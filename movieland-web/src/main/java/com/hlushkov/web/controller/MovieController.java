@@ -23,4 +23,10 @@ public class MovieController {
         log.info("Get request for all movies");
         return movieService.getAllMovies();
     }
+
+    @GetMapping("random")
+    public List<Movie> getThreeRandomMovies(){
+        log.info("Get request for three random movies");
+        return movieService.getThreeRandomMovies();
+    }
 }

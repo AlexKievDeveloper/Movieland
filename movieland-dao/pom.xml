@@ -25,7 +25,7 @@
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>${flyway.version}</version>
-                <configuration>
+                <configuration><!--Fixme-->
                     <driver>org.postgresql.Driver</driver>
                     <url>jdbc:postgresql://localhost:5432/movieland</url>
                     <user>postgres</user>
