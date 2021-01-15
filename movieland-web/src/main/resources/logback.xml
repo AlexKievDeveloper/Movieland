@@ -17,6 +17,7 @@
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>5MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
+            <totalSizeCap>5GB</totalSizeCap>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
 
@@ -25,8 +26,7 @@
             <pattern>%d %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
         </encoder>
     </appender>
-    <logger name="org.apache" level="ERROR"/>
-    <logger name="httpclient" level="DEBUG"/>
+
     <root level="DEBUG">
         <appender-ref ref="consoleAppender"/>
         <appender-ref ref="file"/>
