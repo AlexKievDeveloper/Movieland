@@ -1,6 +1,7 @@
 .idea
 *.iml
 target
+logs
 src/main/resources/dev.properties
 
 

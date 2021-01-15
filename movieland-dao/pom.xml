@@ -36,6 +36,12 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>com.hlushkov</groupId>
+            <artifactId>movieland-entity</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
         <!--DB-->
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -47,6 +53,13 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
             <version>${spring.version}</version>
+        </dependency>
+        <!--Test-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.3.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
