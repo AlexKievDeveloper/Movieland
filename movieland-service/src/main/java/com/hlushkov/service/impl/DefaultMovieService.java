@@ -1,6 +1,7 @@
 package com.hlushkov.service.impl;
 
 import com.hlushkov.dao.jdbc.JdbcMovieDao;
+import com.hlushkov.service.GenreService;
 import com.hlushkov.service.MovieService;
 import entity.Movie;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DefaultMovieService implements MovieService {
     private final JdbcMovieDao jdbcMovieDao;
+    private final GenreService genreService;
 
     @Override
     public List<Movie> getAllMovies() {
@@ -24,5 +26,11 @@ public class DefaultMovieService implements MovieService {
     public List<Movie> getThreeRandomMovies() {
         log.info("Request for three random movies in service level");
         return jdbcMovieDao.getThreeRandomMovies();
+    }
+
+    @Override
+    public List<Movie> getMoviesByGenre(int genreId) {
+        /*String genreName = "'" + genreService.getGenreNameById(genreId) + "'";*/
+        return jdbcMovieDao.getMoviesByGenre(genreId);
     }
 }

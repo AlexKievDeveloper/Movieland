@@ -19,4 +19,10 @@ public class DefaultGenreService implements GenreService {
     public List<Genre> getAllGenres() {
         return jdbcGenreDao.getAllGenres();
     }
+
+    @Override
+    public String getGenreNameById(int genreId) {
+        List<Genre> genreList = jdbcGenreDao.getAllGenres();
+        return genreList.get(genreId-1).getName();
+    }
 }

@@ -36,4 +36,25 @@ class JdbcMovieDaoTest {
         assertNotNull(actualMovieList);
         assertEquals(25, actualMovieList.size());
     }
+
+    @Test
+    @DisplayName("Returns list with all movies from DB")
+    void getThreeRandomMovies() {
+        //when
+        List<Movie> actualMovieList = jdbcMovieDao.getThreeRandomMovies();
+        //then
+        assertNotNull(actualMovieList);
+        assertEquals(3, actualMovieList.size());
+    }
+
+    @Test
+    @DisplayName("Returns list with all movies from DB")
+    void getMoviesByGenre() {
+        //when
+        List<Movie> actualMovieList = jdbcMovieDao.getMoviesByGenre(15);
+        //then
+        assertNotNull(actualMovieList);
+        assertEquals(3, actualMovieList.size());
+    }
+
 }

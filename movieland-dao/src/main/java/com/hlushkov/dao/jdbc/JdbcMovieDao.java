@@ -22,6 +22,9 @@ public class JdbcMovieDao implements MovieDao {
     @Autowired
     private String getAllMovies;
 
+    @Autowired
+    private String getGetMoviesByGenre;
+
     @Override
     public List<Movie> getAllMovies() {
         log.info("Request for all movies in dao level");
@@ -33,15 +36,18 @@ public class JdbcMovieDao implements MovieDao {
         log.info("Request for three random movies in dao level");
         List<Movie> allMoviesList = getAllMovies();
         List<Movie> randomMovieList = new ArrayList<>();
-        //Random random = new Random();
 
         for (int i = 0; i < 3; i++) {
-            //int randomNumber = random.nextInt(allMoviesList.size());
             int randomNumber = ThreadLocalRandom.current().nextInt(allMoviesList.size());
             randomMovieList.add(allMoviesList.get(randomNumber));
             allMoviesList.remove(randomNumber);
         }
 
         return randomMovieList;
+    }
+
+    @Override
+    public List<Movie> getMoviesByGenre(int genreId) {
+        return jdbcTemplate.query(getGetMoviesByGenre, new MovieRowMapper(), genreId);
     }
 }

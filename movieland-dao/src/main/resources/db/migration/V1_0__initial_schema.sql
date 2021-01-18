@@ -1,36 +1,42 @@
-CREATE TYPE genres AS ENUM('драма', 'криминал', 'фэнтези', 'детектив', 'мелодрама', 'биография', 'комедия', 'фантастика',
-    'боевик', 'триллер', 'приключения', 'аниме', 'мультфильм', 'семейный', 'вестерн');
-
-CREATE TABLE IF NOT EXISTS users
+CREATE TABLE IF NOT EXISTS genres
 (
-    user_id  SERIAL PRIMARY KEY,
-    name     VARCHAR(200) UNIQUE NOT NULL,
-    email    VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(200)       NOT NULL
+    genre_id  SERIAL PRIMARY KEY,
+    name     VARCHAR(100) UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS countries
+(
+    country_id  SERIAL PRIMARY KEY,
+    name     VARCHAR(100) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS movies
 (
     movie_id    SERIAL PRIMARY KEY,
     nameRussian VARCHAR(200) UNIQUE NOT NULL,
-    nameNative VARCHAR(200) UNIQUE  NOT NULL,
+    nameNative  VARCHAR(200) UNIQUE NOT NULL,
     yearOfRelease INTEGER           NOT NULL,
-    country     VARCHAR(200)        NOT NULL,
-    genre       genres[]            NOT NULL,
     description VARCHAR(1000)       NOT NULL,
     rating      DOUBLE PRECISION    NOT NULL,
     price       DOUBLE PRECISION    NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS reviews
+CREATE TABLE IF NOT EXISTS movies_genres
 (
-    review_id  SERIAL PRIMARY KEY,
-    review     VARCHAR(500) NOT NULL,
-    user_name  VARCHAR(200) NOT NULL,
-    movie_id   INTEGER NOT NULL,
+  movie_id INTEGER NOT NULL,
+  genre_id INTEGER NOT NULL,
 
-    FOREIGN KEY (user_name) REFERENCES users (name),
-    FOREIGN KEY (movie_id) REFERENCES movies (movie_id)
+  FOREIGN KEY (movie_id) REFERENCES movies (movie_id),
+  FOREIGN KEY (genre_id) REFERENCES genres (genre_id)
+);
+
+CREATE TABLE IF NOT EXISTS movies_countries
+(
+    movie_id INTEGER NOT NULL,
+    country_id INTEGER NOT NULL,
+
+    FOREIGN KEY (movie_id) REFERENCES movies (movie_id),
+    FOREIGN KEY (country_id) REFERENCES countries (country_id)
 );
 
 CREATE TABLE IF NOT EXISTS posters
@@ -41,3 +47,25 @@ CREATE TABLE IF NOT EXISTS posters
 
     FOREIGN KEY (movie_id) REFERENCES movies (movie_id)
 );
+
+CREATE TABLE IF NOT EXISTS users
+(
+    user_id  SERIAL PRIMARY KEY,
+    name     VARCHAR(200) UNIQUE NOT NULL,
+    email    VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(200)       NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS reviews
+(
+    review_id  SERIAL PRIMARY KEY,
+    user_id    INTEGER NOT NULL,
+    movie_id   INTEGER NOT NULL,
+    review     VARCHAR(1000) NOT NULL,
+
+    FOREIGN KEY (user_id) REFERENCES users (user_id),
+    FOREIGN KEY (movie_id) REFERENCES movies (movie_id)
+);
+
+
+
