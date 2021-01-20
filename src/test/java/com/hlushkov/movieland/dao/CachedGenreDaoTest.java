@@ -33,15 +33,15 @@ class CachedGenreDaoTest {
     void getAllGenres() {
         //prepare
         List<Genre> genreList = List.of(new Genre(1, "детектив"), new Genre(2, "боевик"));
-        when(jdbcGenreDao.getAllGenres()).thenReturn(genreList);
+        when(jdbcGenreDao.findAllGenres()).thenReturn(genreList);
 
         //when
-        cachedGenreDao.getAllGenres();
-        cachedGenreDao.getAllGenres();
-        cachedGenreDao.getAllGenres();
+        cachedGenreDao.findAllGenres();
+        cachedGenreDao.findAllGenres();
+        cachedGenreDao.findAllGenres();
 
         //then
-        verify(jdbcGenreDao).getAllGenres();
+        verify(jdbcGenreDao).findAllGenres();
     }
 
 }

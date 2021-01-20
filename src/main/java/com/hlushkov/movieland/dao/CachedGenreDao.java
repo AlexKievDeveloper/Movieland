@@ -22,14 +22,14 @@ public class CachedGenreDao implements GenreDao {
     private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 
     @Override
-    public List<Genre> getAllGenres() {
-        Lock writeLock = readWriteLock.writeLock();
+    public List<Genre> findAllGenres() {
+        Lock writeLock = readWriteLock.writeLock();//FIXME Is it the best solution?
 
         if (cachedGenreList.isEmpty()) {
             writeLock.lock();
 
             try {
-                cachedGenreList = jdbcGenreDao.getAllGenres();
+                cachedGenreList = jdbcGenreDao.findAllGenres();
             } finally {
                 writeLock.unlock();
             }
@@ -43,33 +43,6 @@ public class CachedGenreDao implements GenreDao {
 
     @Scheduled(fixedRateString = "${fixed.rate.in.milliseconds}")
     private synchronized void refreshCachedValues() {
-        cachedGenreList = jdbcGenreDao.getAllGenres();
+        cachedGenreList = jdbcGenreDao.findAllGenres();
     }
 }
-
-
-/**
- * 1) synchronized блок в методе:
- * synchronized(jdbcGenreDao) {
- * cachedGenreList = jdbcGenreDao.getAllGenres();
- * }
- * Все 100 потоков захватят CachedGenreDao и вызовут на нём getAllGenres() но доступ к jdbcGenreDao получат поочерёдно.
- * Но тем не менее все 100 потоков произведут вызов jdbcGenreDao.getAllGenres(); А мне такого не нужно.
- * Мне нужно чтобы доступ к вызову метода getAllGenres() на объекте jdbcGenreDao получил только первый поток,
- * и после отрабатывания метода остальные потоки при вызове getAllGenres() на CachedGenreDao сразу получили
- * лист с кэшем без похода в БД:
- * <p>
- * 2)      @Override
- * public synchronized List<Genre> getAllGenres() {
- * if (cachedGenreList.isEmpty()) {
- * cachedGenreList = jdbcGenreDao.getAllGenres();
- * }
- * return cachedGenreList;
- * }
- * <p>
- * Но это также помешает в будущем множеству потоков одновременно захватить объект CachedGenreDao и вызвать на нём
- * getAllGenres(), что плохо потому что кэш уже будет в листе и так как он только вычитывается и не изменяется то нет
- * необходимости ограничивать одновременный доступ к нему
- * <p>
- * 3) При writeLock.lock(); не будет одновременного доступа потоков к записи, но тем не менее все потоки что то запишут
- */

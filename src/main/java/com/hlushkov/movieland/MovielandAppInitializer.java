@@ -1,10 +1,7 @@
 package com.hlushkov.movieland;
 
 import com.hlushkov.movieland.web.WebApplicationContext;
-import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-
-import javax.servlet.Filter;
 
 public class MovielandAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
@@ -21,12 +18,5 @@ public class MovielandAppInitializer extends AbstractAnnotationConfigDispatcherS
     protected String[] getServletMappings() {
         return new String[]{"/*"};
     }
-    /**For fixing wrong russian movies names*/
-    @Override
-    protected Filter[] getServletFilters() {
-        CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
-        encodingFilter.setEncoding("UTF-8");
-        encodingFilter.setForceEncoding(true);
-        return new Filter[]{encodingFilter};
-    }
+
 }

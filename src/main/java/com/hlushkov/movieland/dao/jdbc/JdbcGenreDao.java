@@ -15,11 +15,11 @@ import java.util.List;
 @Repository
 public class JdbcGenreDao implements GenreDao {
     private final JdbcTemplate jdbcTemplate;
-    private final String getAllGenres;
+    private final String findAllGenres;
 
     @Override
-    public List<Genre> getAllGenres() {
+    public List<Genre> findAllGenres() {
         log.info("Get request for all genres dao level");
-        return jdbcTemplate.query(getAllGenres, new GenreRowMapper());
+        return jdbcTemplate.query(findAllGenres, new GenreRowMapper());
     }
 }

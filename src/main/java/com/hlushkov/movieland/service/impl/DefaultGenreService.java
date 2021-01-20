@@ -16,42 +16,8 @@ public class DefaultGenreService implements GenreService {
     private final CachedGenreDao cachedGenreDao;
 
     @Override
-    public List<Genre> getAllGenres() {
-        return cachedGenreDao.getAllGenres();
+    public List<Genre> findAllGenres() {
+        log.info("Request for find all genre is service level");
+        return cachedGenreDao.findAllGenres();
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//List<Genre> cachedGenreList = jdbcGenreDao.getAllGenres();
-// cachedGenreList.lastModified    compare with result of query SELECT pg_xact_commit_timestamp(xmin), * FROM  genres;
-
-
-
-
-
-/*    @Override
-    public String getGenreNameById(int genreId) {
-
-        if (cachedGenreList.isEmpty()) {
-            cachedGenreList = jdbcGenreDao.getAllGenres();
-        }
-        return cachedGenreList.get(genreId-1).getName();
-    }*/

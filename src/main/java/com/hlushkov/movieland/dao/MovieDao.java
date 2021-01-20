@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface MovieDao {
 
-    List<Movie> getAllMovies(MovieRequest movieRequest);
+    List<Movie> findAllMovies(MovieRequest movieRequest);
 
-    List<Movie> getRandomMovies();
+    List<Movie> findRandomMovies();
 
-    List<Movie> getMoviesByGenre(int genreId, MovieRequest movieRequest);
+    List<Movie> findMoviesByGenre(int genreId, MovieRequest movieRequest);
 }
 
 

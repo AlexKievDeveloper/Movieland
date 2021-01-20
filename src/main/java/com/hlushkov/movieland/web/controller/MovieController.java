@@ -19,34 +19,32 @@ public class MovieController {
     private final MovieService movieService;
 
     @GetMapping("movie")
-    public List<Movie> getAllMovies(@RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,
-                                    @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
-
+    public List<Movie> findAllMovies(@RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,
+                                     @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
 
         log.info("Get request for all movies");
 
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setRatingDirection(ratingSortDirection);
         movieRequest.setPriceDirection(priceSortDirection);
-
-        return movieService.getAllMovies(movieRequest);
+        return movieService.findAllMovies(movieRequest);
     }
 
     @GetMapping("random")
-    public List<Movie> getRandomMovies() {
+    public List<Movie> findRandomMovies() {
         log.info("Get request for three random movies");
-        return movieService.getRandomMovies();
+        return movieService.findRandomMovies();
     }
 
     @GetMapping("movie/genre/{genreId}")
-    public List<Movie> getMoviesByGenre(@PathVariable int genreId,
-                                        @RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,
-                                        @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
+    public List<Movie> findMoviesByGenre(@PathVariable int genreId,
+                                         @RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,
+                                         @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
         log.info("Get request for movies by genre");
 
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setRatingDirection(ratingSortDirection);
         movieRequest.setPriceDirection(priceSortDirection);
-        return movieService.getMoviesByGenre(genreId, movieRequest);
+        return movieService.findMoviesByGenre(genreId, movieRequest);
     }
 }

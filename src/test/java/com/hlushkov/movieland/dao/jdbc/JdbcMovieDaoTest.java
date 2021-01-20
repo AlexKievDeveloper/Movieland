@@ -39,7 +39,7 @@ class JdbcMovieDaoTest {
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setRatingDirection(SortDirection.DESC);
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.getAllMovies(movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findAllMovies(movieRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(25, actualMovieList.size());
@@ -52,7 +52,7 @@ class JdbcMovieDaoTest {
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setRatingDirection(SortDirection.DESC);
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.getAllMovies(movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findAllMovies(movieRequest);
 
         //then
         assertNotNull(actualMovieList);
@@ -68,7 +68,7 @@ class JdbcMovieDaoTest {
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setPriceDirection(SortDirection.DESC);
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.getAllMovies(movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findAllMovies(movieRequest);
 
         //then
         assertNotNull(actualMovieList);
@@ -84,7 +84,7 @@ class JdbcMovieDaoTest {
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setPriceDirection(SortDirection.ASC);
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.getAllMovies(movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findAllMovies(movieRequest);
 
         //then
         assertNotNull(actualMovieList);
@@ -98,7 +98,7 @@ class JdbcMovieDaoTest {
     @DisplayName("Returns list with all movies from DB")
     void getThreeRandomMovies() {
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.getRandomMovies();
+        List<Movie> actualMovieList = jdbcMovieDao.findRandomMovies();
         //then
         assertNotNull(actualMovieList);
         assertEquals(3, actualMovieList.size());
@@ -111,7 +111,7 @@ class JdbcMovieDaoTest {
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setPriceDirection(SortDirection.ASC);
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.getMoviesByGenre(15, movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findMoviesByGenre(15, movieRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(3, actualMovieList.size());
@@ -124,7 +124,7 @@ class JdbcMovieDaoTest {
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setRatingDirection(SortDirection.DESC);
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.getMoviesByGenre(15, movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findMoviesByGenre(15, movieRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(3, actualMovieList.size());
@@ -140,7 +140,7 @@ class JdbcMovieDaoTest {
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setPriceDirection(SortDirection.DESC);
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.getMoviesByGenre(15, movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findMoviesByGenre(15, movieRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(3, actualMovieList.size());
@@ -156,7 +156,7 @@ class JdbcMovieDaoTest {
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setPriceDirection(SortDirection.ASC);
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.getMoviesByGenre(15, movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findMoviesByGenre(15, movieRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(3, actualMovieList.size());

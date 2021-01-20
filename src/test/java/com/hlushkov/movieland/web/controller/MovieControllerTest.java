@@ -57,7 +57,7 @@ class MovieControllerTest {
         assertNotNull(response.getContentAsString());
         assertTrue(response.getContentAsString().contains("The Shawshank Redemption"));
         assertTrue(response.getContentAsString().contains("Dances with Wolves"));
-        //FIXME Russian film names is not correct
+        //FIXME Russian film names is not correct (because response without deprecated produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     }
 
     @Test
@@ -158,7 +158,6 @@ class MovieControllerTest {
         assertEquals("application/json", response.getHeader("Content-Type"));
         assertEquals("application/json", response.getContentType());
         assertNotNull(response.getContentAsString());
-        //FIXME Russian film names is not correct
     }
 
     @Test

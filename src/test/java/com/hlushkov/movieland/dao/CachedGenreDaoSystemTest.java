@@ -24,7 +24,7 @@ class CachedGenreDaoSystemTest {
     @DisplayName("Returns list with genres from test db")
     void getAllGenres() {
         //when
-        List<Genre> actualGenreList = cachedGenreDao.getAllGenres();
+        List<Genre> actualGenreList = cachedGenreDao.findAllGenres();
         //then
         assertNotNull(actualGenreList);
         assertEquals(15, actualGenreList.size());

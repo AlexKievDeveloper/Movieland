@@ -17,19 +17,20 @@ public class DefaultMovieService implements MovieService {
     private final JdbcMovieDao jdbcMovieDao;
 
     @Override
-    public List<Movie> getAllMovies(MovieRequest movieRequest) {
+    public List<Movie> findAllMovies(MovieRequest movieRequest) {
         log.info("Request for all movies in service level");
-        return jdbcMovieDao.getAllMovies(movieRequest);
+        return jdbcMovieDao.findAllMovies(movieRequest);
     }
 
     @Override
-    public List<Movie> getRandomMovies() {
+    public List<Movie> findRandomMovies() {
         log.info("Request for three random movies in service level");
-        return jdbcMovieDao.getRandomMovies();
+        return jdbcMovieDao.findRandomMovies();
     }
 
     @Override
-    public List<Movie> getMoviesByGenre(int genreId, MovieRequest movieRequest) {
-        return jdbcMovieDao.getMoviesByGenre(genreId, movieRequest);
+    public List<Movie> findMoviesByGenre(int genreId, MovieRequest movieRequest) {
+        log.info("Request for movies by genre in service level");
+        return jdbcMovieDao.findMoviesByGenre(genreId, movieRequest);
     }
 }

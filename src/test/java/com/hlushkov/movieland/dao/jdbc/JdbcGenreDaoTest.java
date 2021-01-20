@@ -34,7 +34,7 @@ class JdbcGenreDaoTest {
     @DisplayName("Returns list with all genres from DB")
     void getAllGenres() {
         //when
-        List<Genre> actualGenreList = jdbcGenreDao.getAllGenres();
+        List<Genre> actualGenreList = jdbcGenreDao.findAllGenres();
         //then
         assertNotNull(actualGenreList);
         assertEquals(15, actualGenreList.size());
