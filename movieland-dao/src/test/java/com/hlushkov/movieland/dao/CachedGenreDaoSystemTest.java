@@ -1,6 +1,7 @@
-package com.hlushkov.movieland.dao.jdbc;
+package com.hlushkov.movieland.dao;
 
 import com.hlushkov.movieland.dao.config.JdbcConfig;
+import com.hlushkov.movieland.dao.jdbc.TestConfiguration;
 import com.hlushkov.movieland.entity.Genre;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

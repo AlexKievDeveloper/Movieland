@@ -1,6 +1,9 @@
-package com.hlushkov.movieland.dao.jdbc;
+package com.hlushkov.movieland.dao;
 
+import com.hlushkov.movieland.dao.CachedGenreDao;
 import com.hlushkov.movieland.dao.config.JdbcConfig;
+import com.hlushkov.movieland.dao.jdbc.JdbcGenreDao;
+import com.hlushkov.movieland.dao.jdbc.TestConfiguration;
 import com.hlushkov.movieland.entity.Genre;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +16,6 @@ import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

@@ -1,14 +1,13 @@
 package com.hlushkov.movieland.web.controller;
 
+import com.hlushkov.movieland.entity.MovieRequest;
+import com.hlushkov.movieland.entity.SortDirection;
 import com.hlushkov.movieland.service.MovieService;
 import com.hlushkov.movieland.entity.Movie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,13 +19,19 @@ public class MovieController {
     private final MovieService movieService;
 
     @GetMapping("movie")
-    public List<Movie> getAllMovies(){
+    public List<Movie> getAllMovies(@RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,
+                                    @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
+
+        MovieRequest movieRequest = new MovieRequest();
+        movieRequest.setRatingDirection(ratingSortDirection);
+        movieRequest.setPriceDirection(priceSortDirection);
         log.info("Get request for all movies");
-        return movieService.getAllMovies();
+        log.info("Movies list: {}", movieService.getAllMovies(movieRequest));
+        return movieService.getAllMovies(movieRequest);
     }
 
     @GetMapping("random")
-    public List<Movie> getThreeRandomMovies(){
+    public List<Movie> getThreeRandomMovies() {
         log.info("Get request for three random movies");
         return movieService.getThreeRandomMovies();
     }

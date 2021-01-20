@@ -60,6 +60,60 @@ class MovieControllerTest {
     }
 
     @Test
+    @DisplayName("Returns list of all movies in json format sorted by rating DESC")
+    void getAllMoviesSortedByRatingDESC() throws Exception {
+        //when
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie").param("rating", "desc"))
+                .andDo(print())
+                .andExpect(jsonPath("$[0].rating").value("8.9"))
+                .andExpect(jsonPath("$[24].rating").value("7.6"))
+                .andExpect(status().isOk()).andReturn().getResponse();
+        //then
+        assertNotNull(response.getHeader("Content-Type"));
+        assertEquals("application/json", response.getHeader("Content-Type"));
+        assertEquals("application/json", response.getContentType());
+        assertNotNull(response.getContentAsString());
+        assertTrue(response.getContentAsString().contains("The Shawshank Redemption"));
+        assertTrue(response.getContentAsString().contains("Dances with Wolves"));
+    }
+
+    @Test
+    @DisplayName("Returns list of all movies in json format sorted by price DESC")
+    void getAllMoviesSortedByPriceDESC() throws Exception {
+        //when
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie").param("price", "desc"))
+                .andDo(print())
+                .andExpect(jsonPath("$[0].price").value("200.6"))
+                .andExpect(jsonPath("$[24].price").value("100.0"))
+                .andExpect(status().isOk()).andReturn().getResponse();
+        //then
+        assertNotNull(response.getHeader("Content-Type"));
+        assertEquals("application/json", response.getHeader("Content-Type"));
+        assertEquals("application/json", response.getContentType());
+        assertNotNull(response.getContentAsString());
+        assertTrue(response.getContentAsString().contains("The Shawshank Redemption"));
+        assertTrue(response.getContentAsString().contains("Dances with Wolves"));
+    }
+
+    @Test
+    @DisplayName("Returns list of all movies in json format sorted by price ASC")
+    void getAllMoviesSortedByPriceASC() throws Exception {
+        //when
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie").param("price", "asc"))
+                .andDo(print())
+                .andExpect(jsonPath("$[0].price").value("100.0"))
+                .andExpect(jsonPath("$[24].price").value("200.6"))
+                .andExpect(status().isOk()).andReturn().getResponse();
+        //then
+        assertNotNull(response.getHeader("Content-Type"));
+        assertEquals("application/json", response.getHeader("Content-Type"));
+        assertEquals("application/json", response.getContentType());
+        assertNotNull(response.getContentAsString());
+        assertTrue(response.getContentAsString().contains("The Shawshank Redemption"));
+        assertTrue(response.getContentAsString().contains("Dances with Wolves"));
+    }
+
+    @Test
     @DisplayName("Returns list of three random movies in json format")
     void getThreeRandomMovies() throws Exception {
         //when
