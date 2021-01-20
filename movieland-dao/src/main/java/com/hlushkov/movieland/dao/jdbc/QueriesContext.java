@@ -15,7 +15,7 @@ public class QueriesContext {
     }
 
     @Bean
-    public String getGetMoviesByGenre() {
+    public String getMoviesByGenre() {
         return "SELECT movies.movie_id, nameRussian, nameNative, yearOfRelease, rating, price, picturePath " +
                 "FROM movies LEFT JOIN posters ON (movies.movie_id = posters.movie_id) " +
                 "LEFT JOIN movies_genres ON (movies.movie_id = movies_genres.movie_id) " +
@@ -38,6 +38,30 @@ public class QueriesContext {
     public String getAllMoviesSortedByAcsPrice() {
         return "SELECT movies.movie_id, nameRussian, nameNative, yearOfRelease, rating, price, picturePath FROM movies " +
                 "LEFT JOIN posters ON (movies.movie_id=posters.movie_id) ORDER BY price ASC";
+    }
+
+    @Bean
+    public String getAllMoviesByGenreSortedByRating() {
+        return "SELECT movies.movie_id, nameRussian, nameNative, yearOfRelease, rating, price, picturePath " +
+                "FROM movies LEFT JOIN posters ON (movies.movie_id = posters.movie_id) " +
+                "LEFT JOIN movies_genres ON (movies.movie_id = movies_genres.movie_id) " +
+                "WHERE movies_genres.genre_id = ? ORDER BY rating DESC";
+    }
+
+    @Bean
+    public String getAllMoviesByGenreSortedByDescPrice() {
+        return "SELECT movies.movie_id, nameRussian, nameNative, yearOfRelease, rating, price, picturePath " +
+                "FROM movies LEFT JOIN posters ON (movies.movie_id = posters.movie_id) " +
+                "LEFT JOIN movies_genres ON (movies.movie_id = movies_genres.movie_id) " +
+                "WHERE movies_genres.genre_id = ? ORDER BY price DESC";
+    }
+
+    @Bean
+    public String getAllMoviesByGenreSortedByAcsPrice() {
+        return "SELECT movies.movie_id, nameRussian, nameNative, yearOfRelease, rating, price, picturePath " +
+                "FROM movies LEFT JOIN posters ON (movies.movie_id = posters.movie_id) " +
+                "LEFT JOIN movies_genres ON (movies.movie_id = movies_genres.movie_id) " +
+                "WHERE movies_genres.genre_id = ? ORDER BY price ASC";
     }
 
     /**

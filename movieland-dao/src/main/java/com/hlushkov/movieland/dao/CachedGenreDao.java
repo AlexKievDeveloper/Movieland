@@ -40,7 +40,7 @@ public class CachedGenreDao implements GenreDao {
     /**
      * synchronized is used for change cache in all cores after cached genre list changed
      */
-    //FIXME move to application properties
+
     @Scheduled(fixedRateString = "${fixed.rate.in.milliseconds}")
     private synchronized void refreshCachedValues() {
         cachedGenreList = jdbcGenreDao.getAllGenres();

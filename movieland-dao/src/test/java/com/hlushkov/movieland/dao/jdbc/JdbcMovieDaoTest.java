@@ -10,11 +10,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringJUnitWebConfig(value = {TestConfiguration.class, JdbcConfig.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class JdbcMovieDaoTest {
@@ -95,20 +97,71 @@ class JdbcMovieDaoTest {
     @DisplayName("Returns list with all movies from DB")
     void getThreeRandomMovies() {
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.getThreeRandomMovies();
+        List<Movie> actualMovieList = jdbcMovieDao.getRandomMovies();
         //then
         assertNotNull(actualMovieList);
         assertEquals(3, actualMovieList.size());
     }
 
     @Test
-    @DisplayName("Returns list with all movies from DB")
+    @DisplayName("Returns list with movies by genre from DB")
     void getMoviesByGenre() {
+        //prepare
+        MovieRequest movieRequest = new MovieRequest();
+        movieRequest.setPriceDirection(SortDirection.ASC);
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.getMoviesByGenre(15);
+        List<Movie> actualMovieList = jdbcMovieDao.getMoviesByGenre(15, movieRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(3, actualMovieList.size());
+    }
+
+    @Test
+    @DisplayName("Returns list with movies by genre sorted by rating from DB")
+    void getMoviesByGenreSortedByRating() {
+        //prepare
+        MovieRequest movieRequest = new MovieRequest();
+        movieRequest.setRatingDirection(SortDirection.DESC);
+        //when
+        List<Movie> actualMovieList = jdbcMovieDao.getMoviesByGenre(15, movieRequest);
+        //then
+        assertNotNull(actualMovieList);
+        assertEquals(3, actualMovieList.size());
+        assertEquals(8.5, actualMovieList.get(0).getRating());
+        assertEquals(8.5, actualMovieList.get(1).getRating());
+        assertEquals(8.0, actualMovieList.get(2).getRating());
+    }
+
+    @Test
+    @DisplayName("Returns list with movies by genre sorted by price DESC from DB")
+    void getMoviesByGenreSortedByPriceDesc() {
+        //prepare
+        MovieRequest movieRequest = new MovieRequest();
+        movieRequest.setPriceDirection(SortDirection.DESC);
+        //when
+        List<Movie> actualMovieList = jdbcMovieDao.getMoviesByGenre(15, movieRequest);
+        //then
+        assertNotNull(actualMovieList);
+        assertEquals(3, actualMovieList.size());
+        assertEquals(170, actualMovieList.get(0).getPrice());
+        assertEquals(130, actualMovieList.get(1).getPrice());
+        assertEquals(120.55, actualMovieList.get(2).getPrice());
+    }
+
+    @Test
+    @DisplayName("Returns list with movies by genre sorted by price DESC from DB")
+    void getMoviesByGenreSortedByPriceAsc() {
+        //prepare
+        MovieRequest movieRequest = new MovieRequest();
+        movieRequest.setPriceDirection(SortDirection.ASC);
+        //when
+        List<Movie> actualMovieList = jdbcMovieDao.getMoviesByGenre(15, movieRequest);
+        //then
+        assertNotNull(actualMovieList);
+        assertEquals(3, actualMovieList.size());
+        assertEquals(120.55, actualMovieList.get(0).getPrice());
+        assertEquals(130, actualMovieList.get(1).getPrice());
+        assertEquals(170, actualMovieList.get(2).getPrice());
     }
 
 }

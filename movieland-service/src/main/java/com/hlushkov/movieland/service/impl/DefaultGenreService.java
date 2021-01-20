@@ -42,7 +42,7 @@ public class DefaultGenreService implements GenreService {
 
 //List<Genre> cachedGenreList = jdbcGenreDao.getAllGenres();
 // cachedGenreList.lastModified    compare with result of query SELECT pg_xact_commit_timestamp(xmin), * FROM  genres;
-// FIXME Add check if table with genres was not modified from the last cachedGenreListModified
+
 
 
 

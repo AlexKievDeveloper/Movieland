@@ -60,7 +60,7 @@ class MovieControllerTest {
     }
 
     @Test
-    @DisplayName("Returns list of all movies in json format sorted by rating DESC")
+    @DisplayName("Returns list of all movies sorted by rating DESC in json format")
     void getAllMoviesSortedByRatingDESC() throws Exception {
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie").param("rating", "desc"))
@@ -78,7 +78,7 @@ class MovieControllerTest {
     }
 
     @Test
-    @DisplayName("Returns list of all movies in json format sorted by price DESC")
+    @DisplayName("Returns list of all movies sorted by price DESC in json format")
     void getAllMoviesSortedByPriceDESC() throws Exception {
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie").param("price", "desc"))
@@ -96,7 +96,7 @@ class MovieControllerTest {
     }
 
     @Test
-    @DisplayName("Returns list of all movies in json format sorted by price ASC")
+    @DisplayName("Returns list of all movies sorted by price ASC in json format")
     void getAllMoviesSortedByPriceASC() throws Exception {
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie").param("price", "asc"))
@@ -158,5 +158,73 @@ class MovieControllerTest {
         assertEquals("application/json", response.getContentType());
         assertNotNull(response.getContentAsString());
         //FIXME Russian film names is not correct
+    }
+
+    @Test
+    @DisplayName("Returns list of movies by genre in json format")
+    void getAllMoviesByGenre() throws Exception {
+        //when
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie/genre/15"))
+                .andDo(print())
+                .andExpect(jsonPath("$[0].id").value("21"))
+                .andExpect(jsonPath("$[1].id").value("24"))
+                .andExpect(jsonPath("$[2].id").value("25"))
+                .andExpect(status().isOk()).andReturn().getResponse();
+        //then
+        assertNotNull(response.getHeader("Content-Type"));
+        assertEquals("application/json", response.getHeader("Content-Type"));
+        assertEquals("application/json", response.getContentType());
+        assertNotNull(response.getContentAsString());
+    }
+
+    @Test
+    @DisplayName("Returns list of movies by genre sorted by rating in json format")
+    void getAllMoviesByGenreSortedByRating() throws Exception {
+        //when
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie/genre/15?rating=desc"))
+                .andDo(print())
+                .andExpect(jsonPath("$[0].rating").value("8.5"))
+                .andExpect(jsonPath("$[1].rating").value("8.5"))
+                .andExpect(jsonPath("$[2].rating").value("8.0"))
+                .andExpect(status().isOk()).andReturn().getResponse();
+        //then
+        assertNotNull(response.getHeader("Content-Type"));
+        assertEquals("application/json", response.getHeader("Content-Type"));
+        assertEquals("application/json", response.getContentType());
+        assertNotNull(response.getContentAsString());
+    }
+
+    @Test
+    @DisplayName("Returns list of movies by genre sorted by price DESC in json format")
+    void getAllMoviesByGenreSortedByPriceDesc() throws Exception {
+        //when
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie/genre/15?price=desc"))
+                .andDo(print())
+                .andExpect(jsonPath("$[0].price").value("170.0"))
+                .andExpect(jsonPath("$[1].price").value("130.0"))
+                .andExpect(jsonPath("$[2].price").value("120.55"))
+                .andExpect(status().isOk()).andReturn().getResponse();
+        //then
+        assertNotNull(response.getHeader("Content-Type"));
+        assertEquals("application/json", response.getHeader("Content-Type"));
+        assertEquals("application/json", response.getContentType());
+        assertNotNull(response.getContentAsString());
+    }
+
+    @Test
+    @DisplayName("Returns list of movies by genre sorted by price ASC in json format")
+    void getAllMoviesByGenreSortedByPriceAsc() throws Exception {
+        //when
+        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie/genre/15?price=asc"))
+                .andDo(print())
+                .andExpect(jsonPath("$[0].price").value("120.55"))
+                .andExpect(jsonPath("$[1].price").value("130.0"))
+                .andExpect(jsonPath("$[2].price").value("170.0"))
+                .andExpect(status().isOk()).andReturn().getResponse();
+        //then
+        assertNotNull(response.getHeader("Content-Type"));
+        assertEquals("application/json", response.getHeader("Content-Type"));
+        assertEquals("application/json", response.getContentType());
+        assertNotNull(response.getContentAsString());
     }
 }
