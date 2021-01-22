@@ -30,7 +30,7 @@ public class JdbcMovieDao implements MovieDao {
     @Value("${random.movie.count}")
     private Long randomMovieCount;
 
-    //FIXME Разрулить этот трэш
+    //FIXME optimized code block
     @Override
     public List<Movie> findAllMovies(MovieRequest movieRequest) {
         log.info("Request for all movies in dao level");
@@ -66,7 +66,6 @@ public class JdbcMovieDao implements MovieDao {
         return randomMovieList;
     }
 
-    //FIXME Разрулить этот трэш
     @Override
     public List<Movie> findMoviesByGenre(int genreId, MovieRequest movieRequest) {
         log.info("Request for all movies by genre in dao level");

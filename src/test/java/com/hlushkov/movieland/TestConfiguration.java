@@ -11,7 +11,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 public class TestConfiguration {
 
     @ClassRule
-    public static PostgreSQLContainer postgresContainer = new PostgreSQLContainer("postgres:13.1");
+    public PostgreSQLContainer postgresContainer = new PostgreSQLContainer("postgres:13.1");
 
     @Bean
     public Flyway configureDataSource() {
