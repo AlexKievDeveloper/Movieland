@@ -40,11 +40,6 @@ public class RootApplicationContext {
     }
 
     @Bean
-    protected NamedParameterJdbcTemplate namedJdbcTemplate(DataSource dataSource) {
-        return new NamedParameterJdbcTemplate(dataSource);
-    }
-
-    @Bean
     protected DataSourceTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }

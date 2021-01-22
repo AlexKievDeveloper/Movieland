@@ -17,7 +17,7 @@ public class DefaultGenreService implements GenreService {
 
     @Override
     public List<Genre> findAllGenres() {
-        log.info("Request for find all genre is service level");
+        log.info("Request for find all genre in service level");
         return cachedGenreDao.findAllGenres();
     }
 }
