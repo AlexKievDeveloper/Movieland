@@ -2,8 +2,6 @@ package com.hlushkov.movieland.web.controller;
 
 import com.hlushkov.movieland.RootApplicationContext;
 import com.hlushkov.movieland.TestConfiguration;
-import org.flywaydb.core.Flyway;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -26,20 +24,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfigurer.sharedHttpSession;
 
 @ExtendWith(MockitoExtension.class)
-@SpringJUnitWebConfig(value = {TestConfiguration.class, RootApplicationContext.class, com.hlushkov.movieland.web.WebApplicationContext.class})
+@SpringJUnitWebConfig(value = {RootApplicationContext.class, com.hlushkov.movieland.web.WebApplicationContext.class, TestConfiguration.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GenreControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext context;
-
-    @Autowired
-    private Flyway flyway;
-
-    @BeforeAll
-    void dbSetUp() {
-        flyway.migrate();
-    }
 
     @BeforeEach
     void setMockMvc() {

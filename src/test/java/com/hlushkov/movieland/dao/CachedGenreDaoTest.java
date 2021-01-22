@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringJUnitWebConfig(value = {TestConfiguration.class, RootApplicationContext.class})
+@SpringJUnitWebConfig(value = {RootApplicationContext.class, TestConfiguration.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class) //TODO ПОЧЕМУ ТЕСТ НЕ ПРОХОДИТ БЕЗ АННОТАЦИИ МОКИТО
 class CachedGenreDaoTest {

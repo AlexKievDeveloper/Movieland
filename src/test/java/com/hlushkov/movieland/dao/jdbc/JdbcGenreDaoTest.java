@@ -3,8 +3,6 @@ package com.hlushkov.movieland.dao.jdbc;
 import com.hlushkov.movieland.RootApplicationContext;
 import com.hlushkov.movieland.TestConfiguration;
 import com.hlushkov.movieland.entity.Genre;
-import org.flywaydb.core.Flyway;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,19 +14,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringJUnitWebConfig(value = {TestConfiguration.class, RootApplicationContext.class})
+@SpringJUnitWebConfig(value = {RootApplicationContext.class, TestConfiguration.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class JdbcGenreDaoTest {
     @Autowired
     private JdbcGenreDao jdbcGenreDao;
-
-    @Autowired
-    private Flyway flyway;
-
-    @BeforeAll
-    void setUpDb() {
-        flyway.migrate();
-    }
 
     @Test
     @DisplayName("Returns list with all genres from DB")
