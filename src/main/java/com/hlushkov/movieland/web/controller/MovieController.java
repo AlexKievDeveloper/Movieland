@@ -14,11 +14,11 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "api/v1/", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "movie", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MovieController {
     private final MovieService movieService;
 
-    @GetMapping("movie")
+    @GetMapping
     public List<Movie> findAllMovies(@RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,
                                      @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
 
@@ -36,7 +36,7 @@ public class MovieController {
         return movieService.findRandomMovies();
     }
 
-    @GetMapping("movie/genre/{genreId}")
+    @GetMapping("genre/{genreId}")
     public List<Movie> findMoviesByGenre(@PathVariable int genreId,
                                          @RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,
                                          @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {

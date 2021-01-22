@@ -40,7 +40,7 @@ class GenreControllerTest {
     @Test
     void getAllGenres() throws Exception {
         //when
-        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/genre"))
+        MockHttpServletResponse response = mockMvc.perform(get("/genre"))
                 .andDo(print())
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").isNotEmpty())

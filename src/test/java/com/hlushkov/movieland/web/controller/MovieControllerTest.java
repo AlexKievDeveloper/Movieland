@@ -24,7 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfigurer.sharedHttpSession;
 
 @ExtendWith(MockitoExtension.class)
-@SpringJUnitWebConfig(value = {RootApplicationContext.class, com.hlushkov.movieland.web.WebApplicationContext.class, TestConfiguration.class})
+@SpringJUnitWebConfig(value = {RootApplicationContext.class, com.hlushkov.movieland.web.WebApplicationContext.class,
+        TestConfiguration.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MovieControllerTest {
     private MockMvc mockMvc;
@@ -41,7 +42,7 @@ class MovieControllerTest {
     @DisplayName("Returns list of all movies in json format")
     void getAllMovies() throws Exception {
         //when
-        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie"))
+        MockHttpServletResponse response = mockMvc.perform(get("/movie"))
                 .andDo(print())
                 .andExpect(status().isOk()).andReturn().getResponse();
         //then
@@ -58,7 +59,7 @@ class MovieControllerTest {
     @DisplayName("Returns list of all movies sorted by rating DESC in json format")
     void getAllMoviesSortedByRatingDESC() throws Exception {
         //when
-        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie").param("rating", "desc"))
+        MockHttpServletResponse response = mockMvc.perform(get("/movie").param("rating", "desc"))
                 .andDo(print())
                 .andExpect(jsonPath("$[0].rating").value("8.9"))
                 .andExpect(jsonPath("$[24].rating").value("7.6"))
@@ -76,7 +77,7 @@ class MovieControllerTest {
     @DisplayName("Returns list of all movies sorted by price DESC in json format")
     void getAllMoviesSortedByPriceDESC() throws Exception {
         //when
-        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie").param("price", "desc"))
+        MockHttpServletResponse response = mockMvc.perform(get("/movie").param("price", "desc"))
                 .andDo(print())
                 .andExpect(jsonPath("$[0].price").value("200.6"))
                 .andExpect(jsonPath("$[24].price").value("100.0"))
@@ -94,7 +95,7 @@ class MovieControllerTest {
     @DisplayName("Returns list of all movies sorted by price ASC in json format")
     void getAllMoviesSortedByPriceASC() throws Exception {
         //when
-        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie").param("price", "asc"))
+        MockHttpServletResponse response = mockMvc.perform(get("/movie").param("price", "asc"))
                 .andDo(print())
                 .andExpect(jsonPath("$[0].price").value("100.0"))
                 .andExpect(jsonPath("$[24].price").value("200.6"))
@@ -112,7 +113,7 @@ class MovieControllerTest {
     @DisplayName("Returns list of three random movies in json format")
     void getThreeRandomMovies() throws Exception {
         //when
-        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/random"))
+        MockHttpServletResponse response = mockMvc.perform(get("/movie/random"))
                 .andDo(print())
                 .andExpect(jsonPath("$[0].id").isNotEmpty())
                 .andExpect(jsonPath("$[0].nameRussian").isNotEmpty())
@@ -158,7 +159,7 @@ class MovieControllerTest {
     @DisplayName("Returns list of movies by genre in json format")
     void getAllMoviesByGenre() throws Exception {
         //when
-        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie/genre/15"))
+        MockHttpServletResponse response = mockMvc.perform(get("/movie/genre/15"))
                 .andDo(print())
                 .andExpect(jsonPath("$[0].id").value("21"))
                 .andExpect(jsonPath("$[1].id").value("24"))
@@ -175,7 +176,7 @@ class MovieControllerTest {
     @DisplayName("Returns list of movies by genre sorted by rating in json format")
     void getAllMoviesByGenreSortedByRating() throws Exception {
         //when
-        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie/genre/15?rating=desc"))
+        MockHttpServletResponse response = mockMvc.perform(get("/movie/genre/15?rating=desc"))
                 .andDo(print())
                 .andExpect(jsonPath("$[0].rating").value("8.5"))
                 .andExpect(jsonPath("$[1].rating").value("8.5"))
@@ -192,7 +193,7 @@ class MovieControllerTest {
     @DisplayName("Returns list of movies by genre sorted by price DESC in json format")
     void getAllMoviesByGenreSortedByPriceDesc() throws Exception {
         //when
-        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie/genre/15?price=desc"))
+        MockHttpServletResponse response = mockMvc.perform(get("/movie/genre/15?price=desc"))
                 .andDo(print())
                 .andExpect(jsonPath("$[0].price").value("170.0"))
                 .andExpect(jsonPath("$[1].price").value("130.0"))
@@ -209,7 +210,7 @@ class MovieControllerTest {
     @DisplayName("Returns list of movies by genre sorted by price ASC in json format")
     void getAllMoviesByGenreSortedByPriceAsc() throws Exception {
         //when
-        MockHttpServletResponse response = mockMvc.perform(get("/api/v1/movie/genre/15?price=asc"))
+        MockHttpServletResponse response = mockMvc.perform(get("/movie/genre/15?price=asc"))
                 .andDo(print())
                 .andExpect(jsonPath("$[0].price").value("120.55"))
                 .andExpect(jsonPath("$[1].price").value("130.0"))

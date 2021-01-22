@@ -14,11 +14,11 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "api/v1/", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "genre", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GenreController {
     private final GenreService genreService;
 
-    @GetMapping("genre")
+    @GetMapping
     public List<Genre> findAllGenres() {
         log.info("Get request for all genres");
         return genreService.findAllGenres();
