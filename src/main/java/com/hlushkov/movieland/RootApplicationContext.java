@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 @Configuration
 @PropertySources({@PropertySource("classpath:dev.properties"), @PropertySource("classpath:application.properties")})
 @ComponentScan(value = "com.hlushkov.movieland", excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX,
-        pattern = "com.hlushkov.movieland.web.*"))
+        pattern = "com.hlushkov.movieland.web.controller*"))
 @EnableScheduling
 public class RootApplicationContext {
     @Bean

@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @EnableWebMvc
 @Configuration
-@ComponentScan("com.hlushkov.movieland.web")
+@ComponentScan("com.hlushkov.movieland.web.controller")
 public class WebApplicationContext implements WebMvcConfigurer {
 
     @Override
