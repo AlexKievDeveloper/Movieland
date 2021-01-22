@@ -30,7 +30,7 @@ public class JdbcMovieDao implements MovieDao {
     @Value("${random.movie.count}")
     private Long randomMovieCount;
 
-    //FIXME optimized code block
+    //FIXME optimize code block
     @Override
     public List<Movie> findAllMovies(MovieRequest movieRequest) {
         log.info("Request for all movies in dao level");

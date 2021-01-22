@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class CachedGenreDao implements GenreDao {
         return cachedGenreList;
     }
 
+    @PostConstruct
     @Scheduled(fixedRateString = "${fixed.rate.in.milliseconds}")
     private void refreshCachedValues() {
         log.info("Scheduled method is running: {}", LocalDateTime.now());

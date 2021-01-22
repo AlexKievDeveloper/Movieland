@@ -6,8 +6,6 @@ import com.hlushkov.movieland.entity.Genre;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 
@@ -18,8 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringJUnitWebConfig(value = {RootApplicationContext.class, TestConfiguration.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ExtendWith(MockitoExtension.class) //TODO ПОЧЕМУ ТЕСТ НЕ ПРОХОДИТ БЕЗ АННОТАЦИИ МОКИТО
-class CachedGenreDaoTest {
+class CachedGenreDaoSystemTest {
     @Autowired
     private CachedGenreDao cachedGenreDao;
 
