@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,8 +26,8 @@ public class MovieController {
         log.info("Get request for all movies");
 
         MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setRatingDirection(ratingSortDirection);
-        movieRequest.setPriceDirection(priceSortDirection);
+        movieRequest.setRatingDirection(Optional.ofNullable(ratingSortDirection));
+        movieRequest.setPriceDirection(Optional.ofNullable(priceSortDirection));
         return movieService.findAllMovies(movieRequest);
     }
 
@@ -43,8 +44,8 @@ public class MovieController {
         log.info("Get request for movies by genre");
 
         MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setRatingDirection(ratingSortDirection);
-        movieRequest.setPriceDirection(priceSortDirection);
+        movieRequest.setRatingDirection(Optional.ofNullable(ratingSortDirection));
+        movieRequest.setPriceDirection(Optional.ofNullable(priceSortDirection));
         return movieService.findMoviesByGenre(genreId, movieRequest);
     }
 }

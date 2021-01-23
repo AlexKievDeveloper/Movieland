@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -27,7 +28,8 @@ class JdbcMovieDaoTest {
     void getAllMovies() {
         //prepare
         MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setRatingDirection(SortDirection.DESC);
+        movieRequest.setRatingDirection(Optional.of(SortDirection.DESC));
+        movieRequest.setPriceDirection(Optional.ofNullable(null));
         //when
         List<Movie> actualMovieList = jdbcMovieDao.findAllMovies(movieRequest);
         //then
@@ -40,7 +42,8 @@ class JdbcMovieDaoTest {
     void getAllMoviesWithRatingDirectionTest() {
         //prepare
         MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setRatingDirection(SortDirection.DESC);
+        movieRequest.setRatingDirection(Optional.of(SortDirection.DESC));
+        movieRequest.setPriceDirection(Optional.ofNullable(null));
         //when
         List<Movie> actualMovieList = jdbcMovieDao.findAllMovies(movieRequest);
 
@@ -56,7 +59,8 @@ class JdbcMovieDaoTest {
     void getAllMoviesWithPriceDESCDirectionTest() {
         //prepare
         MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(SortDirection.DESC);
+        movieRequest.setPriceDirection(Optional.of(SortDirection.DESC));
+        movieRequest.setRatingDirection(Optional.ofNullable(null));
         //when
         List<Movie> actualMovieList = jdbcMovieDao.findAllMovies(movieRequest);
 
@@ -72,7 +76,8 @@ class JdbcMovieDaoTest {
     void getAllMoviesWithPriceASCDirectionTest() {
         //prepare
         MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(SortDirection.ASC);
+        movieRequest.setPriceDirection(Optional.ofNullable(SortDirection.ASC));
+        movieRequest.setRatingDirection(Optional.ofNullable(null));
         //when
         List<Movie> actualMovieList = jdbcMovieDao.findAllMovies(movieRequest);
 
@@ -99,7 +104,8 @@ class JdbcMovieDaoTest {
     void getMoviesByGenre() {
         //prepare
         MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(SortDirection.ASC);
+        movieRequest.setPriceDirection(Optional.of(SortDirection.ASC));
+        movieRequest.setRatingDirection(Optional.ofNullable(null));
         //when
         List<Movie> actualMovieList = jdbcMovieDao.findMoviesByGenre(15, movieRequest);
         //then
@@ -112,7 +118,8 @@ class JdbcMovieDaoTest {
     void getMoviesByGenreSortedByRating() {
         //prepare
         MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setRatingDirection(SortDirection.DESC);
+        movieRequest.setRatingDirection(Optional.of(SortDirection.DESC));
+        movieRequest.setPriceDirection(Optional.ofNullable(null));
         //when
         List<Movie> actualMovieList = jdbcMovieDao.findMoviesByGenre(15, movieRequest);
         //then
@@ -128,7 +135,8 @@ class JdbcMovieDaoTest {
     void getMoviesByGenreSortedByPriceDesc() {
         //prepare
         MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(SortDirection.DESC);
+        movieRequest.setPriceDirection(Optional.of(SortDirection.DESC));
+        movieRequest.setRatingDirection(Optional.ofNullable(null));
         //when
         List<Movie> actualMovieList = jdbcMovieDao.findMoviesByGenre(15, movieRequest);
         //then
@@ -144,7 +152,8 @@ class JdbcMovieDaoTest {
     void getMoviesByGenreSortedByPriceAsc() {
         //prepare
         MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(SortDirection.ASC);
+        movieRequest.setPriceDirection(Optional.of(SortDirection.ASC));
+        movieRequest.setRatingDirection(Optional.ofNullable(null));
         //when
         List<Movie> actualMovieList = jdbcMovieDao.findMoviesByGenre(15, movieRequest);
         //then

@@ -20,6 +20,7 @@ public class RootApplicationContext {
                                     @Value("${jdbc.password}") String password,
                                     @Value("${jdbc.driver}") String driverClassName,
                                     @Value("${connections.amount}") int initialSize) {
+
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl(url);
         dataSource.setUsername(userName);

@@ -35,12 +35,12 @@ public class JdbcMovieDao implements MovieDao {
     public List<Movie> findAllMovies(MovieRequest movieRequest) {
         log.info("Request for all movies in dao level");
 
-        if (movieRequest.getRatingDirection() != null) {
-            if (movieRequest.getRatingDirection().getDirection().equals("desc")) {
+        if (movieRequest.getRatingDirection().isPresent()) {
+            if (movieRequest.getRatingDirection().get().getDirection().equals("desc")) {
                 return jdbcTemplate.query(findAllMoviesSortedByRating, new MovieRowMapper());
             }
-        } else if (movieRequest.getPriceDirection() != null) {
-            if (movieRequest.getPriceDirection().getDirection().equals("desc")) {
+        } else if (movieRequest.getPriceDirection().isPresent()) {
+            if (movieRequest.getPriceDirection().get().getDirection().equals("desc")) {
                 return jdbcTemplate.query(findAllMoviesSortedByDescPrice, new MovieRowMapper());
             } else {
                 return jdbcTemplate.query(findAllMoviesSortedByAcsPrice, new MovieRowMapper());
@@ -70,12 +70,12 @@ public class JdbcMovieDao implements MovieDao {
     public List<Movie> findMoviesByGenre(int genreId, MovieRequest movieRequest) {
         log.info("Request for all movies by genre in dao level");
 
-        if (movieRequest.getRatingDirection() != null) {
-            if (movieRequest.getRatingDirection().getDirection().equals("desc")) {
+        if (movieRequest.getRatingDirection().isPresent()) {
+            if (movieRequest.getRatingDirection().get().getDirection().equals("desc")) {
                 return jdbcTemplate.query(findAllMoviesByGenreSortedByRating, new MovieRowMapper(), genreId);
             }
-        } else if (movieRequest.getPriceDirection() != null) {
-            if (movieRequest.getPriceDirection().getDirection().equals("desc")) {
+        } else if (movieRequest.getPriceDirection().isPresent()) {
+            if (movieRequest.getPriceDirection().get().getDirection().equals("desc")) {
                 return jdbcTemplate.query(findAllMoviesByGenreSortedByDescPrice, new MovieRowMapper(), genreId);
             } else {
                 return jdbcTemplate.query(findAllMoviesByGenreSortedByAcsPrice, new MovieRowMapper(), genreId);
