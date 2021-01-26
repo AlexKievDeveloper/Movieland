@@ -4,84 +4,64 @@ import com.hlushkov.movieland.dao.MovieDao;
 import com.hlushkov.movieland.dao.jdbc.mapper.MovieRowMapper;
 import com.hlushkov.movieland.entity.Movie;
 import com.hlushkov.movieland.entity.MovieRequest;
+import com.hlushkov.movieland.entity.SortDirection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @RequiredArgsConstructor
 @Repository
 public class JdbcMovieDao implements MovieDao {
+    private final MovieRowMapper movieRowMapper = new MovieRowMapper();
     private final JdbcTemplate jdbcTemplate;
     private final String findAllMovies;
-    private final String findAllMoviesSortedByRating;
-    private final String findAllMoviesSortedByDescPrice;
-    private final String findAllMoviesSortedByAcsPrice;
-    private final String findAllMoviesByGenreSortedByRating;
-    private final String findAllMoviesByGenreSortedByDescPrice;
-    private final String findAllMoviesByGenreSortedByAcsPrice;
+    private final String findRandomMovies;
     private final String findMoviesByGenre;
     @Value("${random.movie.count}")
     private Long randomMovieCount;
 
+
     //FIXME optimize code block
     @Override
-    public List<Movie> findAllMovies(MovieRequest movieRequest) {
+    public List<Movie> findAll(MovieRequest movieRequest) {
         log.info("Request for all movies in dao level");
 
-        if (movieRequest.getRatingDirection().isPresent()) {
-            if (movieRequest.getRatingDirection().get().getDirection().equals("desc")) {
-                return jdbcTemplate.query(findAllMoviesSortedByRating, new MovieRowMapper());
-            }
-        } else if (movieRequest.getPriceDirection().isPresent()) {
-            if (movieRequest.getPriceDirection().get().getDirection().equals("desc")) {
-                return jdbcTemplate.query(findAllMoviesSortedByDescPrice, new MovieRowMapper());
-            } else {
-                return jdbcTemplate.query(findAllMoviesSortedByAcsPrice, new MovieRowMapper());
-            }
-        }
-        return jdbcTemplate.query(findAllMovies, new MovieRowMapper());
+        String query = generateQuery(findAllMovies, movieRequest);
+        return jdbcTemplate.query(query, movieRowMapper);
     }
 
     @Override
-    public List<Movie> findRandomMovies() {
+    public List<Movie> findRandom() {
         log.info("Request for three random movies in dao level");
-        List<Movie> allMoviesList = jdbcTemplate.query(findAllMovies, new MovieRowMapper());
-        List<Movie> randomMovieList = new ArrayList<>();
-
-        if (randomMovieCount <= allMoviesList.size()) {
-            for (int i = 0; i < randomMovieCount; i++) {
-                int randomNumber = ThreadLocalRandom.current().nextInt(allMoviesList.size());
-                randomMovieList.add(allMoviesList.get(randomNumber));
-                allMoviesList.remove(randomNumber);
-            }
-        }
-
-        return randomMovieList;
+        return jdbcTemplate.query(findRandomMovies, movieRowMapper, randomMovieCount);
     }
 
     @Override
-    public List<Movie> findMoviesByGenre(int genreId, MovieRequest movieRequest) {
+    public List<Movie> findByGenre(int genreId, MovieRequest movieRequest) {
         log.info("Request for all movies by genre in dao level");
 
+        String query = generateQuery(findMoviesByGenre, movieRequest);
+        return jdbcTemplate.query(query, movieRowMapper, genreId);
+    }
+
+    String generateQuery(String query, MovieRequest movieRequest) {
         if (movieRequest.getRatingDirection().isPresent()) {
-            if (movieRequest.getRatingDirection().get().getDirection().equals("desc")) {
-                return jdbcTemplate.query(findAllMoviesByGenreSortedByRating, new MovieRowMapper(), genreId);
+            if (movieRequest.getRatingDirection().get() == SortDirection.DESC) {
+                return query + " ORDER BY " + "rating " + SortDirection.DESC.getDirection();
             }
         } else if (movieRequest.getPriceDirection().isPresent()) {
-            if (movieRequest.getPriceDirection().get().getDirection().equals("desc")) {
-                return jdbcTemplate.query(findAllMoviesByGenreSortedByDescPrice, new MovieRowMapper(), genreId);
+            if (movieRequest.getPriceDirection().get() == SortDirection.DESC) {
+                return query + " ORDER BY " + "price " + SortDirection.DESC.getDirection();
             } else {
-                return jdbcTemplate.query(findAllMoviesByGenreSortedByAcsPrice, new MovieRowMapper(), genreId);
+                return query + " ORDER BY " + "price " + SortDirection.ASC.getDirection();
             }
         }
 
-        return jdbcTemplate.query(findMoviesByGenre, new MovieRowMapper(), genreId);
+        return query;
     }
 }

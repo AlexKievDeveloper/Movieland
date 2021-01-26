@@ -1,6 +1,7 @@
 package com.hlushkov.movieland;
 
-import org.apache.commons.dbcp2.BasicDataSource;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,7 +12,7 @@ import javax.sql.DataSource;
 @Configuration
 @PropertySources({@PropertySource("classpath:dev.properties"), @PropertySource("classpath:application.properties")})
 @ComponentScan(value = "com.hlushkov.movieland", excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX,
-        pattern = "com.hlushkov.movieland.web.controller*"))
+        pattern = "com.hlushkov.movieland.web.controller"))
 @EnableScheduling
 public class RootApplicationContext {
     @Bean
@@ -21,13 +22,13 @@ public class RootApplicationContext {
                                     @Value("${jdbc.driver}") String driverClassName,
                                     @Value("${connections.amount}") int initialSize) {
 
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl(url);
-        dataSource.setUsername(userName);
-        dataSource.setPassword(password);
-        dataSource.setDriverClassName(driverClassName);
-        dataSource.setInitialSize(initialSize);
-        return dataSource;
+        HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setJdbcUrl(url);
+        hikariConfig.setUsername(userName);
+        hikariConfig.setPassword(password);
+        hikariConfig.setDriverClassName(driverClassName);
+        hikariConfig.setMaximumPoolSize(initialSize);
+        return new HikariDataSource(hikariConfig);
     }
 
     @Bean

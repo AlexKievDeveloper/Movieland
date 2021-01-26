@@ -10,7 +10,7 @@
         </encoder>
     </appender>
 
-    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}/movieland.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${log.path}/movieland_%d{yyyy-MM-dd}.log.%i</fileNamePattern>
@@ -23,7 +23,7 @@
 
         <encoder>
             <charset>UTF-8</charset>
-            <pattern>%d %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 

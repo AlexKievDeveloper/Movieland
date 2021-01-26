@@ -20,7 +20,7 @@ public class MovieController {
     private final MovieService movieService;
 
     @GetMapping
-    public List<Movie> findAllMovies(@RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,
+    public List<Movie> findMovies(@RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,
                                      @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
 
         log.info("Get request for all movies");
@@ -28,17 +28,17 @@ public class MovieController {
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setRatingDirection(Optional.ofNullable(ratingSortDirection));
         movieRequest.setPriceDirection(Optional.ofNullable(priceSortDirection));
-        return movieService.findAllMovies(movieRequest);
+        return movieService.findAll(movieRequest);
     }
 
     @GetMapping("random")
-    public List<Movie> findRandomMovies() {
+    public List<Movie> findRandom() {
         log.info("Get request for three random movies");
-        return movieService.findRandomMovies();
+        return movieService.findRandom();
     }
 
     @GetMapping("genre/{genreId}")
-    public List<Movie> findMoviesByGenre(@PathVariable int genreId,
+    public List<Movie> findByGenre(@PathVariable int genreId,
                                          @RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,
                                          @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
         log.info("Get request for movies by genre");
@@ -46,6 +46,6 @@ public class MovieController {
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setRatingDirection(Optional.ofNullable(ratingSortDirection));
         movieRequest.setPriceDirection(Optional.ofNullable(priceSortDirection));
-        return movieService.findMoviesByGenre(genreId, movieRequest);
+        return movieService.findByGenre(genreId, movieRequest);
     }
 }

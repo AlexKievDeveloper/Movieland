@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringJUnitWebConfig(value = {RootApplicationContext.class, TestConfiguration.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CachedGenreDaoSystemTest {
+class CachedGenreDaoTest {
     @Autowired
     private CachedGenreDao cachedGenreDao;
 
@@ -24,7 +24,7 @@ class CachedGenreDaoSystemTest {
     @DisplayName("Returns list of genres from cachedGenreList")
     void getAllGenres() {
         //when
-        List<Genre> actualGenreList = cachedGenreDao.findAllGenres();
+        List<Genre> actualGenreList = cachedGenreDao.findAll();
 
         //then
         assertNotNull(actualGenreList);

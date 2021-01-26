@@ -10,58 +10,23 @@ public class QueriesContext {
      */
     @Bean
     public String findAllMovies() {
-        return "SELECT movies.movie_id, nameRussian, nameNative, yearOfRelease, rating, price, picturePath FROM movies " +
-                "LEFT JOIN posters ON (movies.movie_id=posters.movie_id);";
+        return "SELECT movies.movie_id, nameRussian, nameNative, yearOfRelease, description, rating, price, picturePath FROM movies " +
+                "LEFT JOIN posters ON (movies.movie_id=posters.movie_id)";
+    }
+
+     @Bean
+    public String findRandomMovies() {
+        return "SELECT movies.movie_id, nameRussian, nameNative, yearOfRelease, description, rating, price, picturePath" +
+                " FROM movies LEFT JOIN posters ON (movies.movie_id=posters.movie_id)" +
+                " ORDER BY random() limit ?";
     }
 
     @Bean
     public String findMoviesByGenre() {
-        return "SELECT movies.movie_id, nameRussian, nameNative, yearOfRelease, rating, price, picturePath " +
+        return "SELECT movies.movie_id, nameRussian, nameNative, yearOfRelease, description, rating, price, picturePath " +
                 "FROM movies LEFT JOIN posters ON (movies.movie_id = posters.movie_id) " +
                 "LEFT JOIN movies_genres ON (movies.movie_id = movies_genres.movie_id) " +
                 "WHERE movies_genres.genre_id = ?";
-    }
-
-    @Bean
-    public String findAllMoviesSortedByRating() {
-        return "SELECT movies.movie_id, nameRussian, nameNative, yearOfRelease, rating, price, picturePath FROM movies " +
-                "LEFT JOIN posters ON (movies.movie_id=posters.movie_id) ORDER BY rating DESC";
-    }
-
-    @Bean
-    public String findAllMoviesSortedByDescPrice() {
-        return "SELECT movies.movie_id, nameRussian, nameNative, yearOfRelease, rating, price, picturePath FROM movies " +
-                "LEFT JOIN posters ON (movies.movie_id=posters.movie_id) ORDER BY price DESC";
-    }
-
-    @Bean
-    public String findAllMoviesSortedByAcsPrice() {
-        return "SELECT movies.movie_id, nameRussian, nameNative, yearOfRelease, rating, price, picturePath FROM movies " +
-                "LEFT JOIN posters ON (movies.movie_id=posters.movie_id) ORDER BY price ASC";
-    }
-
-    @Bean
-    public String findAllMoviesByGenreSortedByRating() {
-        return "SELECT movies.movie_id, nameRussian, nameNative, yearOfRelease, rating, price, picturePath " +
-                "FROM movies LEFT JOIN posters ON (movies.movie_id = posters.movie_id) " +
-                "LEFT JOIN movies_genres ON (movies.movie_id = movies_genres.movie_id) " +
-                "WHERE movies_genres.genre_id = ? ORDER BY rating DESC";
-    }
-
-    @Bean
-    public String findAllMoviesByGenreSortedByDescPrice() {
-        return "SELECT movies.movie_id, nameRussian, nameNative, yearOfRelease, rating, price, picturePath " +
-                "FROM movies LEFT JOIN posters ON (movies.movie_id = posters.movie_id) " +
-                "LEFT JOIN movies_genres ON (movies.movie_id = movies_genres.movie_id) " +
-                "WHERE movies_genres.genre_id = ? ORDER BY price DESC";
-    }
-
-    @Bean
-    public String findAllMoviesByGenreSortedByAcsPrice() {
-        return "SELECT movies.movie_id, nameRussian, nameNative, yearOfRelease, rating, price, picturePath " +
-                "FROM movies LEFT JOIN posters ON (movies.movie_id = posters.movie_id) " +
-                "LEFT JOIN movies_genres ON (movies.movie_id = movies_genres.movie_id) " +
-                "WHERE movies_genres.genre_id = ? ORDER BY price ASC";
     }
 
     /**

@@ -14,12 +14,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @Repository
 public class JdbcGenreDao implements GenreDao {
+    private final GenreRowMapper genreRowMapper = new GenreRowMapper();
     private final JdbcTemplate jdbcTemplate;
     private final String findAllGenres;
 
     @Override
-    public List<Genre> findAllGenres() {
+    public List<Genre> findAll() {
         log.info("Get request for all genres dao level");
-        return jdbcTemplate.query(findAllGenres, new GenreRowMapper());
+        return jdbcTemplate.query(findAllGenres, genreRowMapper);
     }
 }

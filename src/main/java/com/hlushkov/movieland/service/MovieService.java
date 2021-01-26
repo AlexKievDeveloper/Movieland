@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface MovieService {
 
-    List<Movie> findAllMovies(MovieRequest movieRequest);
+    List<Movie> findAll(MovieRequest movieRequest);
 
-    List<Movie> findRandomMovies();
+    List<Movie> findRandom();
 
-    List<Movie> findMoviesByGenre(int genreId, MovieRequest movieRequest);
+    List<Movie> findByGenre(int genreId, MovieRequest movieRequest);
 }
 

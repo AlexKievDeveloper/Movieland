@@ -1,7 +1,7 @@
 package com.hlushkov.movieland.entity;
 
 public enum SortDirection {
-    DESC("desc"), ASC("asc");
+    DESC("DESC"), ASC("ASC");
 
     private final String direction;
 

@@ -1,6 +1,5 @@
 package com.hlushkov.movieland.dao;
 
-import com.hlushkov.movieland.dao.jdbc.JdbcGenreDao;
 import com.hlushkov.movieland.entity.Genre;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,11 +14,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Repository
 public class CachedGenreDao implements GenreDao {
-    private final JdbcGenreDao jdbcGenreDao;
+    private final GenreDao jdbcGenreDao;
     private volatile List<Genre> cachedGenreList;
 
     @Override
-    public List<Genre> findAllGenres() {
+    public List<Genre> findAll() {
         return cachedGenreList;
     }
 
@@ -27,6 +26,6 @@ public class CachedGenreDao implements GenreDao {
     @Scheduled(fixedRateString = "${fixed.rate.in.milliseconds}")
     private void refreshCachedValues() {
         log.info("Scheduled method is running: {}", LocalDateTime.now());
-        cachedGenreList = jdbcGenreDao.findAllGenres();
+        cachedGenreList = jdbcGenreDao.findAll();
     }
 }
