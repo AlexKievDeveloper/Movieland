@@ -67,5 +67,21 @@ CREATE TABLE IF NOT EXISTS reviews
     FOREIGN KEY (movie_id) REFERENCES movies (movie_id)
 );
 
+INSERT INTO genres (name) VALUES ('драма');
+INSERT INTO genres (name) VALUES ('криминал');
+INSERT INTO genres (name) VALUES ('фэнтези');
+INSERT INTO genres (name) VALUES ('детектив');
+INSERT INTO genres (name) VALUES ('мелодрама');
+INSERT INTO genres (name) VALUES ('биография');
+INSERT INTO genres (name) VALUES ('комедия');
+INSERT INTO genres (name) VALUES ('фантастика');
+INSERT INTO genres (name) VALUES ('боевик');
+INSERT INTO genres (name) VALUES ('триллер');
+INSERT INTO genres (name) VALUES ('приключения');
+INSERT INTO genres (name) VALUES ('аниме');
+INSERT INTO genres (name) VALUES ('мультфильм');
+INSERT INTO genres (name) VALUES ('семейный');
+INSERT INTO genres (name) VALUES ('вестерн');
+
 
 

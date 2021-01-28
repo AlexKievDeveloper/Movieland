@@ -34,7 +34,7 @@ class JdbcMovieDaoTest {
     private String findMoviesByGenre;
 
     @Test
-    @DataSet(provider = TestConfiguration.MovieProvider.class, cleanBefore = true)
+    @DataSet(provider = TestConfiguration.MovieProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list with all movies from DB")
     void getAllMovies() {
         //prepare
@@ -46,12 +46,10 @@ class JdbcMovieDaoTest {
         //then
         assertNotNull(actualMovieList);
         assertEquals(2, actualMovieList.size());
-/*        assertEquals("Побег из Шоушенка", actualMovieList.get(0).getNameRussian());
-        assertEquals("Зеленая миля", actualMovieList.get(1).getNameRussian());*/
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MovieProvider.class, cleanBefore = true)
+    @DataSet(provider = TestConfiguration.MovieProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list with all movies from DB sorting by rating DESC")
     void getAllMoviesWithRatingDirectionTest() {
         //prepare
@@ -68,7 +66,7 @@ class JdbcMovieDaoTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MovieProvider.class, cleanBefore = true)
+    @DataSet(provider = TestConfiguration.MovieProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list with all movies from DB sorted by price DESC")
     void getAllMoviesWithPriceDESCDirectionTest() {
         //prepare
@@ -86,7 +84,7 @@ class JdbcMovieDaoTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MovieProvider.class, cleanBefore = true)
+    @DataSet(provider = TestConfiguration.MovieProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list with all movies from DB sorted by price ASC")
     void getAllMoviesWithPriceASCDirectionTest() {
         //prepare
@@ -104,7 +102,7 @@ class JdbcMovieDaoTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesProvider.class, cleanBefore = true)
+    @DataSet(provider = TestConfiguration.MoviesProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list with all movies from DB")
     void getRandomMovies() {
         //when
@@ -115,7 +113,7 @@ class JdbcMovieDaoTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesByGenresProvider.class, cleanBefore = true)
+    @DataSet(provider = TestConfiguration.MoviesByGenresProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list with movies by genre from DB")
     void getMoviesByGenre() {
         //prepare
@@ -130,7 +128,7 @@ class JdbcMovieDaoTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesByGenresProvider.class, cleanBefore = true)
+    @DataSet(provider = TestConfiguration.MoviesByGenresProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list with movies by genre sorted by rating from DB")
     void getMoviesByGenreSortedByRating() {
         //prepare
@@ -147,7 +145,7 @@ class JdbcMovieDaoTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesByGenresProvider.class, cleanBefore = true)
+    @DataSet(provider = TestConfiguration.MoviesByGenresProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list with movies by genre sorted by price DESC from DB")
     void getMoviesByGenreSortedByPriceDesc() {
         //prepare
@@ -164,7 +162,7 @@ class JdbcMovieDaoTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesByGenresProvider.class, cleanBefore = true)
+    @DataSet(provider = TestConfiguration.MoviesByGenresProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list with movies by genre sorted by price ASC from DB")
     void getMoviesByGenreSortedByPriceAsc() {
         //prepare
@@ -291,7 +289,6 @@ class JdbcMovieDaoTest {
         //then
         assertEquals(expectedQuery, actualQuery);
     }
-
 
 
     @Test

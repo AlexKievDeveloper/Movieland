@@ -7,10 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -43,7 +41,7 @@ class MovieRowMapperTest {
         assertEquals(1, actualMovie.getId());
         assertEquals("Побег из Шоушенка", actualMovie.getNameRussian());
         assertEquals("The Shawshank Redemption", actualMovie.getNameNative());
-        assertEquals(LocalDate.of(1994, 1, 1), actualMovie.getYearOfRelease());
+        assertEquals(1994, actualMovie.getYearOfRelease());
         assertEquals("Amazing film", actualMovie.getDescription());
         assertEquals(8.9, actualMovie.getRating());
         assertEquals(123.45, actualMovie.getPrice());

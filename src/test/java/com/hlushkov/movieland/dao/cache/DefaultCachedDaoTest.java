@@ -1,4 +1,4 @@
-package com.hlushkov.movieland.dao;
+package com.hlushkov.movieland.dao.cache;
 
 import com.hlushkov.movieland.RootApplicationContext;
 import com.hlushkov.movieland.TestConfiguration;
@@ -16,15 +16,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringJUnitWebConfig(value = {RootApplicationContext.class, TestConfiguration.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CachedGenreDaoTest {
+class DefaultCachedDaoTest {
     @Autowired
-    private CachedGenreDao cachedGenreDao;
+    private DefaultCachedDao cachedGenreDao;
 
     @Test
     @DisplayName("Returns list of genres from cachedGenreList")
     void getAllGenres() {
         //when
-        List<Genre> actualGenreList = cachedGenreDao.findAll();
+        List<Genre> actualGenreList = cachedGenreDao.findAllGenres();
 
         //then
         assertNotNull(actualGenreList);

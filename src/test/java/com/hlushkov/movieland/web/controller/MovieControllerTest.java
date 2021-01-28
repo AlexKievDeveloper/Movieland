@@ -1,5 +1,9 @@
 package com.hlushkov.movieland.web.controller;
 
+import com.github.database.rider.core.api.configuration.DBUnit;
+import com.github.database.rider.core.api.configuration.Orthography;
+import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.spring.api.DBRider;
 import com.hlushkov.movieland.RootApplicationContext;
 import com.hlushkov.movieland.TestConfiguration;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfigurer.sharedHttpSession;
 
+@DBRider
+@DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
 @ExtendWith(MockitoExtension.class)
 @SpringJUnitWebConfig(value = {RootApplicationContext.class, com.hlushkov.movieland.web.WebApplicationContext.class,
         TestConfiguration.class})
@@ -39,6 +45,7 @@ class MovieControllerTest {
     }
 
     @Test
+    @DataSet(provider = TestConfiguration.MoviesProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list of all movies in json format")
     void getAllMovies() throws Exception {
         //when
@@ -52,10 +59,10 @@ class MovieControllerTest {
         assertNotNull(response.getContentAsString());
         assertTrue(response.getContentAsString().contains("The Shawshank Redemption"));
         assertTrue(response.getContentAsString().contains("Dances with Wolves"));
-        //FIXME Russian film names is not correct (because response without deprecated produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     }
 
     @Test
+    @DataSet(provider = TestConfiguration.MoviesProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list of all movies sorted by rating DESC in json format")
     void getAllMoviesSortedByRatingDESC() throws Exception {
         //when
@@ -74,6 +81,7 @@ class MovieControllerTest {
     }
 
     @Test
+    @DataSet(provider = TestConfiguration.MoviesProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list of all movies sorted by price DESC in json format")
     void getAllMoviesSortedByPriceDESC() throws Exception {
         //when
@@ -92,6 +100,7 @@ class MovieControllerTest {
     }
 
     @Test
+    @DataSet(provider = TestConfiguration.MoviesProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list of all movies sorted by price ASC in json format")
     void getAllMoviesSortedByPriceASC() throws Exception {
         //when
@@ -110,6 +119,7 @@ class MovieControllerTest {
     }
 
     @Test
+    @DataSet(provider = TestConfiguration.PostersAndMoviesProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list of three random movies in json format")
     void getThreeRandomMovies() throws Exception {
         //when
@@ -119,6 +129,7 @@ class MovieControllerTest {
                 .andExpect(jsonPath("$[0].nameRussian").isNotEmpty())
                 .andExpect(jsonPath("$[0].nameNative").isNotEmpty())
                 .andExpect(jsonPath("$[0].yearOfRelease").isNotEmpty())
+                .andExpect(jsonPath("$[0].description").isNotEmpty())
                 .andExpect(jsonPath("$[0].rating").isNotEmpty())
                 .andExpect(jsonPath("$[0].price").isNotEmpty())
                 .andExpect(jsonPath("$[0].picturePath").isNotEmpty())
@@ -127,6 +138,7 @@ class MovieControllerTest {
                 .andExpect(jsonPath("$[1].nameRussian").isNotEmpty())
                 .andExpect(jsonPath("$[1].nameNative").isNotEmpty())
                 .andExpect(jsonPath("$[1].yearOfRelease").isNotEmpty())
+                .andExpect(jsonPath("$[1].description").isNotEmpty())
                 .andExpect(jsonPath("$[1].rating").isNotEmpty())
                 .andExpect(jsonPath("$[1].price").isNotEmpty())
                 .andExpect(jsonPath("$[1].picturePath").isNotEmpty())
@@ -135,6 +147,7 @@ class MovieControllerTest {
                 .andExpect(jsonPath("$[2].nameRussian").isNotEmpty())
                 .andExpect(jsonPath("$[2].nameNative").isNotEmpty())
                 .andExpect(jsonPath("$[2].yearOfRelease").isNotEmpty())
+                .andExpect(jsonPath("$[2].description").isNotEmpty())
                 .andExpect(jsonPath("$[2].rating").isNotEmpty())
                 .andExpect(jsonPath("$[2].price").isNotEmpty())
                 .andExpect(jsonPath("$[2].picturePath").isNotEmpty())
@@ -143,6 +156,7 @@ class MovieControllerTest {
                 .andExpect(jsonPath("$[3].nameRussian").doesNotExist())
                 .andExpect(jsonPath("$[3].nameNative").doesNotExist())
                 .andExpect(jsonPath("$[3].yearOfRelease").doesNotExist())
+                .andExpect(jsonPath("$[3].description").doesNotExist())
                 .andExpect(jsonPath("$[3].rating").doesNotExist())
                 .andExpect(jsonPath("$[3].price").doesNotExist())
                 .andExpect(jsonPath("$[3].picturePath").doesNotExist())
@@ -156,14 +170,16 @@ class MovieControllerTest {
     }
 
     @Test
+    @DataSet(provider = TestConfiguration.MoviesGenresFullProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list of movies by genre in json format")
     void getAllMoviesByGenre() throws Exception {
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/movie/genre/15"))
                 .andDo(print())
-                .andExpect(jsonPath("$[0].id").value("21"))
-                .andExpect(jsonPath("$[1].id").value("24"))
-                .andExpect(jsonPath("$[2].id").value("25"))
+                .andExpect(jsonPath("$[0].id").isNotEmpty())
+                .andExpect(jsonPath("$[1].id").isNotEmpty())
+                .andExpect(jsonPath("$[2].id").isNotEmpty())
+                .andExpect(jsonPath("$[3].id").doesNotExist())
                 .andExpect(status().isOk()).andReturn().getResponse();
         //then
         assertNotNull(response.getHeader("Content-Type"));
@@ -173,6 +189,7 @@ class MovieControllerTest {
     }
 
     @Test
+    @DataSet(provider = TestConfiguration.MoviesGenresFullProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list of movies by genre sorted by rating in json format")
     void getAllMoviesByGenreSortedByRating() throws Exception {
         //when
@@ -190,6 +207,7 @@ class MovieControllerTest {
     }
 
     @Test
+    @DataSet(provider = TestConfiguration.MoviesGenresFullProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list of movies by genre sorted by price DESC in json format")
     void getAllMoviesByGenreSortedByPriceDesc() throws Exception {
         //when
@@ -207,6 +225,7 @@ class MovieControllerTest {
     }
 
     @Test
+    @DataSet(provider = TestConfiguration.MoviesGenresFullProvider.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns list of movies by genre sorted by price ASC in json format")
     void getAllMoviesByGenreSortedByPriceAsc() throws Exception {
         //when

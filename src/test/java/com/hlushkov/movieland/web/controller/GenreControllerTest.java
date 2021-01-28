@@ -3,6 +3,7 @@ package com.hlushkov.movieland.web.controller;
 import com.hlushkov.movieland.RootApplicationContext;
 import com.hlushkov.movieland.TestConfiguration;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfigurer.sharedHttpSession;
 
 @ExtendWith(MockitoExtension.class)
-@SpringJUnitWebConfig(value = {RootApplicationContext.class, com.hlushkov.movieland.web.WebApplicationContext.class, TestConfiguration.class})
+@SpringJUnitWebConfig(value = {RootApplicationContext.class, com.hlushkov.movieland.web.WebApplicationContext.class,
+        TestConfiguration.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GenreControllerTest {
     private MockMvc mockMvc;
@@ -38,6 +40,7 @@ class GenreControllerTest {
     }
 
     @Test
+    @DisplayName("Returns all genres")
     void getAllGenres() throws Exception {
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/genre"))

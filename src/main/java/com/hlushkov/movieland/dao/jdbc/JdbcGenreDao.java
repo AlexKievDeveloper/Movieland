@@ -23,4 +23,5 @@ public class JdbcGenreDao implements GenreDao {
         log.info("Get request for all genres dao level");
         return jdbcTemplate.query(findAllGenres, genreRowMapper);
     }
+
 }
