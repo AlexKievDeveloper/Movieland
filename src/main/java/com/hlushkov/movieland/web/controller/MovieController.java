@@ -2,7 +2,7 @@ package com.hlushkov.movieland.web.controller;
 
 import com.hlushkov.movieland.entity.Movie;
 import com.hlushkov.movieland.entity.MovieRequest;
-import com.hlushkov.movieland.entity.SortDirection;
+import com.hlushkov.movieland.common.SortDirection;
 import com.hlushkov.movieland.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

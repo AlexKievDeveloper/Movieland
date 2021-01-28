@@ -1,5 +1,6 @@
 package com.hlushkov.movieland.entity;
 
+import com.hlushkov.movieland.common.SortDirection;
 import lombok.Data;
 
 import java.util.Optional;

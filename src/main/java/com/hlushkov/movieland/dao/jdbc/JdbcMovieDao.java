@@ -4,7 +4,7 @@ import com.hlushkov.movieland.dao.MovieDao;
 import com.hlushkov.movieland.dao.jdbc.mapper.MovieRowMapper;
 import com.hlushkov.movieland.entity.Movie;
 import com.hlushkov.movieland.entity.MovieRequest;
-import com.hlushkov.movieland.entity.SortDirection;
+import com.hlushkov.movieland.common.SortDirection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,8 +25,6 @@ public class JdbcMovieDao implements MovieDao {
     @Value("${random.movie.count}")
     private Long randomMovieCount;
 
-
-    //FIXME optimize code block
     @Override
     public List<Movie> findAll(MovieRequest movieRequest) {
         log.info("Request for all movies in dao level");

@@ -1,26 +1,31 @@
 package com.hlushkov.movieland.dao.jdbc;
 
-import com.hlushkov.movieland.RootApplicationContext;
+import com.github.database.rider.core.api.configuration.DBUnit;
+import com.github.database.rider.core.api.configuration.Orthography;
+import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.spring.api.DBRider;
+import com.hlushkov.movieland.ContextConfiguration;
 import com.hlushkov.movieland.TestConfiguration;
 import com.hlushkov.movieland.entity.Genre;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-@SpringJUnitWebConfig(value = {RootApplicationContext.class, TestConfiguration.class})
+@DBRider
+@DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
+@ContextConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class JdbcGenreDaoTest {
     @Autowired
     private JdbcGenreDao jdbcGenreDao;
 
     @Test
+    @DataSet(provider = TestConfiguration.GenreProvider.class)
     @DisplayName("Returns list with all genres from DB")
     void getAllGenres() {
         //when

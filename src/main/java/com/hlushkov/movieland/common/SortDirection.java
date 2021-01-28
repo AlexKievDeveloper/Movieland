@@ -1,4 +1,4 @@
-package com.hlushkov.movieland.entity;
+package com.hlushkov.movieland.common;
 
 public enum SortDirection {
     DESC("DESC"), ASC("ASC");

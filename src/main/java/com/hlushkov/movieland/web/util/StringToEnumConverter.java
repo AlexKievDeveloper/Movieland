@@ -1,6 +1,6 @@
 package com.hlushkov.movieland.web.util;
 
-import com.hlushkov.movieland.entity.SortDirection;
+import com.hlushkov.movieland.common.SortDirection;
 import org.springframework.core.convert.converter.Converter;
 
 public class StringToEnumConverter implements Converter<String, SortDirection> {
