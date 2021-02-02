@@ -1,4 +1,4 @@
-package com.hlushkov.movieland;
+package com.hlushkov.movieland.config;
 
 import com.github.database.rider.core.api.dataset.DataSetProvider;
 import com.github.database.rider.core.dataset.builder.DataSetBuilder;

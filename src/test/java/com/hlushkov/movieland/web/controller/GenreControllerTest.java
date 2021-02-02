@@ -1,8 +1,6 @@
 package com.hlushkov.movieland.web.controller;
 
-import com.hlushkov.movieland.ContextConfiguration;
-import com.hlushkov.movieland.RootApplicationContext;
-import com.hlushkov.movieland.TestConfiguration;
+import com.hlushkov.movieland.config.ContextConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +10,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;

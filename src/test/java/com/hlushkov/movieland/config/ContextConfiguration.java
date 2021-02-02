@@ -1,5 +1,6 @@
-package com.hlushkov.movieland;
+package com.hlushkov.movieland.config;
 
+import com.hlushkov.movieland.RootApplicationContext;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 
 import java.lang.annotation.Retention;

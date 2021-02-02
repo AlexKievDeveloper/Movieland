@@ -1,6 +1,6 @@
 package com.hlushkov.movieland.dao.jdbc;
 
-import com.hlushkov.movieland.ContextConfiguration;
+import com.hlushkov.movieland.config.ContextConfiguration;
 import com.hlushkov.movieland.common.SortDirection;
 import com.hlushkov.movieland.entity.MovieRequest;
 import org.junit.jupiter.api.DisplayName;
