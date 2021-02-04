@@ -4,6 +4,7 @@ import com.github.database.rider.core.api.dataset.DataSetProvider;
 import com.github.database.rider.core.dataset.builder.DataSetBuilder;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.extern.slf4j.Slf4j;
 import org.dbunit.dataset.IDataSet;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import javax.sql.DataSource;
-
+@Slf4j
 @Configuration
 public class TestConfiguration {
 
@@ -20,6 +21,7 @@ public class TestConfiguration {
     public DataSource dataSource(@Value("${connections.amount}") int initialSize) {
 
         PostgreSQLContainer postgresContainer = new PostgreSQLContainer("postgres:13.1");
+        log.info(postgresContainer.getLogs());
         postgresContainer.start();
 
         HikariConfig hikariConfig = new HikariConfig();
@@ -1078,11 +1080,6 @@ public class TestConfiguration {
 
         }
     }
-
-
-
-
-
 
 }
 
