@@ -10,10 +10,7 @@ public class Movie {
     private String nameRussian;
     private String nameNative;
     private String description;
-
-    //private LocalDate yearOfRelease;
     private int yearOfRelease;
-
     private double rating;
     private double price;
     private String picturePath;

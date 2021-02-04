@@ -1,10 +1,11 @@
 package com.hlushkov.movieland.entity;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Value;
 
 @Value
 @Builder
 public class Genre {
-    int id;
-    String name;
+    private int id;
+    private String name;
 }
