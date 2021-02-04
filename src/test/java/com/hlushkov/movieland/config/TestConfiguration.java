@@ -28,7 +28,6 @@ public class TestConfiguration {
         hikariConfig.setPassword(postgresContainer.getPassword());
         hikariConfig.setDriverClassName(postgresContainer.getDriverClassName());
         hikariConfig.setMaximumPoolSize(initialSize);
-        //hikariConfig.setAutoCommit(false);
         HikariDataSource hikariDataSource = new HikariDataSource(hikariConfig);
 
         Flyway flyway = Flyway.configure().dataSource(hikariDataSource)
