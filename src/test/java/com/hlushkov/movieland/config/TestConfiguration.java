@@ -22,6 +22,7 @@ public class TestConfiguration {
 
         PostgreSQLContainer postgresContainer = new PostgreSQLContainer("postgres:13.1");
         log.info(postgresContainer.getLogs());
+        postgresContainer.addParameter("checks.disable", "true");
         postgresContainer.start();
 
         HikariConfig hikariConfig = new HikariConfig();
