@@ -1,6 +1,6 @@
 package com.hlushkov.movieland.service.impl;
 
-import com.hlushkov.movieland.dao.cache.DefaultCachedDao;
+import com.hlushkov.movieland.dao.CachedDao;
 import com.hlushkov.movieland.entity.Genre;
 import com.hlushkov.movieland.service.GenreService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class DefaultGenreService implements GenreService {
-    private final DefaultCachedDao cachedGenreDao;
+    private final CachedDao cachedGenreDao;
 
     @Override
     public List<Genre> findAll() {

@@ -1,5 +1,9 @@
 package com.hlushkov.movieland.dao.cache;
 
+import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import com.hlushkov.movieland.dao.CachedDao;
 import com.hlushkov.movieland.dao.GenreDao;
 import com.hlushkov.movieland.entity.Genre;
@@ -7,10 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
-
-import javax.annotation.PostConstruct;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor

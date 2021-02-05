@@ -48,15 +48,16 @@ public class JdbcMovieDao implements MovieDao {
     }
 
     String generateQuery(String query, MovieRequest movieRequest) {
+        String orderBy = " ORDER BY ";
         if (movieRequest.getRatingDirection().isPresent()) {
             if (movieRequest.getRatingDirection().get() == SortDirection.DESC) {
-                return query + " ORDER BY " + "rating " + SortDirection.DESC.getDirection();
+                return query + orderBy + "rating " + SortDirection.DESC.getDirection();
             }
         } else if (movieRequest.getPriceDirection().isPresent()) {
             if (movieRequest.getPriceDirection().get() == SortDirection.DESC) {
-                return query + " ORDER BY " + "price " + SortDirection.DESC.getDirection();
+                return query + orderBy + "price " + SortDirection.DESC.getDirection();
             } else {
-                return query + " ORDER BY " + "price " + SortDirection.ASC.getDirection();
+                return query + orderBy + "price " + SortDirection.ASC.getDirection();
             }
         }
 

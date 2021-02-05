@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class GenreRowMapperTest {
+class GenreRowMapperTest {
     private final GenreRowMapper rowMapper;
     @Mock
     private ResultSet resultSet;

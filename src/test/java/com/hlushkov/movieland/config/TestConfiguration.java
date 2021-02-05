@@ -354,41 +354,6 @@ public class TestConfiguration {
         }
     }
 
-    public static class MoviesGenresProvider implements DataSetProvider {
-        @Override
-        public IDataSet provide() {
-            return new DataSetBuilder()
-                    .table("movies_genres")
-                    .columns("movie_id", "genre_id")
-                    .values("1", "1").values("1", "2")
-                    .values("2", "1").values("2", "2").values("2", "3").values("2", "4")
-                    .values("3", "1").values("3", "5")
-                    .values("4", "1").values("4", "6")
-                    .values("5", "1").values("5", "6").values("5", "7")
-                    .values("6", "1").values("6", "4").values("6", "8").values("6", "9").values("6", "10")
-                    .values("7", "1").values("7", "5").values("7", "7")
-                    .values("8", "1").values("8", "2").values("8", "10")
-                    .values("9", "3").values("9", "8").values("9", "9").values("9", "11")
-                    .values("10", "3").values("10", "8").values("10", "9").values("10", "11")
-                    .values("11", "3").values("11", "11").values("11", "12").values("11", "13").values("11", "14")
-                    .values("12", "1").values("12", "5")
-                    .values("13", "1")
-                    .values("14", "3").values("14", "11").values("14", "12").values("14", "13")
-                    .values("15", "1").values("15", "9")
-                    .values("16", "2").values("16", "7")
-                    .values("17", "1").values("17", "2").values("17", "8").values("17", "9").values("17", "10")
-                    .values("18", "3").values("18", "7").values("18", "11").values("18", "13").values("18", "14")
-                    .values("19", "1").values("19", "12").values("19", "4").values("19", "10")
-                    .values("20", "1")
-                    .values("21", "15")
-                    .values("22", "7")
-                    .values("23", "2").values("23", "7")
-                    .values("24", "1").values("24", "7").values("24", "11").values("24", "15")
-                    .values("25", "1").values("25", "11").values("25", "15")
-                    .build();
-        }
-    }
-
     public static class MoviesByGenresProvider implements DataSetProvider {
         @Override
         public IDataSet provide() {
@@ -449,40 +414,6 @@ public class TestConfiguration {
                     .values("2", "1").values("2", "2").values("2", "3").values("2", "4")
                     .values("3", "1").values("3", "5")
                     .values("4", "1").values("4", "6")
-                    .build();
-        }
-    }
-    public static class PostersProvider implements DataSetProvider {
-        @Override
-        public IDataSet provide() {
-            return new DataSetBuilder()
-                    .table("posters")
-                    .columns("poster_id, movie_id", "picturePath")
-                    .values("1", "1", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("2", "2", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("3", "3", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("4", "4", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("5", "5", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("6", "6", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("7", "7", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("8", "8", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("9", "9", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("10", "10", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("11", "11", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("12", "12", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("13", "13", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("14", "14", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("15", "15", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("16", "16", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("17", "17", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("18", "18", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("19", "19", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("20", "20", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("21", "21", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("22", "22", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("23", "23", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("24", "24", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                    .values("25", "25", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
                     .build();
         }
     }
@@ -1077,7 +1008,6 @@ public class TestConfiguration {
                     .values("24", "1").values("24", "7").values("24", "11").values("24", "15")
                     .values("25", "1").values("25", "11").values("25", "15")
                     .build();
-
         }
     }
 

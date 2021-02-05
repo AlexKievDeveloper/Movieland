@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import javax.sql.DataSource;
 
 @Configuration
-@PropertySources({@PropertySource("classpath:application.properties")})
+@PropertySource("classpath:application.properties")
 @ComponentScan(value = "com.hlushkov.movieland", excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX,
         pattern = "com.hlushkov.movieland.web.controller"))
 @EnableScheduling

@@ -1,6 +1,6 @@
 package com.hlushkov.movieland.service.impl;
 
-import com.hlushkov.movieland.dao.jdbc.JdbcMovieDao;
+import com.hlushkov.movieland.dao.MovieDao;
 import com.hlushkov.movieland.entity.Movie;
 import com.hlushkov.movieland.entity.MovieRequest;
 import com.hlushkov.movieland.service.MovieService;
@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class DefaultMovieService implements MovieService {
-    private final JdbcMovieDao jdbcMovieDao;
+    private final MovieDao jdbcMovieDao;
 
     @Override
     public List<Movie> findAll(MovieRequest movieRequest) {
