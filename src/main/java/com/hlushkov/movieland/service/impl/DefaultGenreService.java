@@ -13,11 +13,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class DefaultGenreService implements GenreService {
-    private final CachedDao cachedGenreDao;
+    private final CachedDao cachedDao;
 
     @Override
     public List<Genre> findAll() {
-        log.info("Request for find all genre in service level");
-        return cachedGenreDao.findAllGenres();
+        log.info("Request for find all genres in service level");
+        return cachedDao.findAllGenres();
     }
 }

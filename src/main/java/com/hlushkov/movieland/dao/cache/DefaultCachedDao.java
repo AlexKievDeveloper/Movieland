@@ -1,6 +1,5 @@
 package com.hlushkov.movieland.dao.cache;
 
-import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
+
 @Slf4j
 @RequiredArgsConstructor
 @Repository
@@ -22,7 +23,6 @@ public class DefaultCachedDao implements CachedDao {
     @Override
     public List<Genre> findAllGenres() {
         log.info("Request for find all genre in cached genre dao level");
-        log.info("CACHED GENRE LIST: {}", cachedGenreList);
         return cachedGenreList;
     }
 

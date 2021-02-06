@@ -14,23 +14,23 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class DefaultMovieService implements MovieService {
-    private final MovieDao jdbcMovieDao;
+    private final MovieDao movieDao;
 
     @Override
     public List<Movie> findAll(MovieRequest movieRequest) {
         log.info("Request for all movies in service level");
-        return jdbcMovieDao.findAll(movieRequest);
+        return movieDao.findAll(movieRequest);
     }
 
     @Override
     public List<Movie> findRandom() {
         log.info("Request for three random movies in service level");
-        return jdbcMovieDao.findRandom();
+        return movieDao.findRandom();
     }
 
     @Override
     public List<Movie> findByGenre(int genreId, MovieRequest movieRequest) {
         log.info("Request for movies by genre in service level");
-        return jdbcMovieDao.findByGenre(genreId, movieRequest);
+        return movieDao.findByGenre(genreId, movieRequest);
     }
 }

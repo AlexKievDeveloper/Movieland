@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DefaultCachedDaoTest {
     @Autowired
-    private DefaultCachedDao cachedGenreDao;
+    private DefaultCachedDao cachedDao;
 
     @Test
     @DisplayName("Returns list of genres from cachedGenreList")
     void getAllGenres() {
         //when
-        List<Genre> actualGenreList = cachedGenreDao.findAllGenres();
+        List<Genre> actualGenreList = cachedDao.findAllGenres();
 
         //then
         assertNotNull(actualGenreList);
