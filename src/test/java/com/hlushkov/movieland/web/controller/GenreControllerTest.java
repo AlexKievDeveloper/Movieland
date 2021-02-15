@@ -1,6 +1,6 @@
 package com.hlushkov.movieland.web.controller;
 
-import com.hlushkov.movieland.config.ContextConfiguration;
+import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfigurer.sharedHttpSession;
 
 @ExtendWith(MockitoExtension.class)
-@ContextConfiguration
+@TestWebContextConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GenreControllerTest {
     private MockMvc mockMvc;

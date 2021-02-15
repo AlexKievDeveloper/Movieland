@@ -1,6 +1,6 @@
 package com.hlushkov.movieland.dao.cache;
 
-import com.hlushkov.movieland.config.ContextConfiguration;
+import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.entity.Genre;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,17 +12,17 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@ContextConfiguration
+@TestWebContextConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class DefaultCachedDaoTest {
+class CachedGenreDaoTest {
     @Autowired
-    private DefaultCachedDao cachedDao;
+    private CachedGenreDao cachedDao;
 
     @Test
     @DisplayName("Returns list of genres from cachedGenreList")
     void getAllGenres() {
         //when
-        List<Genre> actualGenreList = cachedDao.findAllGenres();
+        List<Genre> actualGenreList = cachedDao.findAll();
 
         //then
         assertNotNull(actualGenreList);

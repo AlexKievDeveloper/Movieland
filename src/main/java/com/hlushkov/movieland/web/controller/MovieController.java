@@ -1,7 +1,7 @@
 package com.hlushkov.movieland.web.controller;
 
 import com.hlushkov.movieland.entity.Movie;
-import com.hlushkov.movieland.entity.MovieRequest;
+import com.hlushkov.movieland.request.MovieRequest;
 import com.hlushkov.movieland.common.SortDirection;
 import com.hlushkov.movieland.service.MovieService;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +23,6 @@ public class MovieController {
     public List<Movie> findMovies(@RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,
                                      @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
 
-        log.info("Get request for all movies");
-
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setRatingDirection(Optional.ofNullable(ratingSortDirection));
         movieRequest.setPriceDirection(Optional.ofNullable(priceSortDirection));
@@ -41,7 +39,6 @@ public class MovieController {
     public List<Movie> findByGenre(@PathVariable int genreId,
                                          @RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,
                                          @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
-        log.info("Get request for movies by genre");
 
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setRatingDirection(Optional.ofNullable(ratingSortDirection));

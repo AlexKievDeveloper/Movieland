@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @EnableWebMvc
-@ComponentScan("com.hlushkov.movieland.web.controller")
+@ComponentScan("com.hlushkov.movieland.web")
 public class WebApplicationContext implements WebMvcConfigurer {
 
     @Override

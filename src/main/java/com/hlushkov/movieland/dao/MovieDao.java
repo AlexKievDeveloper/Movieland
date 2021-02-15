@@ -1,7 +1,7 @@
 package com.hlushkov.movieland.dao;
 
 import com.hlushkov.movieland.entity.Movie;
-import com.hlushkov.movieland.entity.MovieRequest;
+import com.hlushkov.movieland.request.MovieRequest;
 
 import java.util.List;
 

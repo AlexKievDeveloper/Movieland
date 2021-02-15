@@ -11,5 +11,5 @@ import java.lang.annotation.RetentionPolicy;
         com.hlushkov.movieland.web.WebApplicationContext.class,
         TestConfiguration.class})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ContextConfiguration {
+public @interface TestWebContextConfiguration {
 }

@@ -20,7 +20,6 @@ public class JdbcGenreDao implements GenreDao {
 
     @Override
     public List<Genre> findAll() {
-        log.info("Get request for all genres dao level");
         return jdbcTemplate.query(findAllGenres, genreRowMapper);
     }
 

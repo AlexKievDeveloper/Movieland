@@ -4,7 +4,7 @@ import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.spring.api.DBRider;
-import com.hlushkov.movieland.config.ContextConfiguration;
+import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.config.TestConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfig
 @DBRider
 @DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
 @ExtendWith(MockitoExtension.class)
-@ContextConfiguration
+@TestWebContextConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MovieControllerTest {
     private MockMvc mockMvc;

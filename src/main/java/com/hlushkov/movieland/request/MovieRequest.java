@@ -1,4 +1,4 @@
-package com.hlushkov.movieland.entity;
+package com.hlushkov.movieland.request;
 
 import com.hlushkov.movieland.common.SortDirection;
 import lombok.Data;

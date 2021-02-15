@@ -1,10 +1,10 @@
 package com.hlushkov.movieland.dao.jdbc;
 
+import com.hlushkov.movieland.common.SortDirection;
 import com.hlushkov.movieland.dao.MovieDao;
 import com.hlushkov.movieland.dao.jdbc.mapper.MovieRowMapper;
 import com.hlushkov.movieland.entity.Movie;
-import com.hlushkov.movieland.entity.MovieRequest;
-import com.hlushkov.movieland.common.SortDirection;
+import com.hlushkov.movieland.request.MovieRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,27 +22,22 @@ public class JdbcMovieDao implements MovieDao {
     private final String findAllMovies;
     private final String findRandomMovies;
     private final String findMoviesByGenre;
-    @Value("${random.movie.count}")
+    @Value("${movie.random.count}")
     private Long randomMovieCount;
 
     @Override
     public List<Movie> findAll(MovieRequest movieRequest) {
-        log.info("Request for all movies in dao level");
-
         String query = generateQuery(findAllMovies, movieRequest);
         return jdbcTemplate.query(query, movieRowMapper);
     }
 
     @Override
     public List<Movie> findRandom() {
-        log.info("Request for three random movies in dao level");
         return jdbcTemplate.query(findRandomMovies, movieRowMapper, randomMovieCount);
     }
 
     @Override
     public List<Movie> findByGenre(int genreId, MovieRequest movieRequest) {
-        log.info("Request for all movies by genre in dao level");
-
         String query = generateQuery(findMoviesByGenre, movieRequest);
         return jdbcTemplate.query(query, movieRowMapper, genreId);
     }

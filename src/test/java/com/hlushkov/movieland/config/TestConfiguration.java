@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 public class TestConfiguration {
 
     @Bean
-    public DataSource dataSource(@Value("${connections.amount}") int initialSize) {
+    public DataSource dataSource(@Value("${jdbc.maximum.pool.size}") int maximumPoolSize) {
 
         PostgreSQLContainer postgresContainer = new PostgreSQLContainer("postgres:13.1");
         log.info(postgresContainer.getLogs());
@@ -29,7 +29,7 @@ public class TestConfiguration {
         hikariConfig.setUsername(postgresContainer.getUsername());
         hikariConfig.setPassword(postgresContainer.getPassword());
         hikariConfig.setDriverClassName(postgresContainer.getDriverClassName());
-        hikariConfig.setMaximumPoolSize(initialSize);
+        hikariConfig.setMaximumPoolSize(maximumPoolSize);
         HikariDataSource hikariDataSource = new HikariDataSource(hikariConfig);
 
         Flyway flyway = Flyway.configure().dataSource(hikariDataSource)
@@ -45,7 +45,7 @@ public class TestConfiguration {
         public IDataSet provide() {
             return new DataSetBuilder()
                     .table("movies")
-                    .columns("movie_id", "nameRussian", "nameNative", "yearOfRelease", "description", "rating", "price")
+                    .columns("id", "nameRussian", "nameNative", "yearOfRelease", "description", "rating", "price")
                     .values("1",
                             "Побег из Шоушенка",
                             "The Shawshank Redemption",
@@ -74,7 +74,7 @@ public class TestConfiguration {
         public IDataSet provide() {
             return new DataSetBuilder()
                     .table("movies")
-                    .columns("movie_id", "nameRussian", "nameNative", "yearOfRelease", "description", "rating", "price")
+                    .columns("id", "nameRussian", "nameNative", "yearOfRelease", "description", "rating", "price")
                     .values("1",
                             "Побег из Шоушенка",
                             "The Shawshank Redemption",
@@ -334,7 +334,7 @@ public class TestConfiguration {
         public IDataSet provide() {
             return new DataSetBuilder()
                     .table("genres")
-                    .columns("genre_id", "name")
+                    .columns("id", "name")
                     .values("1", "драма")
                     .values("2", "криминал")
                     .values("3", "фэнтези")
@@ -359,7 +359,7 @@ public class TestConfiguration {
         public IDataSet provide() {
             return new DataSetBuilder()
                     .table("movies")
-                    .columns("movie_id", "nameRussian", "nameNative", "yearOfRelease", "description", "rating", "price")
+                    .columns("id", "nameRussian", "nameNative", "yearOfRelease", "description", "rating", "price")
                     .values("1",
                             "Побег из Шоушенка",
                             "The Shawshank Redemption",
@@ -401,7 +401,7 @@ public class TestConfiguration {
                             "8.9",
                             "123.45")
                     .table("genres")
-                    .columns("genre_id", "name")
+                    .columns("id", "name")
                     .values("1", "драма")
                     .values("2", "криминал")
                     .values("3", "фэнтези")
@@ -423,7 +423,7 @@ public class TestConfiguration {
         public IDataSet provide() {
             return new DataSetBuilder()
                     .table("movies")
-                    .columns("movie_id", "nameRussian", "nameNative", "yearOfRelease", "description", "rating", "price")
+                    .columns("id", "nameRussian", "nameNative", "yearOfRelease", "description", "rating", "price")
                     .values("1",
                             "Побег из Шоушенка",
                             "The Shawshank Redemption",
@@ -710,7 +710,7 @@ public class TestConfiguration {
         public IDataSet provide() {
             return new DataSetBuilder()
                     .table("movies")
-                    .columns("movie_id", "nameRussian", "nameNative", "yearOfRelease", "description", "rating", "price")
+                    .columns("id", "nameRussian", "nameNative", "yearOfRelease", "description", "rating", "price")
                     .values("1",
                             "Побег из Шоушенка",
                             "The Shawshank Redemption",
@@ -963,7 +963,7 @@ public class TestConfiguration {
                             "120.55")
 
                     .table("genres")
-                    .columns("genre_id", "name")
+                    .columns("id", "name")
                     .values("1", "драма")
                     .values("2", "криминал")
                     .values("3", "фэнтези")

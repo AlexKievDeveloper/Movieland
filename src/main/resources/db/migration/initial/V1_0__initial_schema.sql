@@ -1,18 +1,18 @@
 CREATE TABLE IF NOT EXISTS genres
 (
-    genre_id  SERIAL PRIMARY KEY,
-    name     VARCHAR(100) UNIQUE NOT NULL
+    id  SERIAL PRIMARY KEY,
+    name      VARCHAR(100) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS countries
 (
-    country_id  SERIAL PRIMARY KEY,
-    name     VARCHAR(100) UNIQUE NOT NULL
+    id  SERIAL PRIMARY KEY,
+    name        VARCHAR(100) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS movies
 (
-    movie_id    SERIAL PRIMARY KEY,
+    id    SERIAL PRIMARY KEY,
     nameRussian VARCHAR(200) UNIQUE NOT NULL,
     nameNative  VARCHAR(200) UNIQUE NOT NULL,
     yearOfRelease INTEGER           NOT NULL,
@@ -26,8 +26,8 @@ CREATE TABLE IF NOT EXISTS movies_genres
   movie_id INTEGER NOT NULL,
   genre_id INTEGER NOT NULL,
 
-  FOREIGN KEY (movie_id) REFERENCES movies (movie_id),
-  FOREIGN KEY (genre_id) REFERENCES genres (genre_id)
+  FOREIGN KEY (movie_id) REFERENCES movies (id),
+  FOREIGN KEY (genre_id) REFERENCES genres (id)
 );
 
 CREATE TABLE IF NOT EXISTS movies_countries
@@ -35,8 +35,8 @@ CREATE TABLE IF NOT EXISTS movies_countries
     movie_id INTEGER NOT NULL,
     country_id INTEGER NOT NULL,
 
-    FOREIGN KEY (movie_id) REFERENCES movies (movie_id),
-    FOREIGN KEY (country_id) REFERENCES countries (country_id)
+    FOREIGN KEY (movie_id) REFERENCES movies (id),
+    FOREIGN KEY (country_id) REFERENCES countries (id)
 );
 
 CREATE TABLE IF NOT EXISTS posters
@@ -45,12 +45,12 @@ CREATE TABLE IF NOT EXISTS posters
     movie_id   INTEGER NOT NULL,
     picturePath VARCHAR(500) NOT NULL,
 
-    FOREIGN KEY (movie_id) REFERENCES movies (movie_id)
+    FOREIGN KEY (movie_id) REFERENCES movies (id)
 );
 
 CREATE TABLE IF NOT EXISTS users
 (
-    user_id  SERIAL PRIMARY KEY,
+    id  SERIAL PRIMARY KEY,
     name     VARCHAR(200) UNIQUE NOT NULL,
     email    VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(200)       NOT NULL
@@ -63,8 +63,8 @@ CREATE TABLE IF NOT EXISTS reviews
     movie_id   INTEGER NOT NULL,
     review     VARCHAR(1000) NOT NULL,
 
-    FOREIGN KEY (user_id) REFERENCES users (user_id),
-    FOREIGN KEY (movie_id) REFERENCES movies (movie_id)
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (movie_id) REFERENCES movies (id)
 );
 
 INSERT INTO genres (name) VALUES ('драма');

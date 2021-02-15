@@ -20,7 +20,6 @@ public class GenreController {
 
     @GetMapping
     public List<Genre> findAll() {
-        log.info("Get request for all genres");
         return genreService.findAll();
     }
 }

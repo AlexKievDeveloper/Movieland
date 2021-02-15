@@ -27,7 +27,7 @@ class MovieRowMapperTest {
     @DisplayName("Map row from result set")
     void mapRow() throws SQLException {
         //prepare
-        when(resultSet.getInt("movie_id")).thenReturn(1);
+        when(resultSet.getInt("id")).thenReturn(1);
         when(resultSet.getString("nameRussian")).thenReturn("Побег из Шоушенка");
         when(resultSet.getString("nameNative")).thenReturn("The Shawshank Redemption");
         when(resultSet.getInt("yearOfRelease")).thenReturn(1994);

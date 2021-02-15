@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 @Configuration
 @PropertySource("classpath:application.properties")
 @ComponentScan(value = "com.hlushkov.movieland", excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX,
-        pattern = "com.hlushkov.movieland.web.controller"))
+        pattern = "com.hlushkov.movieland.web"))
 @EnableScheduling
 public class RootApplicationContext {
     @Bean
@@ -20,14 +20,14 @@ public class RootApplicationContext {
                                     @Value("${jdbc.user}") String userName,
                                     @Value("${jdbc.password}") String password,
                                     @Value("${jdbc.driver}") String driverClassName,
-                                    @Value("${connections.amount}") int initialSize) {
+                                    @Value("${jdbc.maximum.pool.size}") int maximumPoolSize) {
 
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(url);
         hikariConfig.setUsername(userName);
         hikariConfig.setPassword(password);
         hikariConfig.setDriverClassName(driverClassName);
-        hikariConfig.setMaximumPoolSize(initialSize);
+        hikariConfig.setMaximumPoolSize(maximumPoolSize);
         return new HikariDataSource(hikariConfig);
     }
 
@@ -35,4 +35,5 @@ public class RootApplicationContext {
     protected JdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
+
 }
