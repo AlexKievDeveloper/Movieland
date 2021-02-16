@@ -27,14 +27,14 @@ class MovieRowMapperTest {
     @DisplayName("Map row from result set")
     void mapRow() throws SQLException {
         //prepare
-        when(resultSet.getInt("id")).thenReturn(1);
-        when(resultSet.getString("nameRussian")).thenReturn("Побег из Шоушенка");
-        when(resultSet.getString("nameNative")).thenReturn("The Shawshank Redemption");
-        when(resultSet.getInt("yearOfRelease")).thenReturn(1994);
-        when(resultSet.getString("description")).thenReturn("Amazing film");
-        when(resultSet.getDouble("rating")).thenReturn(8.9);
-        when(resultSet.getDouble("price")).thenReturn(123.45);
-        when(resultSet.getString("picturePath")).thenReturn("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg");
+        when(resultSet.getInt("movie_id")).thenReturn(1);
+        when(resultSet.getString("movie_name_russian")).thenReturn("Побег из Шоушенка");
+        when(resultSet.getString("movie_name_native")).thenReturn("The Shawshank Redemption");
+        when(resultSet.getInt("movie_year_of_release")).thenReturn(1994);
+        when(resultSet.getString("movie_description")).thenReturn("Amazing film");
+        when(resultSet.getDouble("movie_rating")).thenReturn(8.9);
+        when(resultSet.getDouble("movie_price")).thenReturn(123.45);
+        when(resultSet.getString("poster_picture_path")).thenReturn("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg");
         //when
         Movie actualMovie = rowMapper.mapRow(resultSet, 0);
         //then

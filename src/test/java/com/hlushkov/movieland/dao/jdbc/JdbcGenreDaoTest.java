@@ -44,4 +44,18 @@ class JdbcGenreDaoTest {
         assertEquals("вестерн", actualGenreList.get(14).getName());
         assertEquals(15, actualGenreList.get(14).getId());
     }
+
+    @Test
+    @DataSet(provider = TestConfiguration.MoviesGenresFullProvider.class)
+    @DisplayName("Returns list of genres by movie id")
+    void getById() {
+        //when
+        List<Genre> actualGenreList = jdbcGenreDao.findByMovieId(1);
+        //then
+        assertEquals(2, actualGenreList.size());
+        assertEquals(1, actualGenreList.get(0).getId());
+        assertEquals("драма", actualGenreList.get(0).getName());
+        assertEquals(2, actualGenreList.get(1).getId());
+        assertEquals("криминал", actualGenreList.get(1).getName());
+    }
 }

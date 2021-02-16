@@ -27,8 +27,8 @@ class GenreRowMapperTest {
     @DisplayName("Map row from result set")
     void mapRow() throws SQLException {
         //prepare
-        when(resultSet.getString("name")).thenReturn("драма");
-        when(resultSet.getInt("id")).thenReturn(1);
+        when(resultSet.getString("genre_name")).thenReturn("драма");
+        when(resultSet.getInt("genre_id")).thenReturn(1);
         //when
         Genre actualGenre = rowMapper.mapRow(resultSet, 0);
         //then

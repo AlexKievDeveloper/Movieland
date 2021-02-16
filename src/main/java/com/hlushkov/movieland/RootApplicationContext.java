@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 @EnableScheduling
 public class RootApplicationContext {
     @Bean
-    protected DataSource dataSource(@Value("${jdbc.url}") String url,
+    public DataSource dataSource(@Value("${jdbc.url}") String url,
                                     @Value("${jdbc.user}") String userName,
                                     @Value("${jdbc.password}") String password,
                                     @Value("${jdbc.driver}") String driverClassName,
@@ -32,7 +32,7 @@ public class RootApplicationContext {
     }
 
     @Bean
-    protected JdbcTemplate jdbcTemplate(DataSource dataSource) {
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 

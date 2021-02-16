@@ -23,6 +23,11 @@ public class CachedGenreDao implements GenreDao {
         return new ArrayList<>(cachedGenreList);
     }
 
+    @Override
+    public List<Genre> findByMovieId(int movieId) {
+        return jdbcGenreDao.findByMovieId(movieId);
+    }
+
     @PostConstruct
     @Scheduled(initialDelayString = "${genre.cache.update.time}", fixedRateString = "${genre.cache.update.time}")
     private void updateCacheValues() {

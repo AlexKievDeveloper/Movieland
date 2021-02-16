@@ -4,9 +4,10 @@ import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.spring.api.DBRider;
-import com.hlushkov.movieland.config.TestWebContextConfiguration;
-import com.hlushkov.movieland.config.TestConfiguration;
 import com.hlushkov.movieland.common.SortDirection;
+import com.hlushkov.movieland.config.TestConfiguration;
+import com.hlushkov.movieland.config.TestWebContextConfiguration;
+import com.hlushkov.movieland.dto.MovieWithDetails;
 import com.hlushkov.movieland.entity.Movie;
 import com.hlushkov.movieland.request.MovieRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
 @TestWebContextConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class JdbcMovieDaoSystemTest {
+class JdbcMovieDaoITest {
     @Autowired
     private JdbcMovieDao jdbcMovieDao;
 
@@ -44,7 +45,7 @@ class JdbcMovieDaoSystemTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MovieProvider.class)
+    @DataSet(provider = TestConfiguration.MovieProvider.class, cleanAfter = true)
     @DisplayName("Returns list with all movies from DB sorting by rating DESC")
     void getAllMoviesWithRatingDirectionTest() {
         //prepare
@@ -79,7 +80,7 @@ class JdbcMovieDaoSystemTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MovieProvider.class)
+    @DataSet(provider = TestConfiguration.MovieProvider.class, cleanAfter = true)
     @DisplayName("Returns list with all movies from DB sorted by price ASC")
     void getAllMoviesWithPriceASCDirectionTest() {
         //prepare
@@ -171,6 +172,55 @@ class JdbcMovieDaoSystemTest {
         assertEquals(2, actualMovieList.size());
         assertEquals(123.45, actualMovieList.get(0).getPrice());
         assertEquals(134.67, actualMovieList.get(1).getPrice());
+    }
+
+    @Test
+    @DataSet(provider = TestConfiguration.MoviesCountriesGenresReviews.class, cleanAfter = true)
+    @DisplayName("Returns Movie with details by movie id")
+    void findMovieWithDetailsByMovieId() {
+        //when
+        MovieWithDetails actualMovieWithDetails = jdbcMovieDao.findMovieWithDetailsByMovieId(1);
+        //then
+        assertEquals(1, actualMovieWithDetails.getId());
+        assertEquals("Побег из Шоушенка", actualMovieWithDetails.getNameRussian());
+        assertEquals("The Shawshank Redemption", actualMovieWithDetails.getNameNative());
+        assertEquals("Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. " +
+                "Оказавшись в тюрьме под названием Шоушенк, он сталкивается с жестокостью и беззаконием, царящими по обе" +
+                " стороны решетки. Каждый, кто попадает в эти стены, становится их рабом до конца жизни. Но Энди, " +
+                "вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает " +
+                "разрабатывать невероятно дерзкий план своего освобождения.", actualMovieWithDetails.getDescription());
+        assertEquals(1994, actualMovieWithDetails.getYearOfRelease());
+        assertEquals(8.9, actualMovieWithDetails.getRating());
+        assertEquals(123.45, actualMovieWithDetails.getPrice());
+        assertEquals("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg", actualMovieWithDetails.getPicturePath());
+
+        assertEquals(1, actualMovieWithDetails.getGenres().get(0).getId());
+        assertEquals("драма", actualMovieWithDetails.getGenres().get(0).getName());
+        assertEquals(2, actualMovieWithDetails.getGenres().get(1).getId());
+        assertEquals("криминал", actualMovieWithDetails.getGenres().get(1).getName());
+
+        assertEquals(1, actualMovieWithDetails.getCountries().get(0).getId());
+        assertEquals("США", actualMovieWithDetails.getCountries().get(0).getName());
+
+        assertEquals(2, actualMovieWithDetails.getReviews().size());
+        assertEquals(1, actualMovieWithDetails.getReviews().get(0).getId());
+        assertEquals("Гениальное кино! Смотришь и думаешь «Так не бывает!», но позже понимаешь, то только так " +
+                        "и должно быть. Начинаешь заново осмысливать значение фразы, которую постоянно используешь в своей жизни," +
+                        " «Надежда умирает последней». Ведь если ты не надеешься, то все в твоей жизни гаснет, не остается смысла." +
+                        " Фильм наполнен бесконечным числом правильных афоризмов. Я уверена, что буду пересматривать его сотни раз.",
+                actualMovieWithDetails.getReviews().get(0).getText());
+        assertEquals(2, actualMovieWithDetails.getReviews().get(1).getId());
+        assertEquals("Кино это является, безусловно, «со знаком качества». Что же до первого места в рейтинге, " +
+                        "то, думаю, здесь имело место быть выставление «десяточек» от большинства зрителей вкупе с " +
+                        "раздутыми восторженными откликами кинокритиков. 'Фильм атмосферный. Он драматичный. И, конечно," +
+                        " заслуживает того, чтобы находиться довольно высоко в мировом кинематографе.",
+                actualMovieWithDetails.getReviews().get(1).getText());
+
+
+        assertEquals(2, actualMovieWithDetails.getReviews().get(0).getUser().getId());
+        assertEquals("Дарлин Эдвардс", actualMovieWithDetails.getReviews().get(0).getUser().getNickname());
+        assertEquals(3, actualMovieWithDetails.getReviews().get(1).getUser().getId());
+        assertEquals("Габриэль Джексон", actualMovieWithDetails.getReviews().get(1).getUser().getNickname());
     }
 
 }

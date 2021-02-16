@@ -1,5 +1,6 @@
 package com.hlushkov.movieland.dao;
 
+import com.hlushkov.movieland.dto.MovieWithDetails;
 import com.hlushkov.movieland.entity.Movie;
 import com.hlushkov.movieland.request.MovieRequest;
 
@@ -12,6 +13,8 @@ public interface MovieDao {
     List<Movie> findRandom();
 
     List<Movie> findByGenre(int genreId, MovieRequest movieRequest);
+
+    MovieWithDetails findMovieWithDetailsByMovieId(int movieId);
 }
 
 

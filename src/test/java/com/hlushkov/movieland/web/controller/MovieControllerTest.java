@@ -239,4 +239,31 @@ class MovieControllerTest {
         assertEquals("application/json", response.getContentType());
         assertNotNull(response.getContentAsString());
     }
+
+    @Test
+    @DataSet(provider = TestConfiguration.MoviesCountriesGenresReviews.class, cleanAfter = true)
+    @DisplayName("Returns movie by id in json format")
+    void getMoviesById() throws Exception {
+        //when
+        MockHttpServletResponse response = mockMvc.perform(get("/movie/1"))
+                .andDo(print())
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.nameNative").value("The Shawshank Redemption"))
+                .andExpect(jsonPath("$.yearOfRelease").value("1994"))
+                .andExpect(jsonPath("$.rating").value("8.9"))
+                .andExpect(jsonPath("$.price").value("123.45"))
+                .andExpect(jsonPath("$.countries.[0].id").value("1"))
+                .andExpect(jsonPath("$.genres.[0].id").value("1"))
+                .andExpect(jsonPath("$.genres.[1].id").value("2"))
+                .andExpect(jsonPath("$.reviews.[0].id").value("1"))
+                .andExpect(jsonPath("$.reviews.[1].id").value("2"))
+                .andExpect(jsonPath("$.reviews.[0].user.id").value("2"))
+                .andExpect(jsonPath("$.reviews.[1].user.id").value("3"))
+                .andExpect(status().isOk()).andReturn().getResponse();
+        //then
+        assertNotNull(response.getHeader("Content-Type"));
+        assertEquals("application/json", response.getHeader("Content-Type"));
+        assertEquals("application/json", response.getContentType());
+        assertNotNull(response.getContentAsString());
+    }
 }

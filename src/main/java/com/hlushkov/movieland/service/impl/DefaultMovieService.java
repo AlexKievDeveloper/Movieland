@@ -1,6 +1,7 @@
 package com.hlushkov.movieland.service.impl;
 
 import com.hlushkov.movieland.dao.MovieDao;
+import com.hlushkov.movieland.dto.MovieWithDetails;
 import com.hlushkov.movieland.entity.Movie;
 import com.hlushkov.movieland.request.MovieRequest;
 import com.hlushkov.movieland.service.MovieService;
@@ -30,4 +31,10 @@ public class DefaultMovieService implements MovieService {
     public List<Movie> findByGenre(int genreId, MovieRequest movieRequest) {
         return movieDao.findByGenre(genreId, movieRequest);
     }
+
+    @Override
+    public MovieWithDetails findMovieWithDetailsByMovieId(int movieId) {
+        return movieDao.findMovieWithDetailsByMovieId(movieId);
+    }
+
 }

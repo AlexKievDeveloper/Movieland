@@ -7,4 +7,6 @@ import java.util.List;
 public interface GenreDao {
 
     List<Genre> findAll();
+
+    List<Genre> findByMovieId(int movieId);
 }

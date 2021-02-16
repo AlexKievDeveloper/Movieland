@@ -1,5 +1,6 @@
 package com.hlushkov.movieland.web.controller;
 
+import com.hlushkov.movieland.dto.MovieWithDetails;
 import com.hlushkov.movieland.entity.Movie;
 import com.hlushkov.movieland.request.MovieRequest;
 import com.hlushkov.movieland.common.SortDirection;
@@ -27,6 +28,11 @@ public class MovieController {
         movieRequest.setRatingDirection(Optional.ofNullable(ratingSortDirection));
         movieRequest.setPriceDirection(Optional.ofNullable(priceSortDirection));
         return movieService.findAll(movieRequest);
+    }
+
+    @GetMapping("{movieId}")
+    public MovieWithDetails findMovieById(@PathVariable int movieId) {
+        return movieService.findMovieWithDetailsByMovieId(movieId);
     }
 
     @GetMapping("random")
