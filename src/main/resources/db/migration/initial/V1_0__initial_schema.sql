@@ -51,9 +51,11 @@ CREATE TABLE IF NOT EXISTS posters
 CREATE TABLE IF NOT EXISTS users
 (
     user_id  SERIAL PRIMARY KEY,
-    user_name     VARCHAR(200) UNIQUE NOT NULL,
+    user_nickname VARCHAR(200) UNIQUE NOT NULL,
     user_email    VARCHAR(50) UNIQUE NOT NULL,
-    user_password VARCHAR(200)       NOT NULL
+    user_password VARCHAR(200) NOT NULL,
+    user_salt     VARCHAR(500) UNIQUE NOT NULL,
+    user_role     VARCHAR(50)  NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS reviews
@@ -61,7 +63,7 @@ CREATE TABLE IF NOT EXISTS reviews
     review_id  SERIAL PRIMARY KEY,
     user_id    INTEGER NOT NULL,
     movie_id   INTEGER NOT NULL,
-    review_review VARCHAR(1000) NOT NULL,
+    review_text VARCHAR(1000) NOT NULL,
 
     FOREIGN KEY (user_id) REFERENCES users (user_id),
     FOREIGN KEY (movie_id) REFERENCES movies (movie_id)

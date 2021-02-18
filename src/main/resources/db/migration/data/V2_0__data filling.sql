@@ -190,26 +190,26 @@ VALUES ('Танцующий с волками', 'Dances with Wolves', '1990',
 
 
 
-INSERT INTO users (user_name, user_email, user_password)
-VALUES ('Рональд Рейнольдс', 'ronald.reynolds66@example.com', 'paco');
-INSERT INTO users (user_name, user_email, user_password)
-VALUES ('Дарлин Эдвардс', 'darlene.edwards15@example.com', 'bricks');
-INSERT INTO users (user_name, user_email, user_password)
-VALUES ('Габриэль Джексон', 'gabriel.jackson91@example.com', 'hjkl');
-INSERT INTO users (user_name, user_email, user_password)
-VALUES ('Дэрил Брайант', 'daryl.bryant94@example.com', 'exodus');
-INSERT INTO users (user_name, user_email, user_password)
-VALUES ('Нил Паркер', 'neil.parker43@example.com', '878787');
-INSERT INTO users (user_name, user_email, user_password)
-VALUES ('Трэвис Райт', 'travis.wright36@example.com', 'smart');
-INSERT INTO users (user_name, user_email, user_password)
-VALUES ('Амелия Кэннеди', 'amelia.kennedy58@example.com', 'beaker');
-INSERT INTO users (user_name, user_email, user_password)
-VALUES ('Айда Дэвис', 'ida.davis80@example.com', 'pepsi1');
-INSERT INTO users (user_name, user_email, user_password)
-VALUES ('Джесси Паттерсон', 'jessie.patterson68@example.com', 'tommy');
-INSERT INTO users (user_name, user_email, user_password)
-VALUES ('Деннис Крейг', 'dennis.craig82@example.com', 'coldbeer');
+INSERT INTO users (user_nickname, user_email, user_password, user_salt, user_role)
+VALUES ('Рональд Рейнольдс', 'ronald.reynolds66@example.com', 'paco', 'salt1', 'user');
+INSERT INTO users (user_nickname, user_email, user_password, user_salt, user_role)
+VALUES ('Дарлин Эдвардс', 'darlene.edwards15@example.com', 'bricks', 'salt2', 'user');
+INSERT INTO users (user_nickname, user_email, user_password, user_salt, user_role)
+VALUES ('Габриэль Джексон', 'gabriel.jackson91@example.com', 'hjkl', 'salt3', 'user');
+INSERT INTO users (user_nickname, user_email, user_password, user_salt, user_role)
+VALUES ('Дэрил Брайант', 'daryl.bryant94@example.com', 'exodus', 'salt4', 'user');
+INSERT INTO users (user_nickname, user_email, user_password, user_salt, user_role)
+VALUES ('Нил Паркер', 'neil.parker43@example.com', '878787', 'salt5', 'user');
+INSERT INTO users (user_nickname, user_email, user_password, user_salt, user_role)
+VALUES ('Трэвис Райт', 'travis.wright36@example.com', 'smart', 'salt6', 'user');
+INSERT INTO users (user_nickname, user_email, user_password, user_salt, user_role)
+VALUES ('Амелия Кэннеди', 'amelia.kennedy58@example.com', 'beaker', 'salt7', 'user');
+INSERT INTO users (user_nickname, user_email, user_password, user_salt, user_role)
+VALUES ('Айда Дэвис', 'ida.davis80@example.com', 'pepsi1', 'salt8', 'user');
+INSERT INTO users (user_nickname, user_email, user_password, user_salt, user_role)
+VALUES ('Джесси Паттерсон', 'jessie.patterson68@example.com', 'tommy', 'salt9', 'user');
+INSERT INTO users (user_nickname, user_email, user_password, user_salt, user_role)
+VALUES ('Деннис Крейг', 'dennis.craig82@example.com', 'coldbeer', 'salt10', 'user');
 
 
 

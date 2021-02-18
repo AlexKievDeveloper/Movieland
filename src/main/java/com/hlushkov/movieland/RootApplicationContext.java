@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.sql.DataSource;
@@ -15,12 +16,13 @@ import javax.sql.DataSource;
         pattern = "com.hlushkov.movieland.web"))
 @EnableScheduling
 public class RootApplicationContext {
+
     @Bean
     public DataSource dataSource(@Value("${jdbc.url}") String url,
-                                    @Value("${jdbc.user}") String userName,
-                                    @Value("${jdbc.password}") String password,
-                                    @Value("${jdbc.driver}") String driverClassName,
-                                    @Value("${jdbc.maximum.pool.size}") int maximumPoolSize) {
+                                 @Value("${jdbc.user}") String userName,
+                                 @Value("${jdbc.password}") String password,
+                                 @Value("${jdbc.driver}") String driverClassName,
+                                 @Value("${jdbc.maximum.pool.size}") int maximumPoolSize) {
 
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(url);
@@ -35,5 +37,8 @@ public class RootApplicationContext {
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
+
+    @Bean
+    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) { return new NamedParameterJdbcTemplate(dataSource);}
 
 }

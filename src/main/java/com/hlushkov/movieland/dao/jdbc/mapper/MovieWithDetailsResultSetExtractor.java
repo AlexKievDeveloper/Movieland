@@ -42,13 +42,13 @@ public class MovieWithDetailsResultSetExtractor implements ResultSetExtractor<Mo
                 .build();
         User firstUser = User.builder()
                 .id(resultSet.getInt("user_id"))
-                .nickname(resultSet.getString("user_name"))
+                .nickname(resultSet.getString("user_nickname"))
                 .build();
 
         Review firstReview = Review.builder()
                 .id(resultSet.getInt("review_id"))
                 .user(firstUser)
-                .text(resultSet.getString("review_review"))
+                .text(resultSet.getString("review_text"))
                 .build();
 
         List<Genre> genreList = new ArrayList<>();
@@ -69,13 +69,13 @@ public class MovieWithDetailsResultSetExtractor implements ResultSetExtractor<Mo
                     .build();
             User user = User.builder()
                     .id(resultSet.getInt("user_id"))
-                    .nickname(resultSet.getString("user_name"))
+                    .nickname(resultSet.getString("user_nickname"))
                     .build();
 
             Review review = Review.builder()
                     .id(resultSet.getInt("review_id"))
                     .user(user)
-                    .text(resultSet.getString("review_review"))
+                    .text(resultSet.getString("review_text"))
                     .build();
 
             if (!genreList.contains(genre)) {

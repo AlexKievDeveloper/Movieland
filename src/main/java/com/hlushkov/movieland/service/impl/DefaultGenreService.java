@@ -22,8 +22,4 @@ public class DefaultGenreService implements GenreService {
         return genreDao.findAll();
     }
 
-    @Override
-    public List<Genre> findByMovieId(int movieId) {
-        return genreDao.findByMovieId(movieId);
-    }
 }

@@ -45,10 +45,10 @@ class MovieWithDetailsResultSetExtractorTest {
         when(resultSet.getString("country_name")).thenReturn("США");
 
         when(resultSet.getInt("user_id")).thenReturn(2);
-        when(resultSet.getString("user_name")).thenReturn("Дарлин Эдвардс");
+        when(resultSet.getString("user_nickname")).thenReturn("Дарлин Эдвардс");
 
         when(resultSet.getInt("review_id")).thenReturn(1);
-        when(resultSet.getString("review_review")).thenReturn("Гениальное кино! Смотришь и думаешь «Так не бывает!»");
+        when(resultSet.getString("review_text")).thenReturn("Гениальное кино! Смотришь и думаешь «Так не бывает!»");
         //when
         MovieWithDetails actualMovieWithDetails = rowMapper.extractData(resultSet);
         //then

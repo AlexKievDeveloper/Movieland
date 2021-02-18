@@ -8,14 +8,12 @@ import com.hlushkov.movieland.dto.MovieWithDetails;
 import com.hlushkov.movieland.entity.Movie;
 import com.hlushkov.movieland.request.MovieRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Slf4j
 @RequiredArgsConstructor
 @Repository
 public class JdbcMovieDao implements MovieDao {
@@ -50,7 +48,6 @@ public class JdbcMovieDao implements MovieDao {
     public MovieWithDetails findMovieWithDetailsByMovieId(int movieId) {
         return jdbcTemplate.query(findMovieWithDetailsByMovieId, movieWithDetailsResultSetExtractor, movieId);
     }
-
 
     String generateQuery(String query, MovieRequest movieRequest) {
         String orderBy = " ORDER BY ";

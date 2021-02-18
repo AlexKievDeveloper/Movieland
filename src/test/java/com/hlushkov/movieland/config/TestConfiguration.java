@@ -1012,7 +1012,7 @@ public class TestConfiguration {
         }
     }
 
-    public static class MoviesCountriesGenresReviews implements DataSetProvider {
+    public static class MoviesCountriesGenresReviewsUsers implements DataSetProvider {
         @Override
         public IDataSet provide() {
             return new DataSetBuilder()
@@ -1362,13 +1362,13 @@ public class TestConfiguration {
                     .values("25", "3")
 
                     .table("users")
-                    .columns("user_id", "user_name", "user_email", "user_password")
-                    .values("1", "Рональд Рейнольдс", "ronald.reynolds66@example.com", "paco")
-                    .values("2", "Дарлин Эдвардс", "darlene.edwards15@example.com", "bricks")
-                    .values("3", "Габриэль Джексон", "gabriel.jackson91@example.com", "hjkl")
+                    .columns("user_id", "user_nickname", "user_email", "user_password", "user_salt", "user_role")
+                    .values("1", "Рональд Рейнольдс", "ronald.reynolds66@example.com", "paco", "salt1", "user")
+                    .values("2", "Дарлин Эдвардс", "darlene.edwards15@example.com", "bricks", "salt2", "user")
+                    .values("3", "Габриэль Джексон", "gabriel.jackson91@example.com", "hjkl", "salt3", "user")
 
                     .table("reviews")
-                    .columns("review_id", "movie_id", "user_id", "review_review")
+                    .columns("review_id", "movie_id", "user_id", "review_text")
                     .values("1", "1", "2", "Гениальное кино! Смотришь и думаешь «Так не бывает!», но позже понимаешь, то " +
                             "только так и должно быть. Начинаешь заново осмысливать значение фразы, которую постоянно " +
                             "используешь в своей жизни, «Надежда умирает последней». Ведь если ты не надеешься, то все " +
@@ -1389,6 +1389,116 @@ public class TestConfiguration {
         }
     }
 
+    public static class UserProvider implements DataSetProvider {
+        @Override
+        public IDataSet provide() {
+            return new DataSetBuilder()
+                    .table("users")
+                    .columns("user_id", "user_nickname", "user_email", "user_password", "user_salt", "user_role")
+                    .values("1", "user", "user@gmail.com", "e172c5654dbc12d78ce1850a4f7956ba6e5a3d2ac40f0925fc6d691ebb54f6bf", "user", "user")
+                    .build();
+        }
+    }
+
+    public static class ReviewsProvider implements DataSetProvider {
+        @Override
+        public IDataSet provide() {
+            return new DataSetBuilder()
+                    .table("movies")
+                    .columns("movie_id", "movie_name_russian", "movie_name_native", "movie_year_of_release", "movie_description", "movie_rating", "movie_price")
+                    .values("1",
+                            "Побег из Шоушенка",
+                            "The Shawshank Redemption",
+                            "1994",
+                            "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, " +
+                                    "он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их " +
+                                    "рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает " +
+                                    "разрабатывать невероятно дерзкий план своего освобождения.",
+                            "8.9",
+                            "123.45")
+                    .values("2",
+                            "Зеленая миля",
+                            "The Green Mile",
+                            "1999",
+                            "Обвиненный в страшном преступлении, Джон Коффи оказывается в блоке смертников тюрьмы «Холодная гора». Вновь прибывший" +
+                                    " обладал поразительным ростом и был пугающе спокоен, что, впрочем, никак не влияло на отношение к нему начальника блока" +
+                                    " Пола Эджкомба, привыкшего исполнять приговор.",
+                            "8.8",
+                            "134.67")
+
+                    .table("users")
+                    .columns("user_id", "user_nickname", "user_email", "user_password", "user_salt", "user_role")
+                    .values("1", "user", "user@gmail.com", "e172c5654dbc12d78ce1850a4f7956ba6e5a3d2ac40f0925fc6d691ebb54f6bf", "user", "user")
+                    .values("2", "Дарлин Эдвардс", "darlene.edwards15@example.com", "bricks", "salt2", "user")
+                    .values("3", "Габриэль Джексон", "gabriel.jackson91@example.com", "hjkl", "salt3", "user")
+
+                    .table("reviews")
+                    .columns("review_id", "movie_id", "user_id", "review_text")
+                    .values("1", "1", "2", "Гениальное кино! Смотришь и думаешь «Так не бывает!», но позже понимаешь, то " +
+                            "только так и должно быть. Начинаешь заново осмысливать значение фразы, которую постоянно " +
+                            "используешь в своей жизни, «Надежда умирает последней». Ведь если ты не надеешься, то все " +
+                            "в твоей жизни гаснет, не остается смысла. Фильм наполнен бесконечным числом правильных " +
+                            "афоризмов. Я уверена, что буду пересматривать его сотни раз.")
+
+                    .values("2", "1", "3",
+                            "Кино это является, безусловно, «со знаком качества». Что же до первого места в рейтинге, " +
+                                    "то, думаю, здесь имело место быть выставление «десяточек» от большинства зрителей " +
+                                    "вкупе с раздутыми восторженными откликами кинокритиков. 'Фильм атмосферный. " +
+                                    "Он драматичный. И, конечно, заслуживает того, чтобы находиться довольно высоко " +
+                                    "в мировом кинематографе.")
+                    .build();
+        }
+    }
+    public static class ResultReviewsProvider implements DataSetProvider {
+        @Override
+        public IDataSet provide() {
+            return new DataSetBuilder()
+                    .table("movies")
+                    .columns("movie_id", "movie_name_russian", "movie_name_native", "movie_year_of_release", "movie_description", "movie_rating", "movie_price")
+                    .values("1",
+                            "Побег из Шоушенка",
+                            "The Shawshank Redemption",
+                            "1994",
+                            "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, " +
+                                    "он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их " +
+                                    "рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает " +
+                                    "разрабатывать невероятно дерзкий план своего освобождения.",
+                            "8.9",
+                            "123.45")
+                    .values("2",
+                            "Зеленая миля",
+                            "The Green Mile",
+                            "1999",
+                            "Обвиненный в страшном преступлении, Джон Коффи оказывается в блоке смертников тюрьмы «Холодная гора». Вновь прибывший" +
+                                    " обладал поразительным ростом и был пугающе спокоен, что, впрочем, никак не влияло на отношение к нему начальника блока" +
+                                    " Пола Эджкомба, привыкшего исполнять приговор.",
+                            "8.8",
+                            "134.67")
+
+                    .table("users")
+                    .columns("user_id", "user_nickname", "user_email", "user_password", "user_salt", "user_role")
+                    .values("1", "user", "user@gmail.com", "e172c5654dbc12d78ce1850a4f7956ba6e5a3d2ac40f0925fc6d691ebb54f6bf", "user", "user")
+                    .values("2", "Дарлин Эдвардс", "darlene.edwards15@example.com", "bricks", "salt2", "user")
+                    .values("3", "Габриэль Джексон", "gabriel.jackson91@example.com", "hjkl", "salt3", "user")
+
+                    .table("reviews")
+                    .columns("review_id", "movie_id", "user_id", "review_text")
+                    .values("1", "1", "2", "Гениальное кино! Смотришь и думаешь «Так не бывает!», но позже понимаешь, то " +
+                            "только так и должно быть. Начинаешь заново осмысливать значение фразы, которую постоянно " +
+                            "используешь в своей жизни, «Надежда умирает последней». Ведь если ты не надеешься, то все " +
+                            "в твоей жизни гаснет, не остается смысла. Фильм наполнен бесконечным числом правильных " +
+                            "афоризмов. Я уверена, что буду пересматривать его сотни раз.")
+
+                    .values("2", "1", "3",
+                            "Кино это является, безусловно, «со знаком качества». Что же до первого места в рейтинге, " +
+                                    "то, думаю, здесь имело место быть выставление «десяточек» от большинства зрителей " +
+                                    "вкупе с раздутыми восторженными откликами кинокритиков. 'Фильм атмосферный. " +
+                                    "Он драматичный. И, конечно, заслуживает того, чтобы находиться довольно высоко " +
+                                    "в мировом кинематографе.")
+                    .values("3", "1", "1", "Nice film!" )
+                    .build();
+        }
+    }
 }
 
 

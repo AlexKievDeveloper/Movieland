@@ -45,7 +45,7 @@ class MovieControllerTest {
     @Test
     @DataSet(provider = TestConfiguration.MoviesProvider.class)
     @DisplayName("Returns list of all movies in json format")
-    void getAllMovies() throws Exception {
+    void findAllMovies() throws Exception {
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/movie"))
                 .andDo(print())
@@ -62,7 +62,7 @@ class MovieControllerTest {
     @Test
     @DataSet(provider = TestConfiguration.MoviesProvider.class)
     @DisplayName("Returns list of all movies sorted by rating DESC in json format")
-    void getAllMoviesSortedByRatingDESC() throws Exception {
+    void findAllMoviesSortedByRatingDESC() throws Exception {
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/movie").param("rating", "desc"))
                 .andDo(print())
@@ -81,7 +81,7 @@ class MovieControllerTest {
     @Test
     @DataSet(provider = TestConfiguration.MoviesProvider.class)
     @DisplayName("Returns list of all movies sorted by price DESC in json format")
-    void getAllMoviesSortedByPriceDESC() throws Exception {
+    void findAllMoviesSortedByPriceDESC() throws Exception {
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/movie").param("price", "desc"))
                 .andDo(print())
@@ -100,7 +100,7 @@ class MovieControllerTest {
     @Test
     @DataSet(provider = TestConfiguration.MoviesProvider.class)
     @DisplayName("Returns list of all movies sorted by price ASC in json format")
-    void getAllMoviesSortedByPriceASC() throws Exception {
+    void findAllMoviesSortedByPriceASC() throws Exception {
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/movie").param("price", "asc"))
                 .andDo(print())
@@ -119,7 +119,7 @@ class MovieControllerTest {
     @Test
     @DataSet(provider = TestConfiguration.PostersAndMoviesProvider.class, cleanAfter = true)
     @DisplayName("Returns list of three random movies in json format")
-    void getThreeRandomMovies() throws Exception {
+    void findThreeRandomMovies() throws Exception {
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/movie/random"))
                 .andDo(print())
@@ -170,7 +170,7 @@ class MovieControllerTest {
     @Test
     @DataSet(provider = TestConfiguration.MoviesGenresFullProvider.class, cleanAfter = true)
     @DisplayName("Returns list of movies by genre in json format")
-    void getAllMoviesByGenre() throws Exception {
+    void findAllMoviesByGenre() throws Exception {
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/movie/genre/15"))
                 .andDo(print())
@@ -189,7 +189,7 @@ class MovieControllerTest {
     @Test
     @DataSet(provider = TestConfiguration.MoviesGenresFullProvider.class, cleanAfter = true)
     @DisplayName("Returns list of movies by genre sorted by rating in json format")
-    void getAllMoviesByGenreSortedByRating() throws Exception {
+    void findAllMoviesByGenreSortedByRating() throws Exception {
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/movie/genre/15?rating=desc"))
                 .andDo(print())
@@ -207,7 +207,7 @@ class MovieControllerTest {
     @Test
     @DataSet(provider = TestConfiguration.MoviesGenresFullProvider.class, cleanAfter = true)
     @DisplayName("Returns list of movies by genre sorted by price DESC in json format")
-    void getAllMoviesByGenreSortedByPriceDesc() throws Exception {
+    void findAllMoviesByGenreSortedByPriceDesc() throws Exception {
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/movie/genre/15?price=desc"))
                 .andDo(print())
@@ -225,7 +225,7 @@ class MovieControllerTest {
     @Test
     @DataSet(provider = TestConfiguration.MoviesGenresFullProvider.class, cleanAfter = true)
     @DisplayName("Returns list of movies by genre sorted by price ASC in json format")
-    void getAllMoviesByGenreSortedByPriceAsc() throws Exception {
+    void findAllMoviesByGenreSortedByPriceAsc() throws Exception {
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/movie/genre/15?price=asc"))
                 .andDo(print())
@@ -241,9 +241,9 @@ class MovieControllerTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesCountriesGenresReviews.class, cleanAfter = true)
+    @DataSet(provider = TestConfiguration.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
     @DisplayName("Returns movie by id in json format")
-    void getMoviesById() throws Exception {
+    void findMovieById() throws Exception {
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/movie/1"))
                 .andDo(print())

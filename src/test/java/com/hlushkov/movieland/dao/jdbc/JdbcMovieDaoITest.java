@@ -175,7 +175,7 @@ class JdbcMovieDaoITest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesCountriesGenresReviews.class, cleanAfter = true)
+    @DataSet(provider = TestConfiguration.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
     @DisplayName("Returns Movie with details by movie id")
     void findMovieWithDetailsByMovieId() {
         //when

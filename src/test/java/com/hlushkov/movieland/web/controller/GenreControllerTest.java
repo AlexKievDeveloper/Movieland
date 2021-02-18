@@ -38,7 +38,7 @@ class GenreControllerTest {
 
     @Test
     @DisplayName("Returns all genres")
-    void getAllGenres() throws Exception {
+    void findAllGenres() throws Exception {
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/genre"))
                 .andDo(print())
