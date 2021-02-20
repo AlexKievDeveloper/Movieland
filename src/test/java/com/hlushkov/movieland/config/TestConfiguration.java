@@ -1449,6 +1449,7 @@ public class TestConfiguration {
                     .build();
         }
     }
+
     public static class ResultReviewsProvider implements DataSetProvider {
         @Override
         public IDataSet provide() {
@@ -1495,7 +1496,7 @@ public class TestConfiguration {
                                     "вкупе с раздутыми восторженными откликами кинокритиков. 'Фильм атмосферный. " +
                                     "Он драматичный. И, конечно, заслуживает того, чтобы находиться довольно высоко " +
                                     "в мировом кинематографе.")
-                    .values("3", "1", "1", "Nice film!" )
+                    .values("3", "1", "1", "Nice film!")
                     .build();
         }
     }

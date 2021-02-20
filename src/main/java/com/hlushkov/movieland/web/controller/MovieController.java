@@ -1,9 +1,9 @@
 package com.hlushkov.movieland.web.controller;
 
-import com.hlushkov.movieland.dto.MovieWithDetails;
-import com.hlushkov.movieland.entity.Movie;
-import com.hlushkov.movieland.request.MovieRequest;
 import com.hlushkov.movieland.common.SortDirection;
+import com.hlushkov.movieland.common.dto.MovieDetails;
+import com.hlushkov.movieland.common.request.MovieRequest;
+import com.hlushkov.movieland.entity.Movie;
 import com.hlushkov.movieland.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,30 +22,33 @@ public class MovieController {
 
     @GetMapping
     public List<Movie> findMovies(@RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,
-                                     @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
+                                  @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
 
+        log.debug("Request for all movies received");
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setRatingDirection(Optional.ofNullable(ratingSortDirection));
         movieRequest.setPriceDirection(Optional.ofNullable(priceSortDirection));
-        return movieService.findAll(movieRequest);
+        return movieService.findMovies(movieRequest);
     }
 
     @GetMapping("{movieId}")
-    public MovieWithDetails findMovieById(@PathVariable int movieId) {
-        return movieService.findMovieWithDetailsByMovieId(movieId);
+    public MovieDetails findMovieById(@PathVariable int movieId) {
+        log.debug("Request for movie with id: {} received", movieId);
+        return movieService.findMovieDetailsByMovieId(movieId);
     }
 
     @GetMapping("random")
     public List<Movie> findRandom() {
-        log.info("Get request for three random movies");
+        log.debug("Request for random movies received");
         return movieService.findRandom();
     }
 
     @GetMapping("genre/{genreId}")
     public List<Movie> findByGenre(@PathVariable int genreId,
-                                         @RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,
-                                         @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
+                                   @RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,
+                                   @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
 
+        log.debug("Request for movies by genre received");
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setRatingDirection(Optional.ofNullable(ratingSortDirection));
         movieRequest.setPriceDirection(Optional.ofNullable(priceSortDirection));

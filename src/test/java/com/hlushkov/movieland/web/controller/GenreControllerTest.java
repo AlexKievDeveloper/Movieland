@@ -72,7 +72,6 @@ class GenreControllerTest {
                 .andExpect(jsonPath("$[13].name").isNotEmpty())
                 .andExpect(jsonPath("$[14].id").value(15))
                 .andExpect(jsonPath("$[14].name").isNotEmpty())
-
                 .andExpect(status().isOk()).andReturn().getResponse();
         //then
         assertNotNull(response.getHeader("Content-Type"));

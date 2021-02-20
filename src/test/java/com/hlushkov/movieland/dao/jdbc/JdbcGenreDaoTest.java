@@ -4,8 +4,8 @@ import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.spring.api.DBRider;
-import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.config.TestConfiguration;
+import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.entity.Genre;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @DBRider
 @DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
 @TestWebContextConfiguration

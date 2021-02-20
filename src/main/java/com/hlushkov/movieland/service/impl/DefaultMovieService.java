@@ -1,9 +1,9 @@
 package com.hlushkov.movieland.service.impl;
 
+import com.hlushkov.movieland.common.dto.MovieDetails;
+import com.hlushkov.movieland.common.request.MovieRequest;
 import com.hlushkov.movieland.dao.MovieDao;
-import com.hlushkov.movieland.dto.MovieWithDetails;
 import com.hlushkov.movieland.entity.Movie;
-import com.hlushkov.movieland.request.MovieRequest;
 import com.hlushkov.movieland.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,23 +18,23 @@ public class DefaultMovieService implements MovieService {
     private final MovieDao movieDao;
 
     @Override
-    public List<Movie> findAll(MovieRequest movieRequest) {
-        return movieDao.findAll(movieRequest);
+    public List<Movie> findMovies(MovieRequest movieRequest) {
+        return movieDao.findMovies(movieRequest);
+    }
+
+    @Override
+    public MovieDetails findMovieDetailsByMovieId(int movieId) {
+        return movieDao.findMovieDetailsByMovieId(movieId);
     }
 
     @Override
     public List<Movie> findRandom() {
-        return movieDao.findRandom();
+        return movieDao.findRandomMovies();
     }
 
     @Override
     public List<Movie> findByGenre(int genreId, MovieRequest movieRequest) {
-        return movieDao.findByGenre(genreId, movieRequest);
-    }
-
-    @Override
-    public MovieWithDetails findMovieWithDetailsByMovieId(int movieId) {
-        return movieDao.findMovieWithDetailsByMovieId(movieId);
+        return movieDao.findMoviesByGenre(genreId, movieRequest);
     }
 
 }

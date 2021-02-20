@@ -1,21 +1,21 @@
 package com.hlushkov.movieland;
 
-import com.hlushkov.movieland.web.WebApplicationContext;
+import com.hlushkov.movieland.web.MovielandWebApplicationContext;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class MovielandAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
-    protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{RootApplicationContext.class};
+    public Class<?>[] getRootConfigClasses() {
+        return new Class[]{MovielandApplicationContext.class};
     }
 
     @Override
-    protected Class<?>[] getServletConfigClasses() {
-        return new Class[]{WebApplicationContext.class};
+    public Class<?>[] getServletConfigClasses() {
+        return new Class[]{MovielandWebApplicationContext.class};
     }
 
     @Override
-    protected String[] getServletMappings() {
+    public String[] getServletMappings() {
         return new String[]{"/api/v1/*"};
     }
 

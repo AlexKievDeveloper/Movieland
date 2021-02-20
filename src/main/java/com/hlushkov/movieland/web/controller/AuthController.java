@@ -1,10 +1,13 @@
 package com.hlushkov.movieland.web.controller;
 
-import com.hlushkov.movieland.response.AuthResponse;
+import com.hlushkov.movieland.common.request.AuthRequest;
+import com.hlushkov.movieland.common.response.AuthResponse;
 import com.hlushkov.movieland.security.SecurityService;
-import com.hlushkov.movieland.security.Session;
+import com.hlushkov.movieland.security.session.Session;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +17,17 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
+@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 public class AuthController {
     private final SecurityService securityService;
 
     @PostMapping("login")
-    public ResponseEntity<AuthResponse> login(@RequestParam String email, @RequestParam String password, HttpServletResponse response) {
-        Optional<Session> optionalSession = securityService.login(email, password);
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest authRequest, HttpServletResponse response) {
+        log.debug("Request for login with email: {} received", authRequest.getEmail());
+        Optional<Session> optionalSession = securityService.login(authRequest);
 
         if (optionalSession.isPresent()) {
             AuthResponse authResponse = AuthResponse.builder()
@@ -42,10 +48,11 @@ public class AuthController {
 
     @DeleteMapping("logout")
     public ResponseEntity<Object> logout(@CookieValue(value = "user_uuid") Cookie cookie) {
+        log.debug("Request for logout received");
         if (cookie != null && securityService.removeSession(cookie.getValue())) {
             return ResponseEntity.ok().build();
         }
-
+        log.info("user_uuid is not found or expired");
         return ResponseEntity.badRequest().build();
     }
 }

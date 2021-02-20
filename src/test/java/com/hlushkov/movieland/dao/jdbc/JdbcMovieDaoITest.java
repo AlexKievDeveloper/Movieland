@@ -7,9 +7,9 @@ import com.github.database.rider.spring.api.DBRider;
 import com.hlushkov.movieland.common.SortDirection;
 import com.hlushkov.movieland.config.TestConfiguration;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
-import com.hlushkov.movieland.dto.MovieWithDetails;
+import com.hlushkov.movieland.common.dto.MovieDetails;
 import com.hlushkov.movieland.entity.Movie;
-import com.hlushkov.movieland.request.MovieRequest;
+import com.hlushkov.movieland.common.request.MovieRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -38,7 +38,7 @@ class JdbcMovieDaoITest {
         movieRequest.setRatingDirection(Optional.ofNullable(null));
         movieRequest.setPriceDirection(Optional.ofNullable(null));
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findAll(movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findMovies(movieRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(2, actualMovieList.size());
@@ -53,7 +53,7 @@ class JdbcMovieDaoITest {
         movieRequest.setRatingDirection(Optional.of(SortDirection.DESC));
         movieRequest.setPriceDirection(Optional.ofNullable(null));
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findAll(movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findMovies(movieRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(2, actualMovieList.size());
@@ -70,7 +70,7 @@ class JdbcMovieDaoITest {
         movieRequest.setPriceDirection(Optional.of(SortDirection.DESC));
         movieRequest.setRatingDirection(Optional.ofNullable(null));
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findAll(movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findMovies(movieRequest);
 
         //then
         assertNotNull(actualMovieList);
@@ -88,7 +88,7 @@ class JdbcMovieDaoITest {
         movieRequest.setPriceDirection(Optional.ofNullable(SortDirection.ASC));
         movieRequest.setRatingDirection(Optional.ofNullable(null));
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findAll(movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findMovies(movieRequest);
 
         //then
         assertNotNull(actualMovieList);
@@ -102,7 +102,7 @@ class JdbcMovieDaoITest {
     @DisplayName("Returns list with all movies from DB")
     void getRandomMovies() {
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findRandom();
+        List<Movie> actualMovieList = jdbcMovieDao.findRandomMovies();
         //then
         assertNotNull(actualMovieList);
         assertEquals(3, actualMovieList.size());
@@ -117,7 +117,7 @@ class JdbcMovieDaoITest {
         movieRequest.setPriceDirection(Optional.of(SortDirection.ASC));
         movieRequest.setRatingDirection(Optional.ofNullable(null));
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findByGenre(2, movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findMoviesByGenre(2, movieRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(2, actualMovieList.size());
@@ -132,7 +132,7 @@ class JdbcMovieDaoITest {
         movieRequest.setRatingDirection(Optional.of(SortDirection.DESC));
         movieRequest.setPriceDirection(Optional.ofNullable(null));
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findByGenre(2, movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findMoviesByGenre(2, movieRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(2, actualMovieList.size());
@@ -149,7 +149,7 @@ class JdbcMovieDaoITest {
         movieRequest.setPriceDirection(Optional.of(SortDirection.DESC));
         movieRequest.setRatingDirection(Optional.ofNullable(null));
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findByGenre(2, movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findMoviesByGenre(2, movieRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(2, actualMovieList.size());
@@ -166,7 +166,7 @@ class JdbcMovieDaoITest {
         movieRequest.setPriceDirection(Optional.of(SortDirection.ASC));
         movieRequest.setRatingDirection(Optional.ofNullable(null));
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findByGenre(2, movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findMoviesByGenre(2, movieRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(2, actualMovieList.size());
@@ -179,48 +179,48 @@ class JdbcMovieDaoITest {
     @DisplayName("Returns Movie with details by movie id")
     void findMovieWithDetailsByMovieId() {
         //when
-        MovieWithDetails actualMovieWithDetails = jdbcMovieDao.findMovieWithDetailsByMovieId(1);
+        MovieDetails actualMovieDetails = jdbcMovieDao.findMovieDetailsByMovieId(1);
         //then
-        assertEquals(1, actualMovieWithDetails.getId());
-        assertEquals("Побег из Шоушенка", actualMovieWithDetails.getNameRussian());
-        assertEquals("The Shawshank Redemption", actualMovieWithDetails.getNameNative());
+        assertEquals(1, actualMovieDetails.getId());
+        assertEquals("Побег из Шоушенка", actualMovieDetails.getNameRussian());
+        assertEquals("The Shawshank Redemption", actualMovieDetails.getNameNative());
         assertEquals("Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. " +
                 "Оказавшись в тюрьме под названием Шоушенк, он сталкивается с жестокостью и беззаконием, царящими по обе" +
                 " стороны решетки. Каждый, кто попадает в эти стены, становится их рабом до конца жизни. Но Энди, " +
                 "вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает " +
-                "разрабатывать невероятно дерзкий план своего освобождения.", actualMovieWithDetails.getDescription());
-        assertEquals(1994, actualMovieWithDetails.getYearOfRelease());
-        assertEquals(8.9, actualMovieWithDetails.getRating());
-        assertEquals(123.45, actualMovieWithDetails.getPrice());
-        assertEquals("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg", actualMovieWithDetails.getPicturePath());
+                "разрабатывать невероятно дерзкий план своего освобождения.", actualMovieDetails.getDescription());
+        assertEquals(1994, actualMovieDetails.getYearOfRelease());
+        assertEquals(8.9, actualMovieDetails.getRating());
+        assertEquals(123.45, actualMovieDetails.getPrice());
+        assertEquals("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg", actualMovieDetails.getPicturePath());
 
-        assertEquals(1, actualMovieWithDetails.getGenres().get(0).getId());
-        assertEquals("драма", actualMovieWithDetails.getGenres().get(0).getName());
-        assertEquals(2, actualMovieWithDetails.getGenres().get(1).getId());
-        assertEquals("криминал", actualMovieWithDetails.getGenres().get(1).getName());
+        assertEquals(1, actualMovieDetails.getGenres().get(0).getId());
+        assertEquals("драма", actualMovieDetails.getGenres().get(0).getName());
+        assertEquals(2, actualMovieDetails.getGenres().get(1).getId());
+        assertEquals("криминал", actualMovieDetails.getGenres().get(1).getName());
 
-        assertEquals(1, actualMovieWithDetails.getCountries().get(0).getId());
-        assertEquals("США", actualMovieWithDetails.getCountries().get(0).getName());
+        assertEquals(1, actualMovieDetails.getCountries().get(0).getId());
+        assertEquals("США", actualMovieDetails.getCountries().get(0).getName());
 
-        assertEquals(2, actualMovieWithDetails.getReviews().size());
-        assertEquals(1, actualMovieWithDetails.getReviews().get(0).getId());
+        assertEquals(2, actualMovieDetails.getReviews().size());
+        assertEquals(1, actualMovieDetails.getReviews().get(0).getId());
         assertEquals("Гениальное кино! Смотришь и думаешь «Так не бывает!», но позже понимаешь, то только так " +
                         "и должно быть. Начинаешь заново осмысливать значение фразы, которую постоянно используешь в своей жизни," +
                         " «Надежда умирает последней». Ведь если ты не надеешься, то все в твоей жизни гаснет, не остается смысла." +
                         " Фильм наполнен бесконечным числом правильных афоризмов. Я уверена, что буду пересматривать его сотни раз.",
-                actualMovieWithDetails.getReviews().get(0).getText());
-        assertEquals(2, actualMovieWithDetails.getReviews().get(1).getId());
+                actualMovieDetails.getReviews().get(0).getText());
+        assertEquals(2, actualMovieDetails.getReviews().get(1).getId());
         assertEquals("Кино это является, безусловно, «со знаком качества». Что же до первого места в рейтинге, " +
                         "то, думаю, здесь имело место быть выставление «десяточек» от большинства зрителей вкупе с " +
                         "раздутыми восторженными откликами кинокритиков. 'Фильм атмосферный. Он драматичный. И, конечно," +
                         " заслуживает того, чтобы находиться довольно высоко в мировом кинематографе.",
-                actualMovieWithDetails.getReviews().get(1).getText());
+                actualMovieDetails.getReviews().get(1).getText());
 
 
-        assertEquals(2, actualMovieWithDetails.getReviews().get(0).getUser().getId());
-        assertEquals("Дарлин Эдвардс", actualMovieWithDetails.getReviews().get(0).getUser().getNickname());
-        assertEquals(3, actualMovieWithDetails.getReviews().get(1).getUser().getId());
-        assertEquals("Габриэль Джексон", actualMovieWithDetails.getReviews().get(1).getUser().getNickname());
+        assertEquals(2, actualMovieDetails.getReviews().get(0).getUser().getId());
+        assertEquals("Дарлин Эдвардс", actualMovieDetails.getReviews().get(0).getUser().getNickname());
+        assertEquals(3, actualMovieDetails.getReviews().get(1).getUser().getId());
+        assertEquals("Габриэль Джексон", actualMovieDetails.getReviews().get(1).getUser().getNickname());
     }
 
 }

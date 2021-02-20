@@ -18,11 +18,13 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.http.Cookie;
+import java.util.HashMap;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -49,8 +51,17 @@ class AuthControllerTest {
     @DataSet(provider = TestConfiguration.UserProvider.class)
     @DisplayName("Returns cookie with token for user")
     void login() throws Exception {
-        MockHttpServletResponse response = mockMvc.perform(post("/login").param("email", "user@gmail.com")
-                .param("password", "user"))
+        //prepare
+        Map<String, String> userInfo = new HashMap<>();
+        userInfo.put("email", "user@gmail.com");
+        userInfo.put("password", "user");
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonUserCredentials = objectMapper.writeValueAsString(userInfo);
+
+        //when+then
+        MockHttpServletResponse response = mockMvc.perform(post("/login")
+                .content(jsonUserCredentials)
+                .contentType("application/json"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
@@ -62,8 +73,17 @@ class AuthControllerTest {
     @DataSet(provider = TestConfiguration.UserProvider.class)
     @DisplayName("Returns bad request")
     void loginIfEmailOrPasswordIsIncorrect() throws Exception {
-        MockHttpServletResponse response = mockMvc.perform(post("/login").param("email", "nouser@gmail.com")
-                .param("password", "user"))
+        //prepare
+        Map<String, String> userInfo = new HashMap<>();
+        userInfo.put("email", "nouser@gmail.com");
+        userInfo.put("password", "user");
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonUserCredentials = objectMapper.writeValueAsString(userInfo);
+
+        //when+then
+        MockHttpServletResponse response = mockMvc.perform(post("/login")
+                .content(jsonUserCredentials)
+                .contentType("application/json"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andReturn().getResponse();
@@ -75,16 +95,26 @@ class AuthControllerTest {
     @DataSet(provider = TestConfiguration.UserProvider.class)
     @DisplayName("Returns bad request")
     void logout() throws Exception {
-        MockHttpServletResponse response = mockMvc.perform(post("/login").param("email", "user@gmail.com")
-                .param("password", "user"))
+        //prepare
+        Map<String, String> userInfo = new HashMap<>();
+        userInfo.put("email", "user@gmail.com");
+        userInfo.put("password", "user");
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonUserCredentials = objectMapper.writeValueAsString(userInfo);
+
+        MockHttpServletResponse response = mockMvc.perform(post("/login")
+                .content(jsonUserCredentials)
+                .contentType("application/json"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
 
         Cookie cookie = new Cookie("user_uuid", response.getCookie("user_uuid").getValue());
 
+        //when+then
         mockMvc.perform(delete("/logout")
-                .cookie(cookie))
+                .cookie(cookie)
+                .contentType("application/json"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
@@ -94,9 +124,12 @@ class AuthControllerTest {
     @DataSet(provider = TestConfiguration.UserProvider.class)
     @DisplayName("Returns bad request")
     void logoutIfNoValidCookiePresent() throws Exception {
-        mockMvc.perform(delete("/logout"))
+        MockHttpServletResponse response = mockMvc.perform(delete("/logout")
+                .contentType("application/json"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andReturn().getResponse();
+
+        assertEquals("Missing cookie 'user_uuid' for method parameter of type Cookie", response.getErrorMessage());
     }
 }

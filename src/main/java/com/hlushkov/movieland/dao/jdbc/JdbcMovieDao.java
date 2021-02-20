@@ -1,12 +1,12 @@
 package com.hlushkov.movieland.dao.jdbc;
 
 import com.hlushkov.movieland.common.SortDirection;
+import com.hlushkov.movieland.common.dto.MovieDetails;
+import com.hlushkov.movieland.common.request.MovieRequest;
 import com.hlushkov.movieland.dao.MovieDao;
+import com.hlushkov.movieland.dao.jdbc.mapper.MovieDetailsResultSetExtractor;
 import com.hlushkov.movieland.dao.jdbc.mapper.MovieRowMapper;
-import com.hlushkov.movieland.dao.jdbc.mapper.MovieWithDetailsResultSetExtractor;
-import com.hlushkov.movieland.dto.MovieWithDetails;
 import com.hlushkov.movieland.entity.Movie;
-import com.hlushkov.movieland.request.MovieRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,7 +18,7 @@ import java.util.List;
 @Repository
 public class JdbcMovieDao implements MovieDao {
     private final MovieRowMapper movieRowMapper = new MovieRowMapper();
-    private final MovieWithDetailsResultSetExtractor movieWithDetailsResultSetExtractor = new MovieWithDetailsResultSetExtractor();
+    private final MovieDetailsResultSetExtractor movieDetailsResultSetExtractor = new MovieDetailsResultSetExtractor();
     private final JdbcTemplate jdbcTemplate;
     private final String findAllMovies;
     private final String findRandomMovies;
@@ -28,25 +28,25 @@ public class JdbcMovieDao implements MovieDao {
     private Long randomMovieCount;
 
     @Override
-    public List<Movie> findAll(MovieRequest movieRequest) {
-        String query = generateQuery(findAllMovies, movieRequest);
-        return jdbcTemplate.query(query, movieRowMapper);
+    public List<Movie> findMovies(MovieRequest movieRequest) {
+        String generatedQueryForFindMovies = generateQuery(findAllMovies, movieRequest);
+        return jdbcTemplate.query(generatedQueryForFindMovies, movieRowMapper);
     }
 
     @Override
-    public List<Movie> findRandom() {
+    public List<Movie> findRandomMovies() {
         return jdbcTemplate.query(findRandomMovies, movieRowMapper, randomMovieCount);
     }
 
     @Override
-    public List<Movie> findByGenre(int genreId, MovieRequest movieRequest) {
-        String query = generateQuery(findMoviesByGenre, movieRequest);
-        return jdbcTemplate.query(query, movieRowMapper, genreId);
+    public List<Movie> findMoviesByGenre(int genreId, MovieRequest movieRequest) {
+        String generatedQueryForFindMoviesByGenre = generateQuery(findMoviesByGenre, movieRequest);
+        return jdbcTemplate.query(generatedQueryForFindMoviesByGenre, movieRowMapper, genreId);
     }
 
     @Override
-    public MovieWithDetails findMovieWithDetailsByMovieId(int movieId) {
-        return jdbcTemplate.query(findMovieWithDetailsByMovieId, movieWithDetailsResultSetExtractor, movieId);
+    public MovieDetails findMovieDetailsByMovieId(int movieId) {
+        return jdbcTemplate.query(findMovieWithDetailsByMovieId, movieDetailsResultSetExtractor, movieId);
     }
 
     String generateQuery(String query, MovieRequest movieRequest) {
@@ -65,4 +65,5 @@ public class JdbcMovieDao implements MovieDao {
 
         return query;
     }
+
 }

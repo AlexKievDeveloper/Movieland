@@ -1,4 +1,4 @@
-package com.hlushkov.movieland.response;
+package com.hlushkov.movieland.common.response;
 
 import lombok.Builder;
 import lombok.Data;

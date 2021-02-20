@@ -1,38 +1,35 @@
 package com.hlushkov.movieland.web.controller;
 
-import com.hlushkov.movieland.common.Role;
-import com.hlushkov.movieland.security.SecurityService;
-import com.hlushkov.movieland.security.Session;
+import com.hlushkov.movieland.common.UserHolder;
+import com.hlushkov.movieland.common.request.ReviewRequest;
+import com.hlushkov.movieland.entity.Review;
 import com.hlushkov.movieland.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
-import java.util.Optional;
-
+@Slf4j
 @RequiredArgsConstructor
 @RestController
+@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 public class ReviewController {
-    private final SecurityService securityService;
     private final ReviewService reviewService;
 
     @PostMapping("review")
-    public ResponseEntity<Object> addReview(@CookieValue(value = "user_uuid") Cookie cookie, @RequestParam int movieId, @RequestParam String text) {
-        if (cookie != null) {
-            Optional<Session> optionalSession = securityService.getSession(cookie.getValue());
-            if (optionalSession.isPresent()) {
-                Session session = optionalSession.get();
-                if (Role.USER.equals(session.getUser().getRole())) {
-                    reviewService.addReview(session.getUser().getId(), movieId, text);
-                    return ResponseEntity.ok().build();
-                }
-            }
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<Object> addReview(@RequestBody ReviewRequest reviewRequest) {
+        log.debug("Request to add a review received");
+        Review review = Review.builder()
+                .user(UserHolder.getUser())
+                .text(reviewRequest.getText())
+                .movieId(reviewRequest.getMovieId())
+                .build();
+        reviewService.addReview(review);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

@@ -1,6 +1,7 @@
 package com.hlushkov.movieland.common;
 
 public enum SortDirection {
+
     DESC("DESC"), ASC("ASC");
 
     private final String direction;
@@ -12,4 +13,5 @@ public enum SortDirection {
     public String getDirection() {
         return direction;
     }
+
 }

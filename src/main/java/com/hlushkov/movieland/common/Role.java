@@ -2,7 +2,7 @@ package com.hlushkov.movieland.common;
 
 public enum Role {
 
-    USER("user");
+    ADMIN("admin"), USER("user");
 
     private final String userRole;
 

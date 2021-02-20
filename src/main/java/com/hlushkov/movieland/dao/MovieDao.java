@@ -1,20 +1,20 @@
 package com.hlushkov.movieland.dao;
 
-import com.hlushkov.movieland.dto.MovieWithDetails;
+import com.hlushkov.movieland.common.dto.MovieDetails;
 import com.hlushkov.movieland.entity.Movie;
-import com.hlushkov.movieland.request.MovieRequest;
+import com.hlushkov.movieland.common.request.MovieRequest;
 
 import java.util.List;
 
 public interface MovieDao {
 
-    List<Movie> findAll(MovieRequest movieRequest);
+    List<Movie> findMovies(MovieRequest movieRequest);
 
-    List<Movie> findRandom();
+    List<Movie> findRandomMovies();
 
-    List<Movie> findByGenre(int genreId, MovieRequest movieRequest);
+    List<Movie> findMoviesByGenre(int genreId, MovieRequest movieRequest);
 
-    MovieWithDetails findMovieWithDetailsByMovieId(int movieId);
+    MovieDetails findMovieDetailsByMovieId(int movieId);
 }
 
 

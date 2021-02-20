@@ -1,10 +1,11 @@
 package com.hlushkov.movieland.dao.jdbc.mapper;
 
-import com.hlushkov.movieland.dto.MovieWithDetails;
+import com.hlushkov.movieland.common.dto.MovieDetails;
 import com.hlushkov.movieland.entity.Country;
 import com.hlushkov.movieland.entity.Genre;
 import com.hlushkov.movieland.entity.Review;
 import com.hlushkov.movieland.entity.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
@@ -13,15 +14,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieWithDetailsResultSetExtractor implements ResultSetExtractor<MovieWithDetails> {
+@Slf4j
+public class MovieDetailsResultSetExtractor implements ResultSetExtractor<MovieDetails> {
 
     @Override
-    public MovieWithDetails extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+    public MovieDetails extractData(ResultSet resultSet) throws SQLException, DataAccessException {
         if (!resultSet.next()) {
-            throw new IllegalArgumentException("Returned empty result in response to query for Movie with details");
+            log.error("Returned empty result in response to query for Movie with details");
+            throw new IllegalArgumentException("Returned empty result in response to query for Movie with details.");
         }
 
-        MovieWithDetails movieWithDetails = MovieWithDetails.builder()
+        MovieDetails movieWithDetails = MovieDetails.builder()
                 .id(resultSet.getInt("movie_id"))
                 .nameRussian(resultSet.getString("movie_name_russian"))
                 .nameNative(resultSet.getString("movie_name_native"))

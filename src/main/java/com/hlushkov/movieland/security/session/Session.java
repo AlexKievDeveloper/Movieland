@@ -1,4 +1,4 @@
-package com.hlushkov.movieland.security;
+package com.hlushkov.movieland.security.session;
 
 import com.hlushkov.movieland.entity.User;
 import lombok.Builder;

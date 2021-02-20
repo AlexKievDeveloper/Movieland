@@ -1,8 +1,8 @@
 package com.hlushkov.movieland.dao.jdbc;
 
 import com.hlushkov.movieland.common.SortDirection;
+import com.hlushkov.movieland.common.request.MovieRequest;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
-import com.hlushkov.movieland.request.MovieRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

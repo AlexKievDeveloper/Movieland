@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @EnableWebMvc
 @ComponentScan("com.hlushkov.movieland.web")
-public class WebApplicationContext implements WebMvcConfigurer {
+public class MovielandWebApplicationContext implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {

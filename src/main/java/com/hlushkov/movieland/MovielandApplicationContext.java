@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 @ComponentScan(value = "com.hlushkov.movieland", excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX,
         pattern = "com.hlushkov.movieland.web"))
 @EnableScheduling
-public class RootApplicationContext {
+public class MovielandApplicationContext {
 
     @Bean
     public DataSource dataSource(@Value("${jdbc.url}") String url,
@@ -39,6 +39,8 @@ public class RootApplicationContext {
     }
 
     @Bean
-    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) { return new NamedParameterJdbcTemplate(dataSource);}
+    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
+        return new NamedParameterJdbcTemplate(dataSource);
+    }
 
 }

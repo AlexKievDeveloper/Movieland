@@ -1,4 +1,4 @@
-package com.hlushkov.movieland.dto;
+package com.hlushkov.movieland.common.dto;
 
 import com.hlushkov.movieland.entity.Country;
 import com.hlushkov.movieland.entity.Genre;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class MovieWithDetails {
+public class MovieDetails {
     private int id;
     private String nameRussian;
     private String nameNative;

@@ -10,12 +10,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class JdbcReviewDao implements ReviewDao {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private final String saveReview;
+    private final String addReview;
 
     @Override
     public void addReview(int userId, int movieId, String text) {
         MapSqlParameterSource parametersMap = getSqlParameterSource(userId, movieId, text);
-        namedParameterJdbcTemplate.update(saveReview, parametersMap);
+        namedParameterJdbcTemplate.update(addReview, parametersMap);
     }
 
     MapSqlParameterSource getSqlParameterSource(int userId, int movieId, String text) {
@@ -25,4 +25,5 @@ public class JdbcReviewDao implements ReviewDao {
         parameterSource.addValue("text", text);
         return parameterSource;
     }
+
 }

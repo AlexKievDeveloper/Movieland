@@ -1,6 +1,6 @@
 package com.hlushkov.movieland.dao.jdbc.mapper;
 
-import com.hlushkov.movieland.dto.MovieWithDetails;
+import com.hlushkov.movieland.common.dto.MovieDetails;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,18 +10,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class MovieWithDetailsResultSetExtractorTest {
+class MovieDetailsResultSetExtractorTest {
     @Mock
     private ResultSet resultSet;
 
-    private MovieWithDetailsResultSetExtractor rowMapper;
+    private final MovieDetailsResultSetExtractor resultSetExtractor;
 
-    public MovieWithDetailsResultSetExtractorTest() {
-        rowMapper = new MovieWithDetailsResultSetExtractor();
+    public MovieDetailsResultSetExtractorTest() {
+        resultSetExtractor = new MovieDetailsResultSetExtractor();
     }
 
     @Test
@@ -50,27 +50,27 @@ class MovieWithDetailsResultSetExtractorTest {
         when(resultSet.getInt("review_id")).thenReturn(1);
         when(resultSet.getString("review_text")).thenReturn("Гениальное кино! Смотришь и думаешь «Так не бывает!»");
         //when
-        MovieWithDetails actualMovieWithDetails = rowMapper.extractData(resultSet);
+        MovieDetails actualMovieDetails = resultSetExtractor.extractData(resultSet);
         //then
-        assertEquals(1, actualMovieWithDetails.getId());
-        assertEquals("Побег из Шоушенка", actualMovieWithDetails.getNameRussian());
-        assertEquals("The Shawshank Redemption", actualMovieWithDetails.getNameNative());
-        assertEquals("Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника", actualMovieWithDetails.getDescription());
-        assertEquals(1994, actualMovieWithDetails.getYearOfRelease());
-        assertEquals(8.9, actualMovieWithDetails.getRating());
-        assertEquals(123.45, actualMovieWithDetails.getPrice());
-        assertEquals("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg", actualMovieWithDetails.getPicturePath());
+        assertEquals(1, actualMovieDetails.getId());
+        assertEquals("Побег из Шоушенка", actualMovieDetails.getNameRussian());
+        assertEquals("The Shawshank Redemption", actualMovieDetails.getNameNative());
+        assertEquals("Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника", actualMovieDetails.getDescription());
+        assertEquals(1994, actualMovieDetails.getYearOfRelease());
+        assertEquals(8.9, actualMovieDetails.getRating());
+        assertEquals(123.45, actualMovieDetails.getPrice());
+        assertEquals("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg", actualMovieDetails.getPicturePath());
 
-        assertEquals(1, actualMovieWithDetails.getGenres().get(0).getId());
-        assertEquals("драма", actualMovieWithDetails.getGenres().get(0).getName());
+        assertEquals(1, actualMovieDetails.getGenres().get(0).getId());
+        assertEquals("драма", actualMovieDetails.getGenres().get(0).getName());
 
-        assertEquals(1, actualMovieWithDetails.getCountries().get(0).getId());
-        assertEquals("США", actualMovieWithDetails.getCountries().get(0).getName());
+        assertEquals(1, actualMovieDetails.getCountries().get(0).getId());
+        assertEquals("США", actualMovieDetails.getCountries().get(0).getName());
 
-        assertEquals(2, actualMovieWithDetails.getReviews().get(0).getUser().getId());
-        assertEquals("Дарлин Эдвардс", actualMovieWithDetails.getReviews().get(0).getUser().getNickname());
+        assertEquals(2, actualMovieDetails.getReviews().get(0).getUser().getId());
+        assertEquals("Дарлин Эдвардс", actualMovieDetails.getReviews().get(0).getUser().getNickname());
 
-        assertEquals(1, actualMovieWithDetails.getReviews().get(0).getId());
-        assertEquals("Гениальное кино! Смотришь и думаешь «Так не бывает!»", actualMovieWithDetails.getReviews().get(0).getText());
+        assertEquals(1, actualMovieDetails.getReviews().get(0).getId());
+        assertEquals("Гениальное кино! Смотришь и думаешь «Так не бывает!»", actualMovieDetails.getReviews().get(0).getText());
     }
 }
