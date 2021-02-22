@@ -5,9 +5,9 @@ import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.hlushkov.movieland.common.SortDirection;
-import com.hlushkov.movieland.config.TestConfiguration;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.common.dto.MovieDetails;
+import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.entity.Movie;
 import com.hlushkov.movieland.common.request.MovieRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ class JdbcMovieDaoITest {
     private JdbcMovieDao jdbcMovieDao;
 
     @Test
-    @DataSet(provider = TestConfiguration.MovieProvider.class)
+    @DataSet(provider = TestData.MovieProvider.class)
     @DisplayName("Returns list with all movies from DB")
     void getAllMovies() {
         //prepare
@@ -45,7 +45,7 @@ class JdbcMovieDaoITest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MovieProvider.class, cleanAfter = true)
+    @DataSet(provider = TestData.MovieProvider.class, cleanAfter = true)
     @DisplayName("Returns list with all movies from DB sorting by rating DESC")
     void getAllMoviesWithRatingDirectionTest() {
         //prepare
@@ -62,7 +62,7 @@ class JdbcMovieDaoITest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MovieProvider.class)
+    @DataSet(provider = TestData.MovieProvider.class)
     @DisplayName("Returns list with all movies from DB sorted by price DESC")
     void getAllMoviesWithPriceDESCDirectionTest() {
         //prepare
@@ -80,7 +80,7 @@ class JdbcMovieDaoITest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MovieProvider.class, cleanAfter = true)
+    @DataSet(provider = TestData.MovieProvider.class, cleanAfter = true)
     @DisplayName("Returns list with all movies from DB sorted by price ASC")
     void getAllMoviesWithPriceASCDirectionTest() {
         //prepare
@@ -98,7 +98,7 @@ class JdbcMovieDaoITest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesProvider.class)
+    @DataSet(provider = TestData.MoviesProvider.class)
     @DisplayName("Returns list with all movies from DB")
     void getRandomMovies() {
         //when
@@ -109,7 +109,7 @@ class JdbcMovieDaoITest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesByGenresProvider.class, cleanAfter = true)
+    @DataSet(provider = TestData.MoviesByGenresProvider.class, cleanAfter = true)
     @DisplayName("Returns list with movies by genre from DB")
     void getMoviesByGenre() {
         //prepare
@@ -124,7 +124,7 @@ class JdbcMovieDaoITest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesByGenresProvider.class, cleanAfter = true)
+    @DataSet(provider = TestData.MoviesByGenresProvider.class, cleanAfter = true)
     @DisplayName("Returns list with movies by genre sorted by rating from DB")
     void getMoviesByGenreSortedByRating() {
         //prepare
@@ -141,7 +141,7 @@ class JdbcMovieDaoITest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesByGenresProvider.class, cleanAfter = true)
+    @DataSet(provider = TestData.MoviesByGenresProvider.class, cleanAfter = true)
     @DisplayName("Returns list with movies by genre sorted by price DESC from DB")
     void getMoviesByGenreSortedByPriceDesc() {
         //prepare
@@ -158,7 +158,7 @@ class JdbcMovieDaoITest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesByGenresProvider.class, cleanAfter = true)
+    @DataSet(provider = TestData.MoviesByGenresProvider.class, cleanAfter = true)
     @DisplayName("Returns list with movies by genre sorted by price ASC from DB")
     void getMoviesByGenreSortedByPriceAsc() {
         //prepare
@@ -175,7 +175,7 @@ class JdbcMovieDaoITest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
+    @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
     @DisplayName("Returns Movie with details by movie id")
     void findMovieWithDetailsByMovieId() {
         //when

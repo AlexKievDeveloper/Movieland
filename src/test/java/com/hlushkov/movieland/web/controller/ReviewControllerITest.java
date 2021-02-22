@@ -1,9 +1,9 @@
 package com.hlushkov.movieland.web.controller;
 
 import com.github.database.rider.core.api.dataset.DataSet;
-import com.hlushkov.movieland.common.request.ReviewRequest;
-import com.hlushkov.movieland.config.TestConfiguration;
+import com.hlushkov.movieland.common.request.AddReviewRequest;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
+import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.service.ReviewService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,30 +19,29 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestWebContextConfiguration
-class ReviewControllerTest {
+class ReviewControllerITest {
     @InjectMocks
     private ReviewController reviewController;
     @Mock
-    private ReviewRequest reviewRequest;
+    private AddReviewRequest addReviewRequest;
     @Mock
     private ReviewService reviewService;
 
-
     @Test
     @DisplayName("Adds review and returns response with status 200")
-    @DataSet(provider = TestConfiguration.ReviewsProvider.class, executeStatementsBefore = "SELECT setval('reviews_review_id_seq', 2)")
-    void addReview() {
+    @DataSet(provider = TestData.ReviewsProvider.class, executeStatementsBefore = "SELECT setval('reviews_review_id_seq', 2)")
+    void save() {
         //prepare
-        when(reviewRequest.getMovieId()).thenReturn(1);
-        when(reviewRequest.getText()).thenReturn("Nice film!");
+        when(addReviewRequest.getMovieId()).thenReturn(1);
+        when(addReviewRequest.getText()).thenReturn("Nice film!");
 
         //when
-        reviewController.addReview(reviewRequest);
+        reviewController.save(addReviewRequest);
 
         //then
-        verify(reviewRequest).getMovieId();
-        verify(reviewRequest).getText();
-        verify(reviewService).addReview(any());
+        verify(addReviewRequest).getMovieId();
+        verify(addReviewRequest).getText();
+        verify(reviewService).save(any());
     }
 
 }

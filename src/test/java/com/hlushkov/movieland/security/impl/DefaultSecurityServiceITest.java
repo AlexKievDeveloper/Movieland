@@ -6,8 +6,8 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.hlushkov.movieland.common.Role;
 import com.hlushkov.movieland.common.request.AuthRequest;
-import com.hlushkov.movieland.config.TestConfiguration;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
+import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.entity.User;
 import com.hlushkov.movieland.security.SecurityService;
 import com.hlushkov.movieland.security.session.Session;
@@ -26,12 +26,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
 @TestWebContextConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class DefaultSecurityServiceTest {
+class DefaultSecurityServiceITest {
     @Autowired
     private SecurityService securityService;
 
     @Test
-    @DataSet(provider = TestConfiguration.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class)
     @DisplayName("Returns optional with Session")
     void login() {
         //prepare
@@ -47,7 +47,7 @@ class DefaultSecurityServiceTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class)
     @DisplayName("Returns empty optional")
     void loginWithIncorrectPassword() {
         //prepare
@@ -62,7 +62,7 @@ class DefaultSecurityServiceTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class)
     @DisplayName("Returns empty optional")
     void loginWithIncorrectEmail() {
         //prepare
@@ -79,7 +79,7 @@ class DefaultSecurityServiceTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class)
     @DisplayName("Returns true")
     void removeSession() {
         //prepare
@@ -95,7 +95,7 @@ class DefaultSecurityServiceTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class)
     @DisplayName("Returns optional with session")
     void getSession() {
         //prepare

@@ -4,8 +4,8 @@ import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.spring.api.DBRider;
-import com.hlushkov.movieland.config.TestConfiguration;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
+import com.hlushkov.movieland.data.TestData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfig
 @ExtendWith(MockitoExtension.class)
 @TestWebContextConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class AuthControllerTest {
+class AuthControllerITest {
     private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext context;
@@ -48,7 +48,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class)
     @DisplayName("Returns cookie with token for user")
     void login() throws Exception {
         //prepare
@@ -70,7 +70,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class)
     @DisplayName("Returns bad request")
     void loginIfEmailOrPasswordIsIncorrect() throws Exception {
         //prepare
@@ -92,7 +92,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class)
     @DisplayName("Returns bad request")
     void logout() throws Exception {
         //prepare
@@ -121,7 +121,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class)
     @DisplayName("Returns bad request")
     void logoutIfNoValidCookiePresent() throws Exception {
         MockHttpServletResponse response = mockMvc.perform(delete("/logout")

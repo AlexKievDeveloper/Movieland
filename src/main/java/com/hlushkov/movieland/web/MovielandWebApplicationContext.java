@@ -1,6 +1,6 @@
 package com.hlushkov.movieland.web;
 
-import com.hlushkov.movieland.web.util.StringToEnumConverter;
+import com.hlushkov.movieland.web.util.RequestParameterConverter;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -12,6 +12,6 @@ public class MovielandWebApplicationContext implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(new StringToEnumConverter());
+        registry.addConverter(new RequestParameterConverter());
     }
 }

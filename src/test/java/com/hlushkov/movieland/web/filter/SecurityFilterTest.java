@@ -55,6 +55,6 @@ class SecurityFilterTest {
         securityFilter.doFilter(request, response, filterChain);
         //then
         verify(request).getHeader("user_uuid");
-        verify(response).sendRedirect("/api/v1/login");
+        verify(response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }

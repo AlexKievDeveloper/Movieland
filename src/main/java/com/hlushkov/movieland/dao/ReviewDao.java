@@ -1,6 +1,8 @@
 package com.hlushkov.movieland.dao;
 
+import com.hlushkov.movieland.entity.Review;
+
 public interface ReviewDao {
 
-    void addReview(int userId, int movieId, String text);
+    void save(Review review);
 }

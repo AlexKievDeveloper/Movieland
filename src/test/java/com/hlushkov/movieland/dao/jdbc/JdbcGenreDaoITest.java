@@ -4,8 +4,8 @@ import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.spring.api.DBRider;
-import com.hlushkov.movieland.config.TestConfiguration;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
+import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.entity.Genre;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,12 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
 @TestWebContextConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class JdbcGenreDaoTest {
+class JdbcGenreDaoITest {
     @Autowired
     private JdbcGenreDao jdbcGenreDao;
 
     @Test
-    @DataSet(provider = TestConfiguration.GenreProvider.class)
+    @DataSet(provider = TestData.GenreProvider.class, cleanAfter = true)
     @DisplayName("Returns list with all genres from DB")
     void getAllGenres() {
         //when
@@ -47,7 +47,7 @@ class JdbcGenreDaoTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesGenresFullProvider.class)
+    @DataSet(provider = TestData.MoviesGenresFullProvider.class)
     @DisplayName("Returns list of genres by movie id")
     void getById() {
         //when

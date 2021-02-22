@@ -210,6 +210,8 @@ INSERT INTO users (user_nickname, user_email, user_password, user_salt, user_rol
 VALUES ('Джесси Паттерсон', 'jessie.patterson68@example.com', 'tommy', 'salt9', 'user');
 INSERT INTO users (user_nickname, user_email, user_password, user_salt, user_role)
 VALUES ('Деннис Крейг', 'dennis.craig82@example.com', 'coldbeer', 'salt10', 'user');
+INSERT INTO users (user_nickname, user_email, user_password, user_salt, user_role)
+VALUES ('Admin Admin', 'admin@gmail.com', 'd82494f05d6917ba02f7aaa29689ccb444bb73f20380876cb05d1f37537b7892', 'admin', 'admin');
 
 
 

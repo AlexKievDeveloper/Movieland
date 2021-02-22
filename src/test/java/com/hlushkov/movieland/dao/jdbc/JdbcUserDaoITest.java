@@ -4,8 +4,8 @@ import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.spring.api.DBRider;
-import com.hlushkov.movieland.config.TestConfiguration;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
+import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class JdbcUserDaoITest {
     private JdbcUserDao jdbcUserDao;
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
+    @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
     @DisplayName("Returns user by email")
     void findByEmail() {
         //when

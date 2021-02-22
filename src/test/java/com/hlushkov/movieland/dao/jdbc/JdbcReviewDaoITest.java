@@ -5,8 +5,10 @@ import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.spring.api.DBRider;
-import com.hlushkov.movieland.config.TestConfiguration;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
+import com.hlushkov.movieland.data.TestData;
+import com.hlushkov.movieland.entity.Review;
+import com.hlushkov.movieland.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -22,10 +24,16 @@ class JdbcReviewDaoITest {
 
     @Test
     @DisplayName("Save review to DB")
-    @DataSet(provider = TestConfiguration.ReviewsProvider.class, executeStatementsBefore = "SELECT setval('reviews_review_id_seq', 2)")
-    @ExpectedDataSet(provider = TestConfiguration.ResultReviewsProvider.class)
-    void addReview() {
+    @DataSet(provider = TestData.ReviewsProvider.class, executeStatementsBefore = "SELECT setval('reviews_review_id_seq', 2)")
+    @ExpectedDataSet(provider = TestData.ResultReviewsProvider.class)
+    void save() {
+        //prepare
+        Review review = Review.builder()
+                .movieId(1)
+                .user(User.builder().id(1).build())
+                .text("Nice film!")
+                .build();
         //when
-        jdbcReviewDao.addReview(1, 1, "Nice film!");
+        jdbcReviewDao.save(review);
     }
 }

@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfig
 @ExtendWith(MockitoExtension.class)
 @TestWebContextConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class GenreControllerTest {
+class GenreControllerITest {
     private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext context;

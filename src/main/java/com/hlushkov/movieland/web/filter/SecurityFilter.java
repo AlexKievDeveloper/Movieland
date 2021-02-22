@@ -5,6 +5,7 @@ import com.hlushkov.movieland.common.UserHolder;
 import com.hlushkov.movieland.entity.User;
 import com.hlushkov.movieland.security.SecurityService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.http.HttpResponse;
 import java.util.Optional;
 
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
@@ -44,7 +46,7 @@ public class SecurityFilter extends HttpFilter {
             }
         } else {
             log.error("Unauthorized access attempt");
-            response.sendRedirect("/api/v1/login");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
     }
 }

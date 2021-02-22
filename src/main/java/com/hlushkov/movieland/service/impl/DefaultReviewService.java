@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class DefaultReviewService implements ReviewService {
-    private final ReviewDao jdbcReviewDao;
+    private final ReviewDao reviewDao;
 
     @Override
-    public void addReview(Review review) {
-        jdbcReviewDao.addReview(review.getUser().getId(), review.getMovieId(), review.getText());
+    public void save(Review review) {
+        reviewDao.save(review);
     }
 }

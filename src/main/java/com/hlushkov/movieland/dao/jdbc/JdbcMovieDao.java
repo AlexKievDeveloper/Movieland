@@ -4,7 +4,7 @@ import com.hlushkov.movieland.common.SortDirection;
 import com.hlushkov.movieland.common.dto.MovieDetails;
 import com.hlushkov.movieland.common.request.MovieRequest;
 import com.hlushkov.movieland.dao.MovieDao;
-import com.hlushkov.movieland.dao.jdbc.mapper.MovieDetailsResultSetExtractor;
+import com.hlushkov.movieland.dao.jdbc.extractor.MovieDetailsResultSetExtractor;
 import com.hlushkov.movieland.dao.jdbc.mapper.MovieRowMapper;
 import com.hlushkov.movieland.entity.Movie;
 import lombok.RequiredArgsConstructor;

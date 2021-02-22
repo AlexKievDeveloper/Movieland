@@ -45,7 +45,7 @@ class JdbcMovieDaoTest {
         //prepare
         String expectedQuery = "SELECT movies.movie_id, movie_name_russian, movie_name_native, movie_year_of_release, " +
                 "movie_description, movie_rating, movie_price, poster_picture_path FROM movies LEFT JOIN posters " +
-                "ON (movies.movie_id=posters.movie_id) ORDER BY movie_rating DESC";
+                "ON (movies.movie_id=posters.movie_id) ORDER BY movie_rating desc";
 
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setPriceDirection(Optional.ofNullable(null));
@@ -64,7 +64,7 @@ class JdbcMovieDaoTest {
         //prepare
         String expectedQuery = "SELECT movies.movie_id, movie_name_russian, movie_name_native, movie_year_of_release, " +
                 "movie_description, movie_rating, movie_price, poster_picture_path FROM movies LEFT JOIN posters " +
-                "ON (movies.movie_id=posters.movie_id) ORDER BY movie_price ASC";
+                "ON (movies.movie_id=posters.movie_id) ORDER BY movie_price asc";
 
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setPriceDirection(Optional.ofNullable(SortDirection.ASC));
@@ -83,7 +83,7 @@ class JdbcMovieDaoTest {
         //prepare
         String expectedQuery = "SELECT movies.movie_id, movie_name_russian, movie_name_native, movie_year_of_release, " +
                 "movie_description, movie_rating, movie_price, poster_picture_path FROM movies LEFT JOIN posters " +
-                "ON (movies.movie_id=posters.movie_id) ORDER BY movie_price DESC";
+                "ON (movies.movie_id=posters.movie_id) ORDER BY movie_price desc";
 
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setPriceDirection(Optional.ofNullable(SortDirection.DESC));
@@ -146,7 +146,7 @@ class JdbcMovieDaoTest {
                 "movie_description, movie_rating, movie_price, poster_picture_path  FROM movies " +
                 "LEFT JOIN posters ON (movies.movie_id = posters.movie_id) " +
                 "LEFT JOIN movies_genres ON (movies.movie_id = movies_genres.movie_id) " +
-                "WHERE movies_genres.genre_id = ? ORDER BY movie_rating DESC";
+                "WHERE movies_genres.genre_id = ? ORDER BY movie_rating desc";
 
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setPriceDirection(Optional.ofNullable(null));
@@ -166,7 +166,7 @@ class JdbcMovieDaoTest {
         String expectedQuery = "SELECT movies.movie_id, movie_name_russian, movie_name_native, movie_year_of_release, " +
                 "movie_description, movie_rating, movie_price, poster_picture_path  FROM movies " +
                 "LEFT JOIN posters ON (movies.movie_id = posters.movie_id) LEFT JOIN movies_genres " +
-                "ON (movies.movie_id = movies_genres.movie_id) WHERE movies_genres.genre_id = ? ORDER BY movie_price DESC";
+                "ON (movies.movie_id = movies_genres.movie_id) WHERE movies_genres.genre_id = ? ORDER BY movie_price desc";
 
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setPriceDirection(Optional.ofNullable(SortDirection.DESC));
@@ -186,7 +186,7 @@ class JdbcMovieDaoTest {
         String expectedQuery = "SELECT movies.movie_id, movie_name_russian, movie_name_native, movie_year_of_release, " +
                 "movie_description, movie_rating, movie_price, poster_picture_path  FROM movies " +
                 "LEFT JOIN posters ON (movies.movie_id = posters.movie_id) LEFT JOIN movies_genres " +
-                "ON (movies.movie_id = movies_genres.movie_id) WHERE movies_genres.genre_id = ? ORDER BY movie_price ASC";
+                "ON (movies.movie_id = movies_genres.movie_id) WHERE movies_genres.genre_id = ? ORDER BY movie_price asc";
 
         MovieRequest movieRequest = new MovieRequest();
         movieRequest.setPriceDirection(Optional.ofNullable(SortDirection.ASC));

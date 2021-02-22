@@ -1,4 +1,4 @@
-package com.hlushkov.movieland.dao.jdbc.mapper;
+package com.hlushkov.movieland.dao.jdbc.extractor;
 
 import com.hlushkov.movieland.common.dto.MovieDetails;
 import com.hlushkov.movieland.entity.Country;
@@ -20,7 +20,6 @@ public class MovieDetailsResultSetExtractor implements ResultSetExtractor<MovieD
     @Override
     public MovieDetails extractData(ResultSet resultSet) throws SQLException, DataAccessException {
         if (!resultSet.next()) {
-            log.error("Returned empty result in response to query for Movie with details");
             throw new IllegalArgumentException("Returned empty result in response to query for Movie with details.");
         }
 

@@ -5,7 +5,7 @@ import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
-import com.hlushkov.movieland.config.TestConfiguration;
+import com.hlushkov.movieland.data.TestData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfig
 @ExtendWith(MockitoExtension.class)
 @TestWebContextConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class MovieControllerTest {
+class MovieControllerITest {
     private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext context;
@@ -43,7 +43,7 @@ class MovieControllerTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesProvider.class)
+    @DataSet(provider = TestData.MoviesProvider.class)
     @DisplayName("Returns list of all movies in json format")
     void findAllMovies() throws Exception {
         //when
@@ -60,7 +60,7 @@ class MovieControllerTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesProvider.class)
+    @DataSet(provider = TestData.MoviesProvider.class)
     @DisplayName("Returns list of all movies sorted by rating DESC in json format")
     void findAllMoviesSortedByRatingDESC() throws Exception {
         //when
@@ -79,7 +79,7 @@ class MovieControllerTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesProvider.class)
+    @DataSet(provider = TestData.MoviesProvider.class)
     @DisplayName("Returns list of all movies sorted by price DESC in json format")
     void findAllMoviesSortedByPriceDESC() throws Exception {
         //when
@@ -98,7 +98,7 @@ class MovieControllerTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesProvider.class)
+    @DataSet(provider = TestData.MoviesProvider.class)
     @DisplayName("Returns list of all movies sorted by price ASC in json format")
     void findAllMoviesSortedByPriceASC() throws Exception {
         //when
@@ -117,7 +117,7 @@ class MovieControllerTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.PostersAndMoviesProvider.class, cleanAfter = true)
+    @DataSet(provider = TestData.PostersAndMoviesProvider.class, cleanAfter = true)
     @DisplayName("Returns list of three random movies in json format")
     void findThreeRandomMovies() throws Exception {
         //when
@@ -168,7 +168,7 @@ class MovieControllerTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesGenresFullProvider.class, cleanAfter = true)
+    @DataSet(provider = TestData.MoviesGenresFullProvider.class, cleanAfter = true)
     @DisplayName("Returns list of movies by genre in json format")
     void findAllMoviesByGenre() throws Exception {
         //when
@@ -187,7 +187,7 @@ class MovieControllerTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesGenresFullProvider.class, cleanAfter = true)
+    @DataSet(provider = TestData.MoviesGenresFullProvider.class, cleanAfter = true)
     @DisplayName("Returns list of movies by genre sorted by rating in json format")
     void findAllMoviesByGenreSortedByRating() throws Exception {
         //when
@@ -205,7 +205,7 @@ class MovieControllerTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesGenresFullProvider.class, cleanAfter = true)
+    @DataSet(provider = TestData.MoviesGenresFullProvider.class, cleanAfter = true)
     @DisplayName("Returns list of movies by genre sorted by price DESC in json format")
     void findAllMoviesByGenreSortedByPriceDesc() throws Exception {
         //when
@@ -223,7 +223,7 @@ class MovieControllerTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesGenresFullProvider.class, cleanAfter = true)
+    @DataSet(provider = TestData.MoviesGenresFullProvider.class, cleanAfter = true)
     @DisplayName("Returns list of movies by genre sorted by price ASC in json format")
     void findAllMoviesByGenreSortedByPriceAsc() throws Exception {
         //when
@@ -241,7 +241,7 @@ class MovieControllerTest {
     }
 
     @Test
-    @DataSet(provider = TestConfiguration.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
+    @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
     @DisplayName("Returns movie by id in json format")
     void findMovieById() throws Exception {
         //when

@@ -1,4 +1,4 @@
-package com.hlushkov.movieland.dao.jdbc.mapper;
+package com.hlushkov.movieland.dao.jdbc.extractor;
 
 import com.hlushkov.movieland.common.dto.MovieDetails;
 import org.junit.jupiter.api.DisplayName;

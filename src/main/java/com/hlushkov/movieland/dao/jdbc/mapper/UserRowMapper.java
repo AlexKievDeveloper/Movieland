@@ -16,7 +16,7 @@ public class UserRowMapper implements RowMapper<User> {
                 .email(resultSet.getString("user_email"))
                 .password(resultSet.getString("user_password"))
                 .salt(resultSet.getString("user_salt"))
-                .role(Role.valueOf(resultSet.getString("user_role").toUpperCase()))
+                .role(Role.getRole(resultSet.getString("user_role")))
                 .build();
     }
 }
