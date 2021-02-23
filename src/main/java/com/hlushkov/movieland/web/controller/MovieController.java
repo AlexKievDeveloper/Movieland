@@ -1,9 +1,11 @@
 package com.hlushkov.movieland.web.controller;
 
+import com.hlushkov.movieland.common.Role;
 import com.hlushkov.movieland.common.SortDirection;
 import com.hlushkov.movieland.common.dto.MovieDetails;
 import com.hlushkov.movieland.common.request.MovieRequest;
 import com.hlushkov.movieland.entity.Movie;
+import com.hlushkov.movieland.security.Secure;
 import com.hlushkov.movieland.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class MovieController {
     private final MovieService movieService;
 
+    @Secure({Role.USER, Role.ADMIN})
     @GetMapping
     public List<Movie> findMovies(@RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,
                                   @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
@@ -31,18 +34,21 @@ public class MovieController {
         return movieService.findMovies(movieRequest);
     }
 
+    @Secure({Role.USER, Role.ADMIN})
     @GetMapping("{movieId}")
     public MovieDetails findMovieById(@PathVariable int movieId) {
         log.debug("Request for movie with id: {} received", movieId);
         return movieService.findMovieDetailsByMovieId(movieId);
     }
 
+    @Secure({Role.USER, Role.ADMIN})
     @GetMapping("random")
     public List<Movie> findRandom() {
         log.debug("Request for random movies received");
         return movieService.findRandom();
     }
 
+    @Secure({Role.USER, Role.ADMIN})
     @GetMapping("genre/{genreId}")
     public List<Movie> findByGenre(@PathVariable int genreId,
                                    @RequestParam(value = "rating", required = false) SortDirection ratingSortDirection,

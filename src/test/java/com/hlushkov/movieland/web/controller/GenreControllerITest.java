@@ -1,11 +1,16 @@
 package com.hlushkov.movieland.web.controller;
 
+import com.hlushkov.movieland.common.Role;
+import com.hlushkov.movieland.common.UserHolder;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
+import com.hlushkov.movieland.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,43 +45,47 @@ class GenreControllerITest {
     @DisplayName("Returns all genres")
     void findAllGenres() throws Exception {
         //when
-        MockHttpServletResponse response = mockMvc.perform(get("/genre"))
-                .andDo(print())
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].name").isNotEmpty())
-                .andExpect(jsonPath("$[1].id").value(2))
-                .andExpect(jsonPath("$[1].name").isNotEmpty())
-                .andExpect(jsonPath("$[2].id").value(3))
-                .andExpect(jsonPath("$[2].name").isNotEmpty())
-                .andExpect(jsonPath("$[3].id").value(4))
-                .andExpect(jsonPath("$[3].name").isNotEmpty())
-                .andExpect(jsonPath("$[4].id").value(5))
-                .andExpect(jsonPath("$[4].name").isNotEmpty())
-                .andExpect(jsonPath("$[5].id").value(6))
-                .andExpect(jsonPath("$[5].name").isNotEmpty())
-                .andExpect(jsonPath("$[6].id").value(7))
-                .andExpect(jsonPath("$[6].name").isNotEmpty())
-                .andExpect(jsonPath("$[7].id").value(8))
-                .andExpect(jsonPath("$[7].name").isNotEmpty())
-                .andExpect(jsonPath("$[8].id").value(9))
-                .andExpect(jsonPath("$[8].name").isNotEmpty())
-                .andExpect(jsonPath("$[9].id").value(10))
-                .andExpect(jsonPath("$[9].name").isNotEmpty())
-                .andExpect(jsonPath("$[10].id").value(11))
-                .andExpect(jsonPath("$[10].name").isNotEmpty())
-                .andExpect(jsonPath("$[11].id").value(12))
-                .andExpect(jsonPath("$[11].name").isNotEmpty())
-                .andExpect(jsonPath("$[12].id").value(13))
-                .andExpect(jsonPath("$[12].name").isNotEmpty())
-                .andExpect(jsonPath("$[13].id").value(14))
-                .andExpect(jsonPath("$[13].name").isNotEmpty())
-                .andExpect(jsonPath("$[14].id").value(15))
-                .andExpect(jsonPath("$[14].name").isNotEmpty())
-                .andExpect(status().isOk()).andReturn().getResponse();
-        //then
-        assertNotNull(response.getHeader("Content-Type"));
-        assertEquals("application/json", response.getHeader("Content-Type"));
-        assertEquals("application/json", response.getContentType());
-        assertNotNull(response.getContentAsString());
+        try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
+            theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.USER).build());
+
+            MockHttpServletResponse response = mockMvc.perform(get("/genre"))
+                    .andDo(print())
+                    .andExpect(jsonPath("$[0].id").value(1))
+                    .andExpect(jsonPath("$[0].name").isNotEmpty())
+                    .andExpect(jsonPath("$[1].id").value(2))
+                    .andExpect(jsonPath("$[1].name").isNotEmpty())
+                    .andExpect(jsonPath("$[2].id").value(3))
+                    .andExpect(jsonPath("$[2].name").isNotEmpty())
+                    .andExpect(jsonPath("$[3].id").value(4))
+                    .andExpect(jsonPath("$[3].name").isNotEmpty())
+                    .andExpect(jsonPath("$[4].id").value(5))
+                    .andExpect(jsonPath("$[4].name").isNotEmpty())
+                    .andExpect(jsonPath("$[5].id").value(6))
+                    .andExpect(jsonPath("$[5].name").isNotEmpty())
+                    .andExpect(jsonPath("$[6].id").value(7))
+                    .andExpect(jsonPath("$[6].name").isNotEmpty())
+                    .andExpect(jsonPath("$[7].id").value(8))
+                    .andExpect(jsonPath("$[7].name").isNotEmpty())
+                    .andExpect(jsonPath("$[8].id").value(9))
+                    .andExpect(jsonPath("$[8].name").isNotEmpty())
+                    .andExpect(jsonPath("$[9].id").value(10))
+                    .andExpect(jsonPath("$[9].name").isNotEmpty())
+                    .andExpect(jsonPath("$[10].id").value(11))
+                    .andExpect(jsonPath("$[10].name").isNotEmpty())
+                    .andExpect(jsonPath("$[11].id").value(12))
+                    .andExpect(jsonPath("$[11].name").isNotEmpty())
+                    .andExpect(jsonPath("$[12].id").value(13))
+                    .andExpect(jsonPath("$[12].name").isNotEmpty())
+                    .andExpect(jsonPath("$[13].id").value(14))
+                    .andExpect(jsonPath("$[13].name").isNotEmpty())
+                    .andExpect(jsonPath("$[14].id").value(15))
+                    .andExpect(jsonPath("$[14].name").isNotEmpty())
+                    .andExpect(status().isOk()).andReturn().getResponse();
+            //then
+            assertNotNull(response.getHeader("Content-Type"));
+            assertEquals("application/json", response.getHeader("Content-Type"));
+            assertEquals("application/json", response.getContentType());
+            assertNotNull(response.getContentAsString());
+        }
     }
 }

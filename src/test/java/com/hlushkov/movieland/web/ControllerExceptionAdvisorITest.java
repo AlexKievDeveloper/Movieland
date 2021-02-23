@@ -4,13 +4,18 @@ import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.spring.api.DBRider;
+import com.hlushkov.movieland.common.Role;
+import com.hlushkov.movieland.common.UserHolder;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.data.TestData;
+import com.hlushkov.movieland.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,17 +79,21 @@ class ControllerExceptionAdvisorITest {
 
     @Test
     @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
-    @DisplayName("Catch DataAccessException and send message and status bad request as response")
+    @DisplayName("Catch DataAccessException and send message and bad request status as response")
     void testBadRequestIllegalArgumentException() throws Exception {
         //when
-        MockHttpServletResponse response = mockMvc.perform(get("/movie/26"))
-                .andDo(print())
-                .andExpect(jsonPath("$.message").value("Returned empty result in response to query for Movie with details."))
-                .andExpect(status().isBadRequest()).andReturn().getResponse();
-        //then
-        assertNotNull(response.getHeader("Content-Type"));
-        assertEquals("application/json", response.getHeader("Content-Type"));
-        assertEquals("application/json", response.getContentType());
-        assertNotNull(response.getContentAsString());
+        try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
+            theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.USER).build());
+
+            MockHttpServletResponse response = mockMvc.perform(get("/movie/26"))
+                    .andDo(print())
+                    .andExpect(jsonPath("$.message").value("Returned empty result in response to query for Movie with details."))
+                    .andExpect(status().isBadRequest()).andReturn().getResponse();
+            //then
+            assertNotNull(response.getHeader("Content-Type"));
+            assertEquals("application/json", response.getHeader("Content-Type"));
+            assertEquals("application/json", response.getContentType());
+            assertNotNull(response.getContentAsString());
+        }
     }
 }

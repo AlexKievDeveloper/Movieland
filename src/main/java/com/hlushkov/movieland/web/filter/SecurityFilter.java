@@ -1,28 +1,28 @@
 package com.hlushkov.movieland.web.filter;
 
-import com.hlushkov.movieland.common.Role;
 import com.hlushkov.movieland.common.UserHolder;
 import com.hlushkov.movieland.entity.User;
 import com.hlushkov.movieland.security.SecurityService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
 @Slf4j
-@WebFilter(urlPatterns = {"/api/v1/logout", "/api/v1/review", "/api/v1/genre", "/api/v1/movie", "/api/v1/movie/**"})
+@WebFilter("/**")
 public class SecurityFilter extends HttpFilter {
     private SecurityService securityService;
 
@@ -34,19 +34,37 @@ public class SecurityFilter extends HttpFilter {
 
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String userUUID = request.getHeader("user_uuid");
-        if (userUUID != null) {
-            Optional<User> userOptional = securityService.getUserByUUID(userUUID);
-            if (userOptional.isPresent()) {
-                User user = userOptional.get();
-                UserHolder.setUser(user);
-                if (Role.USER.equals(user.getRole()) || Role.ADMIN.equals(user.getRole())) {
-                    chain.doFilter(request, response);
-                }
-            }
+        Cookie[] cookies = request.getCookies();
+        List<String> allowedUrls = new ArrayList<>();
+        allowedUrls.add("/login");
+
+        if (allowedUrls.contains(request.getPathInfo())) {
+            chain.doFilter(request, response);
         } else {
-            log.error("Unauthorized access attempt");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if ("user_uuid".equals(cookie.getName())) {
+                        Optional<User> userOptional = securityService.getUserByUUID(cookie.getValue());
+                        if (userOptional.isPresent()) {
+                            User user = userOptional.get();
+                            UserHolder.setUser(user);
+                            chain.doFilter(request, response);
+                        } else {
+                            returnUnauthorized(request, response);
+                        }
+                    } else {
+                        returnUnauthorized(request, response);
+                    }
+                }
+            } else {
+                returnUnauthorized(request, response);
+            }
         }
+    }
+
+    void returnUnauthorized(HttpServletRequest request, HttpServletResponse response) {
+        log.error("Unauthorized access attempt, servlet path: {}, request path info: {}",
+                request.getServletPath(), request.getPathInfo());
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }
