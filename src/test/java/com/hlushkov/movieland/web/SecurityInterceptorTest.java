@@ -11,6 +11,7 @@ import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.entity.User;
 import com.hlushkov.movieland.web.controller.AuthController;
 import com.hlushkov.movieland.web.controller.MovieController;
+import com.hlushkov.movieland.web.interceptor.SecurityInterceptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

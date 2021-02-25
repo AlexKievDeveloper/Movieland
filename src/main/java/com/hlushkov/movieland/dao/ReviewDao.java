@@ -4,5 +4,5 @@ import com.hlushkov.movieland.entity.Review;
 
 public interface ReviewDao {
 
-    void save(Review review);
+    void addReview(Review review);
 }

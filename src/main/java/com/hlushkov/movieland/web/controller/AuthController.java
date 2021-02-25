@@ -3,7 +3,7 @@ package com.hlushkov.movieland.web.controller;
 import com.hlushkov.movieland.common.Role;
 import com.hlushkov.movieland.common.request.AuthRequest;
 import com.hlushkov.movieland.common.response.AuthResponse;
-import com.hlushkov.movieland.security.Secure;
+import com.hlushkov.movieland.security.annotation.Secure;
 import com.hlushkov.movieland.security.SecurityService;
 import com.hlushkov.movieland.security.session.Session;
 import lombok.RequiredArgsConstructor;

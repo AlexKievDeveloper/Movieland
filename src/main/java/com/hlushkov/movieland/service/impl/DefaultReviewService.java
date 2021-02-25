@@ -14,7 +14,7 @@ public class DefaultReviewService implements ReviewService {
     private final ReviewDao reviewDao;
 
     @Override
-    public void save(Review review) {
-        reviewDao.save(review);
+    public void addReview(Review review) {
+        reviewDao.addReview(review);
     }
 }

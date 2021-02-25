@@ -23,10 +23,11 @@ class JdbcReviewDaoITest {
     private JdbcReviewDao jdbcReviewDao;
 
     @Test
-    @DisplayName("Save review to DB")
-    @DataSet(provider = TestData.ReviewsProvider.class, executeStatementsBefore = "SELECT setval('reviews_review_id_seq', 2)")
+    @DisplayName("Add review to DB")
+    @DataSet(provider = TestData.ReviewsProvider.class,
+            executeStatementsBefore = "SELECT setval('reviews_review_id_seq', 2)", cleanAfter = true)
     @ExpectedDataSet(provider = TestData.ResultReviewsProvider.class)
-    void save() {
+    void addReview() {
         //prepare
         Review review = Review.builder()
                 .movieId(1)
@@ -34,6 +35,6 @@ class JdbcReviewDaoITest {
                 .text("Nice film!")
                 .build();
         //when
-        jdbcReviewDao.save(review);
+        jdbcReviewDao.addReview(review);
     }
 }

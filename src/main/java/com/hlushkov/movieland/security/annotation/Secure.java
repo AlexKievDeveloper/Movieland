@@ -1,4 +1,4 @@
-package com.hlushkov.movieland.security;
+package com.hlushkov.movieland.security.annotation;
 
 import com.hlushkov.movieland.common.Role;
 

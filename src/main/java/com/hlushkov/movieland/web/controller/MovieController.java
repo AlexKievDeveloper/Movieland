@@ -3,12 +3,14 @@ package com.hlushkov.movieland.web.controller;
 import com.hlushkov.movieland.common.Role;
 import com.hlushkov.movieland.common.SortDirection;
 import com.hlushkov.movieland.common.dto.MovieDetails;
+import com.hlushkov.movieland.common.request.AddMovieRequest;
 import com.hlushkov.movieland.common.request.MovieRequest;
 import com.hlushkov.movieland.entity.Movie;
-import com.hlushkov.movieland.security.Secure;
+import com.hlushkov.movieland.security.annotation.Secure;
 import com.hlushkov.movieland.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,4 +62,13 @@ public class MovieController {
         movieRequest.setPriceDirection(Optional.ofNullable(priceSortDirection));
         return movieService.findByGenre(genreId, movieRequest);
     }
+
+    @Secure({Role.ADMIN})
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public void addMovie(@RequestBody AddMovieRequest addMovieRequest) {
+        log.info("Request for add movie");
+        movieService.addMovie(addMovieRequest);
+    }
+
 }

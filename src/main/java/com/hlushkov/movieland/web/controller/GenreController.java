@@ -2,7 +2,7 @@ package com.hlushkov.movieland.web.controller;
 
 import com.hlushkov.movieland.common.Role;
 import com.hlushkov.movieland.entity.Genre;
-import com.hlushkov.movieland.security.Secure;
+import com.hlushkov.movieland.security.annotation.Secure;
 import com.hlushkov.movieland.service.GenreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

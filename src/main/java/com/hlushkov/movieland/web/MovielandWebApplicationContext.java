@@ -1,5 +1,6 @@
 package com.hlushkov.movieland.web;
 
+import com.hlushkov.movieland.web.interceptor.SecurityInterceptor;
 import com.hlushkov.movieland.web.util.RequestParameterConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

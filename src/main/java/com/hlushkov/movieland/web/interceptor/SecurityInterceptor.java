@@ -1,9 +1,9 @@
-package com.hlushkov.movieland.web;
+package com.hlushkov.movieland.web.interceptor;
 
 import com.hlushkov.movieland.common.Role;
 import com.hlushkov.movieland.common.UserHolder;
 import com.hlushkov.movieland.entity.User;
-import com.hlushkov.movieland.security.Secure;
+import com.hlushkov.movieland.security.annotation.Secure;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -35,6 +35,7 @@ public class SecurityInterceptor implements HandlerInterceptor {
                     return true;
                 }
             }
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return false;
         }
         return true;

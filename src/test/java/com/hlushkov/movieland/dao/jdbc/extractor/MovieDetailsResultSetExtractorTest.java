@@ -36,7 +36,7 @@ class MovieDetailsResultSetExtractorTest {
         when(resultSet.getInt("movie_year_of_release")).thenReturn(1994);
         when(resultSet.getDouble("movie_rating")).thenReturn(8.9);
         when(resultSet.getDouble("movie_price")).thenReturn(123.45);
-        when(resultSet.getString("poster_picture_path")).thenReturn("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg");
+        when(resultSet.getString("movie_picture_path")).thenReturn("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg");
 
         when(resultSet.getInt("genre_id")).thenReturn(1);
         when(resultSet.getString("genre_name")).thenReturn("драма");

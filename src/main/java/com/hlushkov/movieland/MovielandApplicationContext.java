@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
 
@@ -15,6 +18,7 @@ import javax.sql.DataSource;
 @ComponentScan(value = "com.hlushkov.movieland", excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX,
         pattern = "com.hlushkov.movieland.web"))
 @EnableScheduling
+@EnableTransactionManagement(proxyTargetClass = true)
 public class MovielandApplicationContext {
 
     @Bean
@@ -41,6 +45,16 @@ public class MovielandApplicationContext {
     @Bean
     public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
         return new NamedParameterJdbcTemplate(dataSource);
+    }
+
+    @Bean
+    protected DataSourceTransactionManager transactionManager(DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
+    }
+
+    @Bean
+    protected TransactionTemplate transactionTemplate(DataSourceTransactionManager transactionManager) {
+        return new TransactionTemplate(transactionManager);
     }
 
 }

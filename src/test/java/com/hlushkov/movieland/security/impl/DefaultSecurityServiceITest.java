@@ -5,6 +5,7 @@ import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.hlushkov.movieland.common.Role;
+import com.hlushkov.movieland.common.exception.NoUserFoundException;
 import com.hlushkov.movieland.common.request.AuthRequest;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.data.TestData;
@@ -31,7 +32,7 @@ class DefaultSecurityServiceITest {
     private SecurityService securityService;
 
     @Test
-    @DataSet(provider = TestData.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class, cleanAfter = true)
     @DisplayName("Returns optional with Session")
     void login() {
         //prepare
@@ -47,7 +48,7 @@ class DefaultSecurityServiceITest {
     }
 
     @Test
-    @DataSet(provider = TestData.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class, cleanAfter = true)
     @DisplayName("Returns empty optional")
     void loginWithIncorrectPassword() {
         //prepare
@@ -62,7 +63,7 @@ class DefaultSecurityServiceITest {
     }
 
     @Test
-    @DataSet(provider = TestData.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class, cleanAfter = true)
     @DisplayName("Returns empty optional")
     void loginWithIncorrectEmail() {
         //prepare
@@ -71,15 +72,15 @@ class DefaultSecurityServiceITest {
         authRequestWithNoValidCredentials.setPassword("user");
 
         //when
-        EmptyResultDataAccessException thrown = Assertions.assertThrows(
-                EmptyResultDataAccessException.class,
+        NoUserFoundException thrown = Assertions.assertThrows(
+                NoUserFoundException.class,
                 () -> securityService.login(authRequestWithNoValidCredentials));
 
-        assertEquals("Incorrect result size: expected 1, actual 0", thrown.getMessage());
+        assertEquals("Exception while getting user by email from db: noValidUserEmail@gmail.com", thrown.getMessage());
     }
 
     @Test
-    @DataSet(provider = TestData.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class, cleanAfter = true)
     @DisplayName("Returns true")
     void removeSession() {
         //prepare
@@ -95,7 +96,7 @@ class DefaultSecurityServiceITest {
     }
 
     @Test
-    @DataSet(provider = TestData.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class, cleanAfter = true)
     @DisplayName("Returns optional with session")
     void getSession() {
         //prepare

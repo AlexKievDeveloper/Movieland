@@ -4,7 +4,7 @@ import com.hlushkov.movieland.common.Role;
 import com.hlushkov.movieland.common.UserHolder;
 import com.hlushkov.movieland.common.request.AddReviewRequest;
 import com.hlushkov.movieland.entity.Review;
-import com.hlushkov.movieland.security.Secure;
+import com.hlushkov.movieland.security.annotation.Secure;
 import com.hlushkov.movieland.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +22,13 @@ public class ReviewController {
     @Secure({Role.USER, Role.ADMIN})
     @PostMapping("review")
     @ResponseStatus(HttpStatus.CREATED)
-    public void save(@RequestBody AddReviewRequest addReviewRequest) {
+    public void addReview(@RequestBody AddReviewRequest addReviewRequest) {
         log.debug("Request to add a review received");
         Review review = Review.builder()
                 .user(UserHolder.getUser())
                 .text(addReviewRequest.getText())
                 .movieId(addReviewRequest.getMovieId())
                 .build();
-        reviewService.save(review);
+        reviewService.addReview(review);
     }
 }

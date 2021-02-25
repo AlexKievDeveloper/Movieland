@@ -3,6 +3,7 @@ package com.hlushkov.movieland.web.controller;
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.hlushkov.movieland.common.Role;
 import com.hlushkov.movieland.common.UserHolder;
@@ -23,9 +24,16 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,7 +56,7 @@ class MovieControllerITest {
     }
 
     @Test
-    @DataSet(provider = TestData.MoviesProvider.class)
+    @DataSet(provider = TestData.MoviesProvider.class, cleanAfter = true)
     @DisplayName("Returns list of all movies in json format")
     void findAllMovies() throws Exception {
         //when
@@ -69,7 +77,7 @@ class MovieControllerITest {
     }
 
     @Test
-    @DataSet(provider = TestData.MoviesProvider.class)
+    @DataSet(provider = TestData.MoviesProvider.class, cleanAfter = true)
     @DisplayName("Returns list of all movies sorted by rating DESC in json format")
     void findAllMoviesSortedByRatingDESC() throws Exception {
         //when
@@ -92,7 +100,7 @@ class MovieControllerITest {
     }
 
     @Test
-    @DataSet(provider = TestData.MoviesProvider.class)
+    @DataSet(provider = TestData.MoviesProvider.class, cleanAfter = true)
     @DisplayName("Returns list of all movies sorted by price DESC in json format")
     void findAllMoviesSortedByPriceDESC() throws Exception {
         //when
@@ -115,7 +123,7 @@ class MovieControllerITest {
     }
 
     @Test
-    @DataSet(provider = TestData.MoviesProvider.class)
+    @DataSet(provider = TestData.MoviesProvider.class, cleanAfter = true)
     @DisplayName("Returns list of all movies sorted by price ASC in json format")
     void findAllMoviesSortedByPriceASC() throws Exception {
         //when
@@ -138,7 +146,7 @@ class MovieControllerITest {
     }
 
     @Test
-    @DataSet(provider = TestData.PostersAndMoviesProvider.class, cleanAfter = true)
+    @DataSet(provider = TestData.MoviesProvider.class, cleanAfter = true)
     @DisplayName("Returns list of three random movies in json format")
     void findThreeRandomMovies() throws Exception {
         //when
@@ -311,4 +319,39 @@ class MovieControllerITest {
             assertNotNull(response.getContentAsString());
         }
     }
+
+    @Test
+    @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class,
+            executeStatementsBefore = "SELECT setval('movies_movie_id_seq', 25)", cleanAfter = true)
+    @ExpectedDataSet(provider = TestData.AddMovieResultProvider.class)
+    @DisplayName("Saves movie to db")
+    void addMovie() throws Exception {
+        //prepare
+        List<Integer> countriesList = List.of(1, 2);
+        List<Integer> genresList = List.of(1, 2, 3);
+        Map<String, Object> parametersMap = new HashMap();
+        parametersMap.put("nameRussian", "Побег из тюрьмы Шоушенка");
+        parametersMap.put("nameNative", "The Shawshank Redemption prison");
+        parametersMap.put("yearOfRelease", 1994);
+        parametersMap.put("description", "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает разрабатывать невероятно дерзкий план своего освобождения.");
+        parametersMap.put("price", 123.45);
+        parametersMap.put("rating", 8.0);
+        parametersMap.put("picturePath", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg");
+        parametersMap.put("countriesIds", countriesList);
+        parametersMap.put("genresIds", genresList);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String addMovieJson = objectMapper.writeValueAsString(parametersMap);
+
+        //when+then
+        try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
+            theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.ADMIN).build());
+
+            mockMvc.perform(post("/movie")
+                    .content(addMovieJson)
+                    .contentType("application/json"))
+                    .andDo(print())
+                    .andExpect(status().isCreated());
+        }
+    }
+
 }

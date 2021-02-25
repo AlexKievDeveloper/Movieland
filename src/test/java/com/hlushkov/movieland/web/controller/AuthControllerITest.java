@@ -4,6 +4,8 @@ import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.spring.api.DBRider;
+import com.hlushkov.movieland.common.Role;
+import com.hlushkov.movieland.common.UserHolder;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.entity.User;
@@ -14,9 +16,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -68,7 +68,7 @@ class AuthControllerITest {
     }
 
     @Test
-    @DataSet(provider = TestData.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class, cleanAfter = true)
     @DisplayName("Returns cookie with token for user")
     void login() throws Exception {
         //prepare
@@ -90,7 +90,7 @@ class AuthControllerITest {
     }
 
     @Test
-    @DataSet(provider = TestData.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class, cleanAfter = true)
     @DisplayName("Returns bad request")
     void loginIfEmailOrPasswordIsIncorrect() throws Exception {
         //prepare
@@ -112,41 +112,47 @@ class AuthControllerITest {
     }
 
     @Test
-    @DataSet(provider = TestData.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class, cleanAfter = true)
     @DisplayName("Returns bad request")
     void logout() throws Exception {
         //prepare
-        Map<String, String> userInfo = new HashMap<>();
-        userInfo.put("email", "user@gmail.com");
-        userInfo.put("password", "user");
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonUserCredentials = objectMapper.writeValueAsString(userInfo);
+        try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
+            theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.USER).build());
 
-        MockHttpServletResponse response = mockMvc.perform(post("/login")
-                .content(jsonUserCredentials)
-                .contentType("application/json"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andReturn().getResponse();
+            Map<String, String> userInfo = new HashMap<>();
+            userInfo.put("email", "user@gmail.com");
+            userInfo.put("password", "user");
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonUserCredentials = objectMapper.writeValueAsString(userInfo);
 
-        Cookie cookie = new Cookie("user_uuid", response.getCookie("user_uuid").getValue());
-        when(securityService.getUserByUUID(any())).thenReturn(Optional.of(User.builder().build()));
-        //when+then
-        mockMvcWithSecurityFilter.perform(delete("/logout")
-                .cookie(cookie))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andReturn().getResponse();
+            MockHttpServletResponse response = mockMvc.perform(post("/login")
+                    .content(jsonUserCredentials)
+                    .contentType("application/json"))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andReturn().getResponse();
+
+            Cookie cookie = new Cookie("user_uuid", response.getCookie("user_uuid").getValue());
+            when(securityService.getUserByUUID(any())).thenReturn(Optional.of(User.builder().build()));
+            //when+then
+            mockMvcWithSecurityFilter.perform(delete("/logout")
+                    .cookie(cookie))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andReturn().getResponse();
+        }
     }
 
     @Test
-    @DataSet(provider = TestData.UserProvider.class)
+    @DataSet(provider = TestData.UserProvider.class, cleanAfter = true)
     @DisplayName("Returns bad request")
     void logoutIfNoValidCookiePresent() throws Exception {
         //when+then
+
         mockMvcWithSecurityFilter.perform(delete("/logout"))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andReturn().getResponse();
     }
+
 }

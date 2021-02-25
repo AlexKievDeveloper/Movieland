@@ -14,7 +14,7 @@ public class JdbcReviewDao implements ReviewDao {
     private final String addReview;
 
     @Override
-    public void save(Review review) {
+    public void addReview(Review review) {
         MapSqlParameterSource parametersMap = getSqlParameterSource(review.getUser().getId(), review.getMovieId(),
                 review.getText());
         namedParameterJdbcTemplate.update(addReview, parametersMap);

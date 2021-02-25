@@ -29,19 +29,20 @@ class ReviewControllerITest {
 
     @Test
     @DisplayName("Adds review and returns response with status 200")
-    @DataSet(provider = TestData.ReviewsProvider.class, executeStatementsBefore = "SELECT setval('reviews_review_id_seq', 2)")
-    void save() {
+    @DataSet(provider = TestData.ReviewsProvider.class,
+            executeStatementsBefore = "SELECT setval('reviews_review_id_seq', 2)", cleanAfter = true)
+    void addReview() {
         //prepare
         when(addReviewRequest.getMovieId()).thenReturn(1);
         when(addReviewRequest.getText()).thenReturn("Nice film!");
 
         //when
-        reviewController.save(addReviewRequest);
+        reviewController.addReview(addReviewRequest);
 
         //then
         verify(addReviewRequest).getMovieId();
         verify(addReviewRequest).getText();
-        verify(reviewService).save(any());
+        verify(reviewService).addReview(any());
     }
 
 }

@@ -3,8 +3,10 @@ package com.hlushkov.movieland.dao.jdbc;
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.hlushkov.movieland.common.SortDirection;
+import com.hlushkov.movieland.common.request.AddMovieRequest;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.common.dto.MovieDetails;
 import com.hlushkov.movieland.data.TestData;
@@ -30,7 +32,7 @@ class JdbcMovieDaoITest {
     private JdbcMovieDao jdbcMovieDao;
 
     @Test
-    @DataSet(provider = TestData.MovieProvider.class)
+    @DataSet(provider = TestData.MovieProvider.class, cleanAfter = true)
     @DisplayName("Returns list with all movies from DB")
     void getAllMovies() {
         //prepare
@@ -62,7 +64,7 @@ class JdbcMovieDaoITest {
     }
 
     @Test
-    @DataSet(provider = TestData.MovieProvider.class)
+    @DataSet(provider = TestData.MovieProvider.class, cleanAfter = true)
     @DisplayName("Returns list with all movies from DB sorted by price DESC")
     void getAllMoviesWithPriceDESCDirectionTest() {
         //prepare
@@ -222,5 +224,29 @@ class JdbcMovieDaoITest {
         assertEquals(3, actualMovieDetails.getReviews().get(1).getUser().getId());
         assertEquals("Габриэль Джексон", actualMovieDetails.getReviews().get(1).getUser().getNickname());
     }
+
+ /*FIXME*/
+/*    @Test
+    @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class,
+            executeStatementsBefore = "SELECT setval('movies_movie_id_seq', 25)", cleanAfter = true)
+    @ExpectedDataSet(provider = TestData.AddMovieResultProvider.class)
+    @DisplayName("Adds Movie to DB")
+    void addMovie() {
+        //prepare
+        AddMovieRequest addMovieRequest = AddMovieRequest.builder()
+                .nameRussian("Побег из тюрьмы Шоушенка")
+                .nameNative("The Shawshank Redemption prison")
+                .yearOfRelease(1994)
+                .description("Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает разрабатывать невероятно дерзкий план своего освобождения.")
+                .rating(8.0)
+                .price(123.45)
+                .picturePath("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
+                .countriesIds(List.of(1, 2))
+                .genresIds(List.of(1, 2, 3))
+                .build();
+
+        //when+then
+        jdbcMovieDao.addMovie(addMovieRequest);
+    }*/
 
 }

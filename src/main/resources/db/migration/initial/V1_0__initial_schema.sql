@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS movies
     movie_year_of_release INTEGER           NOT NULL,
     movie_description VARCHAR(1000)       NOT NULL,
     movie_rating      DOUBLE PRECISION    NOT NULL,
-    movie_price       DOUBLE PRECISION    NOT NULL
+    movie_price       DOUBLE PRECISION    NOT NULL,
+    movie_picture_path VARCHAR(500)       NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS movies_genres
@@ -37,15 +38,6 @@ CREATE TABLE IF NOT EXISTS movies_countries
 
     FOREIGN KEY (movie_id) REFERENCES movies (movie_id),
     FOREIGN KEY (country_id) REFERENCES countries (country_id)
-);
-
-CREATE TABLE IF NOT EXISTS posters
-(
-    poster_id  SERIAL PRIMARY KEY,
-    movie_id   INTEGER NOT NULL,
-    poster_picture_path VARCHAR(500) NOT NULL,
-
-    FOREIGN KEY (movie_id) REFERENCES movies (movie_id)
 );
 
 CREATE TABLE IF NOT EXISTS users
