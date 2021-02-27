@@ -6,7 +6,7 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.hlushkov.movieland.common.SortDirection;
-import com.hlushkov.movieland.common.request.AddMovieRequest;
+import com.hlushkov.movieland.common.request.CreateUpdateMovieRequest;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.common.dto.MovieDetails;
 import com.hlushkov.movieland.data.TestData;
@@ -16,6 +16,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 import java.util.List;
 import java.util.Optional;
@@ -225,7 +226,7 @@ class JdbcMovieDaoITest {
         assertEquals("Габриэль Джексон", actualMovieDetails.getReviews().get(1).getUser().getNickname());
     }
 
- /*FIXME*/
+    /*FIXME*/
 /*    @Test
     @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class,
             executeStatementsBefore = "SELECT setval('movies_movie_id_seq', 25)", cleanAfter = true)
@@ -233,7 +234,7 @@ class JdbcMovieDaoITest {
     @DisplayName("Adds Movie to DB")
     void addMovie() {
         //prepare
-        AddMovieRequest addMovieRequest = AddMovieRequest.builder()
+        CreateUpdateMovieRequest createUpdateMovieRequest = CreateUpdateMovieRequest.builder()
                 .nameRussian("Побег из тюрьмы Шоушенка")
                 .nameNative("The Shawshank Redemption prison")
                 .yearOfRelease(1994)
@@ -246,7 +247,73 @@ class JdbcMovieDaoITest {
                 .build();
 
         //when+then
-        jdbcMovieDao.addMovie(addMovieRequest);
+        jdbcMovieDao.addMovie(createUpdateMovieRequest);
     }*/
 
+/*    @Test
+    @DataSet(provider = TestData.EditMovieDataProvider.class, cleanAfter = true)
+    @ExpectedDataSet(provider = TestData.EditMovieDataResultProvider.class)
+    @DisplayName("Updates movie with genres and countries by movie id")
+    void editMovie() {
+        //prepare
+        CreateUpdateMovieRequest createUpdateMovieRequest = CreateUpdateMovieRequest.builder()
+                .nameRussian("Побег из тюрьмы Шоушенка")
+                .nameNative("The Shawshank Redemption prison")
+                .yearOfRelease(1994)
+                .description("Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает разрабатывать невероятно дерзкий план своего освобождения.")
+                .rating(8.0)
+                .price(123.45)
+                .picturePath("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
+                .countriesIds(List.of(3, 4))
+                .genresIds(List.of(4, 5, 6))
+                .build();
+        //when
+        jdbcMovieDao.editMovie(2, createUpdateMovieRequest);
+    }*/
+
+    @Test
+    @DataSet(provider = TestData.RemoveMoviesGenresDataProvider.class, cleanAfter = true)
+    @ExpectedDataSet(provider = TestData.RemoveMoviesGenresResultProvider.class)
+    @DisplayName("Removes movies-genres by movie id")
+    void removeMoviesGenresByMovieId() {
+        //when
+        jdbcMovieDao.removeMoviesGenresByMovieId(1);
+    }
+
+    @Test
+    @DataSet(provider = TestData.RemoveMoviesCountriesDataProvider.class, cleanAfter = true)
+    @ExpectedDataSet(provider = TestData.RemoveMoviesCountriesResultProvider.class)
+    @DisplayName("Removes movies-countries by movie id")
+    void removeMoviesCountriesByMovieId() {
+        //when
+        jdbcMovieDao.removeMoviesCountriesByMovieId(1);
+    }
+
+/*    @Test
+    @DataSet(provider = TestData.AddMoviesGenresDataProvider.class, cleanAfter = true)
+    @ExpectedDataSet(provider = TestData.AddMoviesGenresResultProvider.class)
+    @DisplayName("Adds movies-genres")
+    void addMoviesGenres() {
+        //prepare
+        MapSqlParameterSource parametersMap = new MapSqlParameterSource();
+        parametersMap.addValue("movie_id", 1);
+        List<Integer> countriesIds = List.of(3, 4);
+
+        //when
+        jdbcMovieDao.addMoviesGenres(parametersMap, countriesIds);
+    }
+
+    @Test
+    @DataSet(provider = TestData.AddMoviesCountriesDataProvider.class, cleanAfter = true)
+    @ExpectedDataSet(provider = TestData.AddMoviesCountriesResultProvider.class)
+    @DisplayName("Adds movies-countries")
+    void addMoviesCountries() {
+        //prepare
+        MapSqlParameterSource parametersMap = new MapSqlParameterSource();
+        parametersMap.addValue("movie_id", 1);
+        List<Integer> countriesIds = List.of(3, 4);
+
+        //when
+        jdbcMovieDao.addMoviesCountries(parametersMap, countriesIds);
+    }*/
 }

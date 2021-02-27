@@ -1,7 +1,7 @@
 package com.hlushkov.movieland.service;
 
 import com.hlushkov.movieland.common.dto.MovieDetails;
-import com.hlushkov.movieland.common.request.AddMovieRequest;
+import com.hlushkov.movieland.common.request.CreateUpdateMovieRequest;
 import com.hlushkov.movieland.common.request.MovieRequest;
 import com.hlushkov.movieland.entity.Movie;
 
@@ -17,6 +17,8 @@ public interface MovieService {
 
     MovieDetails findMovieDetailsByMovieId(int movieId);
 
-    void addMovie(AddMovieRequest addMovieRequest);
+    void addMovie(CreateUpdateMovieRequest createUpdateMovieRequest);
+
+    void editMovie(int movieId, CreateUpdateMovieRequest createUpdateMovieRequest);
 }
 

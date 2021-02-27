@@ -1,11 +1,9 @@
 package com.hlushkov.movieland.dao.jdbc;
 
-import com.github.database.rider.core.api.dataset.DataSet;
 import com.hlushkov.movieland.common.SortDirection;
-import com.hlushkov.movieland.common.request.AddMovieRequest;
+import com.hlushkov.movieland.common.request.CreateUpdateMovieRequest;
 import com.hlushkov.movieland.common.request.MovieRequest;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
-import com.hlushkov.movieland.data.TestData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -228,7 +226,7 @@ class JdbcMovieDaoTest {
     @DisplayName("Returns map with all entries for addMovieFullQuery")
     void getSqlParameterSource() {
         //prepare
-        AddMovieRequest addMovieRequest = AddMovieRequest.builder()
+        CreateUpdateMovieRequest createUpdateMovieRequest = CreateUpdateMovieRequest.builder()
                 .nameRussian("Побег из тюрьмы Шоушенка")
                 .nameNative("The Shawshank Redemption prison")
                 .yearOfRelease(1994)
@@ -241,7 +239,7 @@ class JdbcMovieDaoTest {
                 .build();
 
         //when
-        MapSqlParameterSource actualParameterSource = jdbcMovieDao.getSqlParameterSource(addMovieRequest);
+        MapSqlParameterSource actualParameterSource = jdbcMovieDao.getSqlParameterSource(createUpdateMovieRequest);
 
         //then
         assertTrue(actualParameterSource.hasValue("name_russian"));
@@ -280,7 +278,7 @@ class JdbcMovieDaoTest {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
 
         //when
-        jdbcMovieDao.addMapSqlParametersForCountryIds(mapSqlParameterSource, List.of(1,2));
+        jdbcMovieDao.addMapSqlParametersForCountryIds(mapSqlParameterSource, List.of(1, 2));
 
         //then
         assertTrue(mapSqlParameterSource.hasValue("country_id0"));
@@ -291,14 +289,13 @@ class JdbcMovieDaoTest {
     }
 
     @Test
-    @DataSet(provider = TestData.MovieProvider.class, cleanAfter = true)
     @DisplayName("Generate value with genres for addMovie query from list with genre ids")
     void addMapSqlParametersForGenreIds() {
         //prepare
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
 
         //when
-        jdbcMovieDao.addMapSqlParametersForGenreIds(mapSqlParameterSource, List.of(1,2,3));
+        jdbcMovieDao.addMapSqlParametersForGenreIds(mapSqlParameterSource, List.of(1, 2, 3));
 
         //then
         assertTrue(mapSqlParameterSource.hasValue("genre_id0"));
@@ -309,4 +306,61 @@ class JdbcMovieDaoTest {
         assertEquals(2L, mapSqlParameterSource.getValue("genre_id1"));
         assertEquals(3L, mapSqlParameterSource.getValue("genre_id2"));
     }
+
+    @Test
+    @DisplayName("Generate value with genres for addMovie query from list with genre ids")
+    void generateFullEditMovieQuery() {
+        //prepare
+        String editMovie = "UPDATE movies SET ";
+
+        CreateUpdateMovieRequest createUpdateMovieRequest = CreateUpdateMovieRequest.builder()
+                .nameRussian("Побег из тюрьмы Шоушенка")
+                .nameNative("The Shawshank Redemption prison")
+                .yearOfRelease(1994)
+                .description("Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает разрабатывать невероятно дерзкий план своего освобождения.")
+                .rating(8.0)
+                .price(123.45)
+                .picturePath("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
+                .countriesIds(List.of(1, 2))
+                .genresIds(List.of(1, 2, 3))
+                .build();
+
+        String expectedMovieFullQuery = "UPDATE movies SET movie_name_russian = :name_russian, " +
+                "movie_name_native = :name_native, movie_year_of_release = :year_of_release, " +
+                "movie_description = :description, movie_rating = :rating, movie_price = :price, " +
+                "movie_picture_path = :picture_path WHERE movie_id = :movie_id";
+        //when
+        String actualMovieFullQuery = jdbcMovieDao.generateFullEditMovieQuery(editMovie, createUpdateMovieRequest);
+
+        //then
+        assertEquals(expectedMovieFullQuery, actualMovieFullQuery);
+    }
+
+    @Test
+    @DisplayName("Generate row with countries for addMoviesCountriesFullQuery from list with country ids")
+    void generateAddMoviesCountriesFullQuery() {
+        //prepare
+        String addMoviesCountries = "INSERT INTO movies_countries (movie_id, country_id) VALUES ";
+        List countriesIds = List.of(1, 2);
+        String expectedAddMoviesCountriesFullQuery = "INSERT INTO movies_countries (movie_id, country_id) VALUES (:movie_id, :country_id0), (:movie_id, :country_id1)";
+        //when
+        String actualAddMoviesCountriesFullQuery = jdbcMovieDao.generateAddMoviesCountriesFullQuery(addMoviesCountries, countriesIds);
+        //then
+        assertEquals(expectedAddMoviesCountriesFullQuery, actualAddMoviesCountriesFullQuery);
+    }
+
+    @Test
+    @DisplayName("Generate row with genres for addMoviesGenresFullQuery from list with genre ids")
+    void generateAddMoviesGenresFullQuery() {
+        //prepare
+        String addMoviesGenres = "INSERT INTO movies_genres (movie_id, genre_id) VALUES ";
+        List genresIds = List.of(1, 2, 3);
+        String expectedAddMoviesGenresFullQuery = "INSERT INTO movies_genres (movie_id, genre_id) VALUES (:movie_id, :genre_id0), (:movie_id, :genre_id1), (:movie_id, :genre_id2)";
+        //when
+        String actualAddMoviesGenresFullQuery = jdbcMovieDao.generateAddMoviesGenresFullQuery(addMoviesGenres, genresIds);
+        //then
+        assertEquals(expectedAddMoviesGenresFullQuery, actualAddMoviesGenresFullQuery);
+    }
+
+
 }

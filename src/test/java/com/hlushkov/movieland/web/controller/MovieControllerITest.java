@@ -32,8 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -351,6 +350,39 @@ class MovieControllerITest {
                     .contentType("application/json"))
                     .andDo(print())
                     .andExpect(status().isCreated());
+        }
+    }
+
+    @Test
+    @DataSet(provider = TestData.EditMovieDataProvider.class, cleanAfter = true)
+    @ExpectedDataSet(provider = TestData.EditMovieDataResultProvider.class)
+    @DisplayName("Updates movie with genres and countries by movie id")
+    void editMovie() throws Exception {
+        //prepare
+        List<Integer> countriesList = List.of(3, 4);
+        List<Integer> genresList = List.of(4, 5, 6);
+        Map<String, Object> parametersMap = new HashMap();
+        parametersMap.put("nameRussian", "Побег из тюрьмы Шоушенка");
+        parametersMap.put("nameNative", "The Shawshank Redemption prison");
+        parametersMap.put("yearOfRelease", 1994);
+        parametersMap.put("description", "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает разрабатывать невероятно дерзкий план своего освобождения.");
+        parametersMap.put("price", 123.45);
+        parametersMap.put("rating", 8.0);
+        parametersMap.put("picturePath", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg");
+        parametersMap.put("countriesIds", countriesList);
+        parametersMap.put("genresIds", genresList);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String addMovieJson = objectMapper.writeValueAsString(parametersMap);
+
+        //when+then
+        try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
+            theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.ADMIN).build());
+
+            mockMvc.perform(put("/movie/2")
+                    .content(addMovieJson)
+                    .contentType("application/json"))
+                    .andDo(print())
+                    .andExpect(status().isOk());
         }
     }
 

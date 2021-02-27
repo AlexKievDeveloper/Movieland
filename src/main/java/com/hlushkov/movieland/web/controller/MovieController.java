@@ -3,7 +3,7 @@ package com.hlushkov.movieland.web.controller;
 import com.hlushkov.movieland.common.Role;
 import com.hlushkov.movieland.common.SortDirection;
 import com.hlushkov.movieland.common.dto.MovieDetails;
-import com.hlushkov.movieland.common.request.AddMovieRequest;
+import com.hlushkov.movieland.common.request.CreateUpdateMovieRequest;
 import com.hlushkov.movieland.common.request.MovieRequest;
 import com.hlushkov.movieland.entity.Movie;
 import com.hlushkov.movieland.security.annotation.Secure;
@@ -66,9 +66,16 @@ public class MovieController {
     @Secure({Role.ADMIN})
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public void addMovie(@RequestBody AddMovieRequest addMovieRequest) {
+    public void addMovie(@RequestBody CreateUpdateMovieRequest createUpdateMovieRequest) {
         log.info("Request for add movie");
-        movieService.addMovie(addMovieRequest);
+        movieService.addMovie(createUpdateMovieRequest);
+    }
+
+    @Secure({Role.ADMIN})
+    @PutMapping("{movieId}")
+    public void editMovie(@PathVariable int movieId, @RequestBody CreateUpdateMovieRequest createUpdateMovieRequest) {
+        log.info("Request for edit movie");
+        movieService.editMovie(movieId, createUpdateMovieRequest);
     }
 
 }

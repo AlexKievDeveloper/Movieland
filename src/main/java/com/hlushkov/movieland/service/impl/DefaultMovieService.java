@@ -1,7 +1,7 @@
 package com.hlushkov.movieland.service.impl;
 
 import com.hlushkov.movieland.common.dto.MovieDetails;
-import com.hlushkov.movieland.common.request.AddMovieRequest;
+import com.hlushkov.movieland.common.request.CreateUpdateMovieRequest;
 import com.hlushkov.movieland.common.request.MovieRequest;
 import com.hlushkov.movieland.dao.MovieDao;
 import com.hlushkov.movieland.entity.Movie;
@@ -9,7 +9,6 @@ import com.hlushkov.movieland.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,10 +38,14 @@ public class DefaultMovieService implements MovieService {
         return movieDao.findMoviesByGenre(genreId, movieRequest);
     }
 
-  /*FIXME  @Transactional*/
     @Override
-    public void addMovie(AddMovieRequest addMovieRequest) {
-        movieDao.addMovie(addMovieRequest);
+    public void addMovie(CreateUpdateMovieRequest createUpdateMovieRequest) {
+        movieDao.addMovie(createUpdateMovieRequest);
+    }
+
+    @Override
+    public void editMovie(int movieId, CreateUpdateMovieRequest createUpdateMovieRequest) {
+        movieDao.editMovie(movieId, createUpdateMovieRequest);
     }
 
 }

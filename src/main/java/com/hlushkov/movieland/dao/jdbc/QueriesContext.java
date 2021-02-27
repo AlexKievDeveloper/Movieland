@@ -41,25 +41,35 @@ public class QueriesContext {
     }
 
     @Bean
-    public String addMovie2() {
-        return  "WITH ins_movies AS (INSERT INTO movies (movie_name_russian, movie_name_native, movie_year_of_release, " +
-                "movie_description, movie_rating, movie_price, movie_picture_path) " +
-                "VALUES (:name_russian, :name_native, :year_of_release, :description, :rating, :price, :picture_path) " +
-                "RETURNING movie_id AS movie_id_result) ," +
-                "ins_movies_countries AS (INSERT INTO movies_countries (movie_id, country_id) " +
-                "(SELECT movie_id_result, :country_id FROM ins_movies)) " +
-                "INSERT INTO movies_genres (movie_id, genre_id) (SELECT movie_id_result, :genre_id FROM ins_movies)";
-
-
-        //DELETE FROM links WHERE link_id IN(:link_id0,:link_id1) and congratulation_id = congratulation_id
-    }
-
-    @Bean
     public String addMovie() {
         return  "WITH ins_movies AS (INSERT INTO movies (movie_name_russian, movie_name_native, movie_year_of_release, " +
                 "movie_description, movie_rating, movie_price, movie_picture_path) VALUES (:name_russian, :name_native, " +
                 ":year_of_release, :description, :rating, :price, :picture_path) RETURNING movie_id AS movie_id_result), " +
                 "ins_movies_countries AS (INSERT INTO movies_countries (movie_id, country_id) VALUES ";
+    }
+
+    @Bean
+    public String editMovie() {
+        return "UPDATE movies SET ";
+    }
+
+    @Bean
+    public String addMoviesCountries() {
+        return "INSERT INTO movies_countries (movie_id, country_id) VALUES ";
+    }
+    @Bean
+    public String addMoviesGenres() {
+        return "INSERT INTO movies_genres (movie_id, genre_id) VALUES ";
+    }
+
+    @Bean
+    public String removeMoviesCountries() {
+        return "DELETE from movies_countries WHERE movies_countries.movie_id = :movie_id";
+    }
+
+    @Bean
+    public String removeMoviesGenres() {
+        return "DELETE from movies_genres WHERE movies_genres.movie_id = :movie_id";
     }
 
     /**

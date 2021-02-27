@@ -1686,6 +1686,469 @@ public class TestData {
                     .build();
         }
     }
+
+    public static class EditMovieDataProvider implements DataSetProvider {
+        @Override
+        public IDataSet provide() {
+            return new DataSetBuilder()
+                    .table("movies")
+                    .columns("movie_id", "movie_name_russian", "movie_name_native", "movie_year_of_release", "movie_description", "movie_rating", "movie_price", "movie_picture_path")
+                    .values("1",
+                            "Побег из Шоушенка",
+                            "The Shawshank Redemption",
+                            "1994",
+                            "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, " +
+                                    "он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их " +
+                                    "рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает " +
+                                    "разрабатывать невероятно дерзкий план своего освобождения.",
+                            "8.9",
+                            "123.45",
+                            "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
+                    .values("2",
+                            "Зеленая миля",
+                            "The Green Mile",
+                            "1994",
+                            "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, " +
+                                    "он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их " +
+                                    "рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает " +
+                                    "разрабатывать невероятно дерзкий план своего освобождения.",
+                            "8.9",
+                            "134.67",
+                            "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
+
+
+                    .table("genres")
+                    .columns("genre_id", "genre_name")
+                    .values("1", "драма")
+                    .values("2", "криминал")
+                    .values("3", "фэнтези")
+                    .values("4", "детектив")
+                    .values("5", "мелодрама")
+                    .values("6", "биография")
+                    .values("7", "комедия")
+                    .values("8", "фантастика")
+                    .values("9", "боевик")
+                    .values("10", "триллер")
+                    .values("11", "приключения")
+                    .values("12", "аниме")
+                    .values("13", "мультфильм")
+                    .values("14", "семейный")
+                    .values("15", "вестерн")
+
+                    .table("movies_genres")
+                    .columns("movie_id", "genre_id")
+                    .values("1", "1").values("1", "2")
+                    .values("2", "1").values("2", "2").values("2", "3").values("2", "4")
+
+
+                    .table("countries")
+                    .columns("country_id", "country_name")
+                    .values("1", "США")
+                    .values("2", "Франция")
+                    .values("3", "Великобритания")
+                    .values("4", "Италия")
+                    .values("5", "Германия")
+                    .values("6", "Япония")
+                    .values("7", "Испания")
+
+                    .table("movies_countries")
+                    .columns("movie_id", "country_id")
+                    .values("1", "1")
+                    .values("2", "1")
+                    .build();
+        }
+    }
+
+    public static class EditMovieDataResultProvider implements DataSetProvider {
+        @Override
+        public IDataSet provide() {
+            return new DataSetBuilder()
+                    .table("movies")
+                    .columns("movie_id", "movie_name_russian", "movie_name_native", "movie_year_of_release", "movie_description", "movie_rating", "movie_price", "movie_picture_path")
+                    .values("1",
+                            "Побег из Шоушенка",
+                            "The Shawshank Redemption",
+                            "1994",
+                            "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, " +
+                                    "он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их " +
+                                    "рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает " +
+                                    "разрабатывать невероятно дерзкий план своего освобождения.",
+                            "8.9",
+                            "123.45",
+                            "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
+                    .values("2",
+                            "Побег из тюрьмы Шоушенка",
+                            "The Shawshank Redemption prison",
+                            "1994",
+                            "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, " +
+                                    "он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их " +
+                                    "рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает " +
+                                    "разрабатывать невероятно дерзкий план своего освобождения.",
+                            "8.0",
+                            "123.45",
+                            "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
+
+                    .table("genres")
+                    .columns("genre_id", "genre_name")
+                    .values("1", "драма")
+                    .values("2", "криминал")
+                    .values("3", "фэнтези")
+                    .values("4", "детектив")
+                    .values("5", "мелодрама")
+                    .values("6", "биография")
+                    .values("7", "комедия")
+                    .values("8", "фантастика")
+                    .values("9", "боевик")
+                    .values("10", "триллер")
+                    .values("11", "приключения")
+                    .values("12", "аниме")
+                    .values("13", "мультфильм")
+                    .values("14", "семейный")
+                    .values("15", "вестерн")
+
+                    .table("movies_genres")
+                    .columns("movie_id", "genre_id")
+                    .values("1", "1").values("1", "2")
+                    .values("2", "4").values("2", "5").values("2", "6")
+
+                    .table("countries")
+                    .columns("country_id", "country_name")
+                    .values("1", "США")
+                    .values("2", "Франция")
+                    .values("3", "Великобритания")
+                    .values("4", "Италия")
+                    .values("5", "Германия")
+                    .values("6", "Япония")
+                    .values("7", "Испания")
+
+                    .table("movies_countries")
+                    .columns("movie_id", "country_id")
+                    .values("1", "1")
+                    .values("2", "3")
+                    .values("2", "4")
+                    .build();
+        }
+    }
+
+    public static class RemoveMoviesGenresDataProvider implements DataSetProvider {
+        @Override
+        public IDataSet provide() {
+            return new DataSetBuilder()
+                    .table("movies")
+                    .columns("movie_id", "movie_name_russian", "movie_name_native", "movie_year_of_release", "movie_description", "movie_rating", "movie_price", "movie_picture_path")
+                    .values("1",
+                            "Побег из Шоушенка",
+                            "The Shawshank Redemption",
+                            "1994",
+                            "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, " +
+                                    "он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их " +
+                                    "рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает " +
+                                    "разрабатывать невероятно дерзкий план своего освобождения.",
+                            "8.9",
+                            "123.45",
+                            "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
+
+                    .table("genres")
+                    .columns("genre_id", "genre_name")
+                    .values("1", "драма")
+                    .values("2", "криминал")
+
+                    .table("movies_genres")
+                    .columns("movie_id", "genre_id")
+                    .values("1", "1").values("1", "2")
+
+                    .table("countries")
+                    .columns("country_id", "country_name")
+                    .values("1", "США")
+
+                    .table("movies_countries")
+                    .columns("movie_id", "country_id")
+                    .values("1", "1")
+                    .build();
+        }
+    }
+
+    public static class RemoveMoviesGenresResultProvider implements DataSetProvider {
+        @Override
+        public IDataSet provide() {
+            return new DataSetBuilder()
+                    .table("movies")
+                    .columns("movie_id", "movie_name_russian", "movie_name_native", "movie_year_of_release", "movie_description", "movie_rating", "movie_price", "movie_picture_path")
+                    .values("1",
+                            "Побег из Шоушенка",
+                            "The Shawshank Redemption",
+                            "1994",
+                            "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, " +
+                                    "он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их " +
+                                    "рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает " +
+                                    "разрабатывать невероятно дерзкий план своего освобождения.",
+                            "8.9",
+                            "123.45",
+                            "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
+
+                    .table("genres")
+                    .columns("genre_id", "genre_name")
+                    .values("1", "драма")
+                    .values("2", "криминал")
+
+                    .table("movies_genres")
+                    .columns("movie_id", "genre_id")
+
+                    .table("countries")
+                    .columns("country_id", "country_name")
+                    .values("1", "США")
+
+                    .table("movies_countries")
+                    .columns("movie_id", "country_id")
+                    .values("1", "1")
+                    .build();
+        }
+    }
+
+    public static class RemoveMoviesCountriesDataProvider implements DataSetProvider {
+        @Override
+        public IDataSet provide() {
+            return new DataSetBuilder()
+                    .table("movies")
+                    .columns("movie_id", "movie_name_russian", "movie_name_native", "movie_year_of_release", "movie_description", "movie_rating", "movie_price", "movie_picture_path")
+                    .values("1",
+                            "Побег из Шоушенка",
+                            "The Shawshank Redemption",
+                            "1994",
+                            "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, " +
+                                    "он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их " +
+                                    "рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает " +
+                                    "разрабатывать невероятно дерзкий план своего освобождения.",
+                            "8.9",
+                            "123.45",
+                            "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
+
+                    .table("genres")
+                    .columns("genre_id", "genre_name")
+                    .values("1", "драма")
+                    .values("2", "криминал")
+
+                    .table("movies_genres")
+                    .columns("movie_id", "genre_id")
+                    .values("1", "1").values("1", "2")
+
+                    .table("countries")
+                    .columns("country_id", "country_name")
+                    .values("1", "США")
+
+                    .table("movies_countries")
+                    .columns("movie_id", "country_id")
+                    .values("1", "1")
+                    .build();
+        }
+    }
+
+    public static class RemoveMoviesCountriesResultProvider implements DataSetProvider {
+        @Override
+        public IDataSet provide() {
+            return new DataSetBuilder()
+                    .table("movies")
+                    .columns("movie_id", "movie_name_russian", "movie_name_native", "movie_year_of_release", "movie_description", "movie_rating", "movie_price", "movie_picture_path")
+                    .values("1",
+                            "Побег из Шоушенка",
+                            "The Shawshank Redemption",
+                            "1994",
+                            "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, " +
+                                    "он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их " +
+                                    "рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает " +
+                                    "разрабатывать невероятно дерзкий план своего освобождения.",
+                            "8.9",
+                            "123.45",
+                            "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
+
+                    .table("genres")
+                    .columns("genre_id", "genre_name")
+                    .values("1", "драма")
+                    .values("2", "криминал")
+
+                    .table("movies_genres")
+                    .columns("movie_id", "genre_id")
+                    .values("1", "1").values("1", "2")
+
+                    .table("countries")
+                    .columns("country_id", "country_name")
+                    .values("1", "США")
+
+                    .table("movies_countries")
+                    .columns("movie_id", "country_id")
+                    .build();
+        }
+    }
+
+    public static class AddMoviesCountriesDataProvider implements DataSetProvider {
+        @Override
+        public IDataSet provide() {
+            return new DataSetBuilder()
+                    .table("movies")
+                    .columns("movie_id", "movie_name_russian", "movie_name_native", "movie_year_of_release", "movie_description", "movie_rating", "movie_price", "movie_picture_path")
+                    .values("1",
+                            "Побег из Шоушенка",
+                            "The Shawshank Redemption",
+                            "1994",
+                            "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, " +
+                                    "он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их " +
+                                    "рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает " +
+                                    "разрабатывать невероятно дерзкий план своего освобождения.",
+                            "8.9",
+                            "123.45",
+                            "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
+
+                    .table("genres")
+                    .columns("genre_id", "genre_name")
+                    .values("1", "драма")
+                    .values("2", "криминал")
+
+                    .table("movies_genres")
+                    .columns("movie_id", "genre_id")
+                    .values("1", "1").values("1", "2")
+
+                    .table("countries")
+                    .columns("country_id", "country_name")
+                    .values("1", "США")
+                    .values("2", "Франция")
+                    .values("3", "Великобритания")
+                    .values("4", "Италия")
+
+                    .table("movies_countries")
+                    .columns("movie_id", "country_id")
+                    .values("1", "1")
+                    .build();
+        }
+    }
+
+    public static class AddMoviesCountriesResultProvider implements DataSetProvider {
+        @Override
+        public IDataSet provide() {
+            return new DataSetBuilder()
+                    .table("movies")
+                    .columns("movie_id", "movie_name_russian", "movie_name_native", "movie_year_of_release", "movie_description", "movie_rating", "movie_price", "movie_picture_path")
+                    .values("1",
+                            "Побег из Шоушенка",
+                            "The Shawshank Redemption",
+                            "1994",
+                            "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, " +
+                                    "он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их " +
+                                    "рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает " +
+                                    "разрабатывать невероятно дерзкий план своего освобождения.",
+                            "8.9",
+                            "123.45",
+                            "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
+
+                    .table("genres")
+                    .columns("genre_id", "genre_name")
+                    .values("1", "драма")
+                    .values("2", "криминал")
+
+                    .table("movies_genres")
+                    .columns("movie_id", "genre_id")
+                    .values("1", "1").values("1", "2")
+
+                    .table("countries")
+                    .columns("country_id", "country_name")
+                    .values("1", "США")
+                    .values("2", "Франция")
+                    .values("3", "Великобритания")
+                    .values("4", "Италия")
+
+                    .table("movies_countries")
+                    .columns("movie_id", "country_id")
+                    .values("1", "1")
+                    .values("1", "3")
+                    .values("1", "4")
+                    .build();
+        }
+    }
+
+    public static class AddMoviesGenresDataProvider implements DataSetProvider {
+        @Override
+        public IDataSet provide() {
+            return new DataSetBuilder()
+                    .table("movies")
+                    .columns("movie_id", "movie_name_russian", "movie_name_native", "movie_year_of_release", "movie_description", "movie_rating", "movie_price", "movie_picture_path")
+                    .values("1",
+                            "Побег из Шоушенка",
+                            "The Shawshank Redemption",
+                            "1994",
+                            "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, " +
+                                    "он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их " +
+                                    "рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает " +
+                                    "разрабатывать невероятно дерзкий план своего освобождения.",
+                            "8.9",
+                            "123.45",
+                            "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
+
+                    .table("genres")
+                    .columns("genre_id", "genre_name")
+                    .values("1", "драма")
+                    .values("2", "криминал")
+                    .values("3", "фэнтези")
+                    .values("4", "детектив")
+
+                    .table("movies_genres")
+                    .columns("movie_id", "genre_id")
+                    .values("1", "1")
+                    .values("1", "2")
+
+                    .table("countries")
+                    .columns("country_id", "country_name")
+                    .values("1", "США")
+
+                    .table("movies_countries")
+                    .columns("movie_id", "country_id")
+                    .values("1", "1")
+                    .build();
+        }
+    }
+
+    public static class AddMoviesGenresResultProvider implements DataSetProvider {
+        @Override
+        public IDataSet provide() {
+            return new DataSetBuilder()
+                    .table("movies")
+                    .columns("movie_id", "movie_name_russian", "movie_name_native", "movie_year_of_release", "movie_description", "movie_rating", "movie_price", "movie_picture_path")
+                    .values("1",
+                            "Побег из Шоушенка",
+                            "The Shawshank Redemption",
+                            "1994",
+                            "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, " +
+                                    "он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их " +
+                                    "рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает " +
+                                    "разрабатывать невероятно дерзкий план своего освобождения.",
+                            "8.9",
+                            "123.45",
+                            "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
+
+                    .table("genres")
+                    .columns("genre_id", "genre_name")
+                    .values("1", "драма")
+                    .values("2", "криминал")
+                    .values("3", "фэнтези")
+                    .values("4", "детектив")
+
+                    .table("movies_genres")
+                    .columns("movie_id", "genre_id")
+                    .values("1", "1")
+                    .values("1", "2")
+                    .values("1", "3")
+                    .values("1", "4")
+
+                    .table("countries")
+                    .columns("country_id", "country_name")
+                    .values("1", "США")
+
+                    .table("movies_countries")
+                    .columns("movie_id", "country_id")
+                    .values("1", "1")
+                    .build();
+        }
+    }
+
+
 }
 
 
