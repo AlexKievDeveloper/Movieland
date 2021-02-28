@@ -1,5 +1,6 @@
 package com.hlushkov.movieland.web.controller;
 
+import com.hlushkov.movieland.common.Currency;
 import com.hlushkov.movieland.common.Role;
 import com.hlushkov.movieland.common.SortDirection;
 import com.hlushkov.movieland.common.dto.MovieDetails;
@@ -38,9 +39,10 @@ public class MovieController {
 
     @Secure({Role.USER, Role.ADMIN})
     @GetMapping("{movieId}")
-    public MovieDetails findMovieById(@PathVariable int movieId) {
+    public MovieDetails findMovieById(@PathVariable int movieId,
+                                      @RequestParam(value = "currency", required = false) Currency currency) {
         log.debug("Request for movie with id: {} received", movieId);
-        return movieService.findMovieDetailsByMovieId(movieId);
+        return movieService.findMovieDetailsByMovieId(movieId, Optional.ofNullable(currency));
     }
 
     @Secure({Role.USER, Role.ADMIN})

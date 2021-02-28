@@ -5,11 +5,13 @@ import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.spring.api.DBRider;
+import com.hlushkov.movieland.common.Currency;
 import com.hlushkov.movieland.common.Role;
 import com.hlushkov.movieland.common.UserHolder;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.entity.User;
+import com.hlushkov.movieland.service.CurrencyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +28,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +50,8 @@ class MovieControllerITest {
     private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext context;
+    @Autowired
+    private CurrencyService currencyService;
 
     @BeforeEach
     void setMockMvc() {
@@ -303,6 +308,76 @@ class MovieControllerITest {
                     .andExpect(jsonPath("$.yearOfRelease").value("1994"))
                     .andExpect(jsonPath("$.rating").value("8.9"))
                     .andExpect(jsonPath("$.price").value("123.45"))
+                    .andExpect(jsonPath("$.countries.[0].id").value("1"))
+                    .andExpect(jsonPath("$.genres.[0].id").value("1"))
+                    .andExpect(jsonPath("$.genres.[1].id").value("2"))
+                    .andExpect(jsonPath("$.reviews.[0].id").value("1"))
+                    .andExpect(jsonPath("$.reviews.[1].id").value("2"))
+                    .andExpect(jsonPath("$.reviews.[0].user.id").value("2"))
+                    .andExpect(jsonPath("$.reviews.[1].user.id").value("3"))
+                    .andExpect(status().isOk()).andReturn().getResponse();
+            //then
+            assertNotNull(response.getHeader("Content-Type"));
+            assertEquals("application/json", response.getHeader("Content-Type"));
+            assertEquals("application/json", response.getContentType());
+            assertNotNull(response.getContentAsString());
+        }
+    }
+
+    @Test
+    @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
+    @DisplayName("Returns movie by id in json format value in USD")
+    void findMovieByIdWithCurrencyUSD() throws Exception {
+        //prepare
+        double price = 123.45 / currencyService.getCurrencyExchangeRate(Currency.USD);
+        double expectedPrice = BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        //when
+        try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
+            theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.USER).build());
+
+            MockHttpServletResponse response = mockMvc.perform(get("/movie/1")
+                    .param("currency", "USD"))
+                    .andDo(print())
+                    .andExpect(jsonPath("$.id").value("1"))
+                    .andExpect(jsonPath("$.nameNative").value("The Shawshank Redemption"))
+                    .andExpect(jsonPath("$.yearOfRelease").value("1994"))
+                    .andExpect(jsonPath("$.rating").value("8.9"))
+                    .andExpect(jsonPath("$.price").value(expectedPrice))
+                    .andExpect(jsonPath("$.countries.[0].id").value("1"))
+                    .andExpect(jsonPath("$.genres.[0].id").value("1"))
+                    .andExpect(jsonPath("$.genres.[1].id").value("2"))
+                    .andExpect(jsonPath("$.reviews.[0].id").value("1"))
+                    .andExpect(jsonPath("$.reviews.[1].id").value("2"))
+                    .andExpect(jsonPath("$.reviews.[0].user.id").value("2"))
+                    .andExpect(jsonPath("$.reviews.[1].user.id").value("3"))
+                    .andExpect(status().isOk()).andReturn().getResponse();
+            //then
+            assertNotNull(response.getHeader("Content-Type"));
+            assertEquals("application/json", response.getHeader("Content-Type"));
+            assertEquals("application/json", response.getContentType());
+            assertNotNull(response.getContentAsString());
+        }
+    }
+
+    @Test
+    @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
+    @DisplayName("Returns movie by id in json format value in EUR")
+    void findMovieByIdWithCurrencyEUR() throws Exception {
+        //prepare
+        double price = 123.45 / currencyService.getCurrencyExchangeRate(Currency.EUR);
+        double expectedPrice = BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        //when
+        try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
+            theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.USER).build());
+
+            MockHttpServletResponse response = mockMvc.perform(get("/movie/1")
+                    .param("currency", "EUR"))
+                    .andDo(print())
+                    .andExpect(jsonPath("$.id").value("1"))
+                    .andExpect(jsonPath("$.nameNative").value("The Shawshank Redemption"))
+                    .andExpect(jsonPath("$.yearOfRelease").value("1994"))
+                    .andExpect(jsonPath("$.rating").value("8.9"))
+                    .andExpect(jsonPath("$.price").value(expectedPrice))
                     .andExpect(jsonPath("$.countries.[0].id").value("1"))
                     .andExpect(jsonPath("$.genres.[0].id").value("1"))
                     .andExpect(jsonPath("$.genres.[1].id").value("2"))

@@ -1,7 +1,7 @@
 package com.hlushkov.movieland.web;
 
 import com.hlushkov.movieland.web.interceptor.SecurityInterceptor;
-import com.hlushkov.movieland.web.util.RequestParameterConverter;
+import com.hlushkov.movieland.web.util.SortDirectionRequestParameterConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +26,7 @@ public class MovielandWebApplicationContext implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(new RequestParameterConverter());
+        registry.addConverter(new SortDirectionRequestParameterConverter());
     }
 
 }
