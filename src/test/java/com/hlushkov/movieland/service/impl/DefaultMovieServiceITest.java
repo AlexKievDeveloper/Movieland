@@ -3,13 +3,10 @@ package com.hlushkov.movieland.service.impl;
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
-import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.spring.api.DBRider;
-import com.hlushkov.movieland.common.Currency;
 import com.hlushkov.movieland.common.dto.MovieDetails;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.data.TestData;
-import com.hlushkov.movieland.service.CurrencyService;
 import com.hlushkov.movieland.service.MovieService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +19,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DBRider
 @DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
@@ -33,17 +30,17 @@ class DefaultMovieServiceITest {
     @Autowired
     private MovieService movieService;
     @Autowired
-    private CurrencyService currencyService;
+    private DefaultCurrencyService currencyService;
 
     @Test
     @DataSet(provider = TestData.MovieProvider.class, cleanAfter = true)
-    @DisplayName("")
+    @DisplayName("Returns movie details with converted price")
     void findMovieDetailsByMovieIdWithSpecifiedUsdCurrency() {
         //prepare
-        double price = 123.45 / currencyService.getCurrencyExchangeRate(Currency.USD);
+        double price = 123.45 / currencyService.getCurrencyExchangeRate("USD");
         double expectedPrice = BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP).doubleValue();
         //when
-        MovieDetails actualMovieDetails = movieService.findMovieDetailsByMovieId(1, Optional.of(Currency.USD));
+        MovieDetails actualMovieDetails = movieService.findMovieDetailsByMovieId(1, Optional.of("USD"));
         //then
         assertEquals(expectedPrice, actualMovieDetails.getPrice());
     }

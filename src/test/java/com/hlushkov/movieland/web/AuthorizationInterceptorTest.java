@@ -5,13 +5,13 @@ import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.hlushkov.movieland.common.Role;
-import com.hlushkov.movieland.common.UserHolder;
+import com.hlushkov.movieland.security.util.UserHolder;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.entity.User;
-import com.hlushkov.movieland.web.controller.AuthController;
+import com.hlushkov.movieland.web.controller.AuthorizationController;
 import com.hlushkov.movieland.web.controller.MovieController;
-import com.hlushkov.movieland.web.interceptor.SecurityInterceptor;
+import com.hlushkov.movieland.web.interceptor.AuthorizationInterceptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,19 +41,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestWebContextConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class SecurityInterceptorTest {
+class AuthorizationInterceptorTest {
     private MockMvc mockMvcWithMovieController;
     private MockMvc mockMvcWithAuthController;
     @Autowired
-    private AuthController authController;
+    private AuthorizationController authController;
     @Autowired
     private MovieController movieController;
 
     @BeforeEach
     void setMockMvc() {
         MockitoAnnotations.openMocks(this);
-        mockMvcWithMovieController = MockMvcBuilders.standaloneSetup(movieController).addInterceptors(new SecurityInterceptor()).build();
-        mockMvcWithAuthController = MockMvcBuilders.standaloneSetup(authController).addInterceptors(new SecurityInterceptor()).build();
+        mockMvcWithMovieController = MockMvcBuilders.standaloneSetup(movieController).addInterceptors(new AuthorizationInterceptor()).build();
+        mockMvcWithAuthController = MockMvcBuilders.standaloneSetup(authController).addInterceptors(new AuthorizationInterceptor()).build();
     }
 
     @Test
@@ -83,6 +83,7 @@ class SecurityInterceptorTest {
         userInfo.put("password", "user");
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonUserCredentials = objectMapper.writeValueAsString(userInfo);
+
         //when+then
         try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
             theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.USER).build());

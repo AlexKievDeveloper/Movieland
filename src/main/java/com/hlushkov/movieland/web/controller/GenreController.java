@@ -2,7 +2,7 @@ package com.hlushkov.movieland.web.controller;
 
 import com.hlushkov.movieland.common.Role;
 import com.hlushkov.movieland.entity.Genre;
-import com.hlushkov.movieland.security.annotation.Secure;
+import com.hlushkov.movieland.security.annotation.Secured;
 import com.hlushkov.movieland.service.GenreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import java.util.List;
 public class GenreController {
     private final GenreService genreService;
 
-    @Secure({Role.USER, Role.ADMIN})
+    @Secured({Role.USER, Role.ADMIN})
     @GetMapping
     public List<Genre> findAll() {
         log.debug("Request for all genres received");

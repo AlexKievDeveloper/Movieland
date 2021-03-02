@@ -7,5 +7,6 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NbuCurrencyRate {
     private Double rate;
+    private String cc;
 }
 

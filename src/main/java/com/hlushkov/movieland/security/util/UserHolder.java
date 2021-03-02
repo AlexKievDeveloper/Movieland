@@ -1,4 +1,4 @@
-package com.hlushkov.movieland.common;
+package com.hlushkov.movieland.security.util;
 
 import com.hlushkov.movieland.entity.User;
 
@@ -12,6 +12,10 @@ public class UserHolder {
 
     public final static void setUser(User user) {
         USER_THREAD_LOCAL.set(user);
+    }
+
+    public final static void removeUser() {
+        USER_THREAD_LOCAL.remove();
     }
 
 }

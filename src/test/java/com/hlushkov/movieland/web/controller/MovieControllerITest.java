@@ -5,13 +5,12 @@ import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.spring.api.DBRider;
-import com.hlushkov.movieland.common.Currency;
 import com.hlushkov.movieland.common.Role;
-import com.hlushkov.movieland.common.UserHolder;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.entity.User;
-import com.hlushkov.movieland.service.CurrencyService;
+import com.hlushkov.movieland.security.util.UserHolder;
+import com.hlushkov.movieland.service.impl.DefaultCurrencyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,7 +50,7 @@ class MovieControllerITest {
     @Autowired
     private WebApplicationContext context;
     @Autowired
-    private CurrencyService currencyService;
+    private DefaultCurrencyService currencyService;
 
     @BeforeEach
     void setMockMvc() {
@@ -329,7 +328,7 @@ class MovieControllerITest {
     @DisplayName("Returns movie by id in json format value in USD")
     void findMovieByIdWithCurrencyUSD() throws Exception {
         //prepare
-        double price = 123.45 / currencyService.getCurrencyExchangeRate(Currency.USD);
+        double price = 123.45 / currencyService.getCurrencyExchangeRate("USD");
         double expectedPrice = BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP).doubleValue();
         //when
         try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
@@ -364,7 +363,7 @@ class MovieControllerITest {
     @DisplayName("Returns movie by id in json format value in EUR")
     void findMovieByIdWithCurrencyEUR() throws Exception {
         //prepare
-        double price = 123.45 / currencyService.getCurrencyExchangeRate(Currency.EUR);
+        double price = 123.45 / currencyService.getCurrencyExchangeRate("EUR");
         double expectedPrice = BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP).doubleValue();
         //when
         try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {

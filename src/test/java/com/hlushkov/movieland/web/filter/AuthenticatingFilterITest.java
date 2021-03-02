@@ -5,6 +5,7 @@ import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.hlushkov.movieland.common.Role;
+import com.hlushkov.movieland.common.response.AuthResponse;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.entity.User;
@@ -25,12 +26,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -44,22 +45,24 @@ import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfig
 @ExtendWith(MockitoExtension.class)
 @TestWebContextConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class SecurityFilterITest {
+class AuthenticatingFilterITest {
     private MockMvc mockMvcWithSecurityFilter;
     @Autowired
     private WebApplicationContext context;
     @InjectMocks
-    private SecurityFilter securityFilter;
+    private AuthenticatingFilter authenticatingFilter;
     @Mock
     private SecurityService securityService;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setMockMvc() {
+        objectMapper = new ObjectMapper();
         MockitoAnnotations.openMocks(this);
         mockMvcWithSecurityFilter = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(sharedHttpSession())
-                .addFilter(securityFilter)
+                .addFilter(authenticatingFilter)
                 .build();
     }
 
@@ -83,13 +86,15 @@ class SecurityFilterITest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
 
-        assertNotNull(response.getCookie("user_uuid"));
+        assertNotNull(response.getContentAsString());
+        assertTrue(response.getContentAsString().contains("userUUID"));
+        assertTrue(response.getContentAsString().contains("\"nickname\":\"user\""));
     }
 
     @Test
     @DataSet(provider = TestData.UserProvider.class)
-    @DisplayName("Return unauthorized status if no cookie in request")
-    void doFilterIfNoCookieIsPresent() throws Exception {
+    @DisplayName("Return unauthorized status if no valid header in request")
+    void doFilterIfNoHeaderIsPresent() throws Exception {
         //when+then
         mockMvcWithSecurityFilter.perform(delete("/logout"))
                 .andDo(print())
@@ -99,13 +104,10 @@ class SecurityFilterITest {
 
     @Test
     @DataSet(provider = TestData.UserProvider.class)
-    @DisplayName("Return unauthorized status if no valid cookie in request")
-    void doFilterIfNoRequiredCookieIsPresent() throws Exception {
-        //prepare
-        Cookie cookie = new Cookie("no_valid_cookie", "uuid");
+    @DisplayName("Return unauthorized status if no valid header in request")
+    void doFilterIfNoRequiredHeaderIsPresent() throws Exception {
         //when+then
-        mockMvcWithSecurityFilter.perform(delete("/logout")
-                .cookie(cookie))
+        mockMvcWithSecurityFilter.perform(delete("/logout"))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andReturn().getResponse();
@@ -113,13 +115,11 @@ class SecurityFilterITest {
 
     @Test
     @DataSet(provider = TestData.UserProvider.class)
-    @DisplayName("Return unauthorized status if no valid cookie in request")
-    void doFilterIfRequiredCookieIsPresentWithNoValidToken() throws Exception {
-        //prepare
-        Cookie cookie = new Cookie("user_uuid", "uuid");
+    @DisplayName("Return unauthorized status if no valid header in request")
+    void doFilterIfRequiredHeaderIsPresentWithNoValidToken() throws Exception {
         //when+then
         mockMvcWithSecurityFilter.perform(delete("/logout")
-                .cookie(cookie))
+                .header("userUUID", "no-valid-uuid"))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andReturn().getResponse();
@@ -127,8 +127,8 @@ class SecurityFilterITest {
 
     @Test
     @DataSet(provider = TestData.UserProvider.class)
-    @DisplayName("Return unauthorized status if no valid cookie in request")
-    void doFilterIfRequiredCookieIsPresentWithValidToken() throws Exception {
+    @DisplayName("Return ok status")
+    void doFilterIfRequiredHeaderIsPresentWithValidToken() throws Exception {
         //prepare
         Map<String, String> userInfo = new HashMap<>();
         userInfo.put("email", "user@gmail.com");
@@ -145,9 +145,12 @@ class SecurityFilterITest {
                 .andReturn().getResponse();
 
         when(securityService.getUserByUUID(any())).thenReturn(Optional.of(User.builder().role(Role.USER).build()));
+        String content = response.getContentAsString();
+        String userUUID = objectMapper.readValue(content, AuthResponse.class).getUserUUID();
+
         //when+then
         mockMvcWithSecurityFilter.perform(delete("/logout")
-                .cookie(response.getCookie("user_uuid")))
+                .header("userUUID", userUUID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn().getResponse();

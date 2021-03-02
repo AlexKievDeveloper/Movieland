@@ -1,6 +1,5 @@
 package com.hlushkov.movieland.service.impl;
 
-import com.hlushkov.movieland.common.Currency;
 import com.hlushkov.movieland.common.dto.MovieDetails;
 import com.hlushkov.movieland.common.request.CreateUpdateMovieRequest;
 import com.hlushkov.movieland.common.request.MovieRequest;
@@ -12,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,15 +27,9 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Override
-    public MovieDetails findMovieDetailsByMovieId(int movieId, Optional<Currency> requestedCurrency) {
+    public MovieDetails findMovieDetailsByMovieId(int movieId, Optional<String> requestedCurrency) {
         MovieDetails movieDetails = movieDao.findMovieDetailsByMovieId(movieId);
-
-        if (requestedCurrency.isPresent()) {
-            Double nbuExchangeRate = currencyService.getCurrencyExchangeRate(requestedCurrency.get());
-            double movieDetailsConvertedPrice = getPriceRoundedToTwoDigits(movieDetails.getPrice() / nbuExchangeRate);
-            movieDetails.setPrice(movieDetailsConvertedPrice);
-        }
-
+        requestedCurrency.ifPresent(currency -> movieDetails.setPrice(currencyService.convert(movieDetails.getPrice(), currency)));
         return movieDetails;
     }
 
@@ -60,10 +51,6 @@ public class DefaultMovieService implements MovieService {
     @Override
     public void editMovie(int movieId, CreateUpdateMovieRequest createUpdateMovieRequest) {
         movieDao.editMovie(movieId, createUpdateMovieRequest);
-    }
-
-    double getPriceRoundedToTwoDigits(double price) {
-        return BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
 }

@@ -1,9 +1,10 @@
 package com.hlushkov.movieland.common.response;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class AuthResponse {
     private String userUUID;

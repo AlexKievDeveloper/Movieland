@@ -1,32 +1,29 @@
 package com.hlushkov.movieland.web.interceptor;
 
 import com.hlushkov.movieland.common.Role;
-import com.hlushkov.movieland.common.UserHolder;
+import com.hlushkov.movieland.security.util.UserHolder;
 import com.hlushkov.movieland.entity.User;
-import com.hlushkov.movieland.security.annotation.Secure;
+import com.hlushkov.movieland.security.annotation.Secured;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
 
 @Slf4j
-public class SecurityInterceptor implements HandlerInterceptor {
+public class AuthorizationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
-        HandlerMethod hm = (HandlerMethod) handler;
-        Method method = hm.getMethod();
-        log.debug("Method: {}", method);
-
-        Secure annotation = method.getAnnotation(Secure.class);
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        Secured annotation = handlerMethod.getMethodAnnotation(Secured.class);
         log.debug("Secure annotation: {}", annotation);
 
         if (annotation != null) {
             Role[] roles = annotation.value();
             User user = UserHolder.getUser();
+            log.debug("User from user holder, nickname: {}, email: {}", user.getNickname(), user.getEmail());
 
             for (Role role : roles) {
                 log.debug("Annotation role: {}", role);

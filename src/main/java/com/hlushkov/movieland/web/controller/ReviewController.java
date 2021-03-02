@@ -1,10 +1,10 @@
 package com.hlushkov.movieland.web.controller;
 
 import com.hlushkov.movieland.common.Role;
-import com.hlushkov.movieland.common.UserHolder;
+import com.hlushkov.movieland.security.util.UserHolder;
 import com.hlushkov.movieland.common.request.AddReviewRequest;
 import com.hlushkov.movieland.entity.Review;
-import com.hlushkov.movieland.security.annotation.Secure;
+import com.hlushkov.movieland.security.annotation.Secured;
 import com.hlushkov.movieland.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewController {
     private final ReviewService reviewService;
 
-    @Secure({Role.USER, Role.ADMIN})
+    @Secured({Role.USER, Role.ADMIN})
     @PostMapping("review")
     @ResponseStatus(HttpStatus.CREATED)
     public void addReview(@RequestBody AddReviewRequest addReviewRequest) {

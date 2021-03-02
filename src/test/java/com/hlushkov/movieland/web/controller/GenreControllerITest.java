@@ -1,7 +1,7 @@
 package com.hlushkov.movieland.web.controller;
 
 import com.hlushkov.movieland.common.Role;
-import com.hlushkov.movieland.common.UserHolder;
+import com.hlushkov.movieland.security.util.UserHolder;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.entity.User;
 import org.junit.jupiter.api.BeforeEach;

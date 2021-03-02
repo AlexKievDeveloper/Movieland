@@ -33,22 +33,17 @@ public class DefaultSecurityService implements SecurityService {
 
         Optional<User> optionalUser = jdbcUserDao.findByEmail(authRequest.getEmail());
 
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            String salt = user.getSalt();
-            String hashPassword = DigestUtils.sha256Hex(salt.concat(authRequest.getPassword()));
+        if (optionalUser.isPresent() && checkPassword(optionalUser.get(), authRequest.getPassword())) {
 
-            if (user.getPassword().equals(hashPassword)) {
+            Session session = Session.builder()
+                    .user(optionalUser.get())
+                    .userUUID(UUID.randomUUID().toString())
+                    .expireDate(LocalDateTime.now().plusSeconds(sessionMaxAge))
+                    .build();
 
-                Session session = Session.builder()
-                        .user(user)
-                        .userUUID(UUID.randomUUID().toString())
-                        .expireDate(LocalDateTime.now().plusSeconds(sessionMaxAge))
-                        .build();
-
-                sessionList.add(session);
-                return Optional.of(session);
-            }
+            log.debug("Adding new session : {}", session);
+            sessionList.add(session);
+            return Optional.of(session);
         }
         return Optional.empty();
     }
@@ -60,12 +55,25 @@ public class DefaultSecurityService implements SecurityService {
 
     @Override
     public Optional<User> getUserByUUID(String userUUID) {
-        for (Session session : sessionList) {
-            if (session.getUserUUID().equals(userUUID)) {
-                return Optional.of(session.getUser());
+        if (userUUID != null) {
+            log.info("Request for user with UUID: {}", userUUID);
+            for (Session session : sessionList) {
+                if (session.getUserUUID().equals(userUUID)) {
+                    return Optional.of(session.getUser());
+                }
             }
         }
+        log.info("Returned empty user");
         return Optional.empty();
+    }
+
+    boolean checkPassword(User user, String passwordFromAuthRequest) {
+        String salt = user.getSalt();
+        String hashPassword = DigestUtils.sha256Hex(salt.concat(passwordFromAuthRequest));
+        if (user.getPassword().equals(hashPassword)) {
+            return true;
+        }
+        return false;
     }
 
     @PostConstruct

@@ -1,6 +1,6 @@
 package com.hlushkov.movieland.web;
 
-import com.hlushkov.movieland.web.interceptor.SecurityInterceptor;
+import com.hlushkov.movieland.web.interceptor.AuthorizationInterceptor;
 import com.hlushkov.movieland.web.util.SortDirectionRequestParameterConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,8 +15,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @ComponentScan("com.hlushkov.movieland.web")
 public class MovielandWebApplicationContext implements WebMvcConfigurer {
     @Bean
-    SecurityInterceptor securityInterceptor() {
-        return new SecurityInterceptor();
+    AuthorizationInterceptor securityInterceptor() {
+        return new AuthorizationInterceptor();
     }
 
     @Override
@@ -25,6 +25,7 @@ public class MovielandWebApplicationContext implements WebMvcConfigurer {
     }
 
     @Override
+    /** FIXME Is it necessary?*/
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new SortDirectionRequestParameterConverter());
     }

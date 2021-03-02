@@ -2,19 +2,18 @@ package com.hlushkov.movieland.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hlushkov.movieland.common.Currency;
 import com.hlushkov.movieland.common.NbuCurrencyRate;
 import com.hlushkov.movieland.service.CurrencyService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.net.URLConnection;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,39 +22,46 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class DefaultCurrencyService implements CurrencyService {
 
-    private final Map<Currency, Double> currencyDoubleMap = new ConcurrentHashMap<>();
+    private final Map<String, Double> currencyMap = new ConcurrentHashMap<>();
+    @Value("${current.nbu.rates.link}")
+    private String nbuRatesLink;
 
     @Override
-    public Double getCurrencyExchangeRate(Currency currency) {
-        return currencyDoubleMap.get(currency);
+    public Double convert(Double costInUah, String currencyToConvertTo) {
+        Double nbuExchangeRate = currencyMap.get(currencyToConvertTo);
+        if (nbuExchangeRate != null) {
+            return getPriceRoundedToTwoDigits(costInUah / nbuExchangeRate);
+        } else  {
+            throw new IllegalArgumentException("Unknown currency: ".concat(currencyToConvertTo));
+        }
     }
 
     @PostConstruct
     @Scheduled(cron = "${currency.cron.update.time.period}")
-    void updateCurrencyExchangeRates() throws IOException {
-        log.info("Refresh currency rates");
-        ObjectMapper objectMapper = new ObjectMapper();
-        DateTimeFormatter formatters = DateTimeFormatter.ofPattern("yyyyMMdd");
+    void updateCurrencyExchangeRates() {
+        try {
+            log.info("Refresh currency rates");
+            ObjectMapper objectMapper = new ObjectMapper();
 
-        String requestForEurRateForCurrentData = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?" +
-                "valcode=EUR&date=" + formatters.format(LocalDate.now()) + "&json";
-        String requestForUsdRateForCurrentData = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?" +
-                "valcode=USD&date=" + formatters.format(LocalDate.now()) + "&json";
+            URL rates = new URL(nbuRatesLink);
+            URLConnection urlConnection = rates.openConnection();
+            List<NbuCurrencyRate> nbuCurrencyRates = objectMapper.readValue(urlConnection.getInputStream(), new TypeReference<>() {
+            });
 
-        URL eurUrl = new URL(requestForEurRateForCurrentData);
-        URLConnection urlEurConnection = eurUrl.openConnection();
-        List<NbuCurrencyRate> eurNbuRate = objectMapper.readValue(urlEurConnection.getInputStream(),
-                new TypeReference<>() {
-                });
+            for (NbuCurrencyRate nbuCurrencyRate : nbuCurrencyRates) {
+                currencyMap.put(nbuCurrencyRate.getCc(), nbuCurrencyRate.getRate());
+            }
+        } catch (Exception e) {
+            log.error("Exception while updating currency rates: ", e);
+        }
+    }
 
-        URL usdUrl = new URL(requestForUsdRateForCurrentData);
-        URLConnection urlUsdConnection = usdUrl.openConnection();
-        List<NbuCurrencyRate> usdNbuRate = objectMapper.readValue(urlUsdConnection.getInputStream(),
-                new TypeReference<>() {
-                });
+    double getPriceRoundedToTwoDigits(double price) {
+        return BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    }
 
-        currencyDoubleMap.put(Currency.USD, usdNbuRate.get(0).getRate());
-        currencyDoubleMap.put(Currency.EUR, eurNbuRate.get(0).getRate());
+    public Double getCurrencyExchangeRate(String currency) {
+        return currencyMap.get(currency);
     }
 
 }

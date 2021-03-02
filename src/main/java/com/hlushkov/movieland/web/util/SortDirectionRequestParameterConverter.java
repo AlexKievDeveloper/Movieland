@@ -10,6 +10,4 @@ public class SortDirectionRequestParameterConverter implements Converter<String,
         return SortDirection.getSortDirection(directionParameterValue);
     }
 
-
-
 }

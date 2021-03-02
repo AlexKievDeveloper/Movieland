@@ -1,6 +1,5 @@
 package com.hlushkov.movieland.service;
 
-import com.hlushkov.movieland.common.Currency;
 import com.hlushkov.movieland.common.dto.MovieDetails;
 import com.hlushkov.movieland.common.request.CreateUpdateMovieRequest;
 import com.hlushkov.movieland.common.request.MovieRequest;
@@ -17,7 +16,7 @@ public interface MovieService {
 
     List<Movie> findByGenre(int genreId, MovieRequest movieRequest);
 
-    MovieDetails findMovieDetailsByMovieId(int movieId, Optional<Currency> requestedCurrency);
+    MovieDetails findMovieDetailsByMovieId(int movieId, Optional<String> requestedCurrency);
 
     void addMovie(CreateUpdateMovieRequest createUpdateMovieRequest);
 
