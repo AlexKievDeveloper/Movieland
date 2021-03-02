@@ -42,7 +42,7 @@ public class AuthenticatingFilter extends HttpFilter {
         try {
             if (allowedUrls.contains(request.getPathInfo())) {
                 chain.doFilter(request, response);
-                log.info("Successfully finished authentication filtering checking: {}", request.getPathInfo());
+                log.info("Redirecting request with allowed path: {}", request.getPathInfo());
                 return;
             }
 
