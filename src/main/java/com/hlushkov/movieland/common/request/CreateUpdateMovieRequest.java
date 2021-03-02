@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateUpdateMovieRequest {
+    private Integer id;
     private String nameRussian;
     private String nameNative;
     private int yearOfRelease;

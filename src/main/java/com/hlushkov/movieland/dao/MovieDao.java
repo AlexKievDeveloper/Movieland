@@ -19,7 +19,7 @@ public interface MovieDao {
 
     void addMovie(CreateUpdateMovieRequest createUpdateMovieRequest);
 
-    void editMovie(int movieId, CreateUpdateMovieRequest createUpdateMovieRequest);
+    void editMovie(CreateUpdateMovieRequest createUpdateMovieRequest);
 }
 
 

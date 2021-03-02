@@ -13,25 +13,26 @@ import java.util.Map;
 @Slf4j
 @RestControllerAdvice
 public class ControllerExceptionAdvisor {
+    private final String constantMessage = "message";
 
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<Map<String, String>> badRequest(DataAccessException e) {
-        log.info("DataAccessException was thrown ", e);
+        log.error("DataAccessException was thrown ", e);
         String message = "Please check your input data and try again.";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", message));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(constantMessage, message));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> badRequest(IllegalArgumentException e) {
         log.error("IllegalArgumentException was thrown: ", e);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(constantMessage, e.getMessage()));
     }
 
     @ExceptionHandler(NoUserFoundException.class)
     public ResponseEntity<Map<String, String>> badRequest(NoUserFoundException e) {
         log.error("NoUserFoundException was thrown, unsuccessful user authentication: " + e);
         String message = "Invalid email or password. Please check your credentials and try again.";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", message));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(constantMessage, message));
     }
 
 }

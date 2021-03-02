@@ -50,7 +50,10 @@ public class QueriesContext {
 
     @Bean
     public String editMovie() {
-        return "UPDATE movies SET ";
+        return "UPDATE movies SET movie_name_russian = :name_russian, " +
+                "movie_name_native = :name_native, movie_year_of_release = :year_of_release, " +
+                "movie_description = :description, movie_rating = :rating, movie_price = :price, " +
+                "movie_picture_path = :picture_path WHERE movie_id = :movie_id";
     }
 
     @Bean

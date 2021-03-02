@@ -15,11 +15,11 @@ CREATE TABLE IF NOT EXISTS movies
     movie_id    SERIAL PRIMARY KEY,
     movie_name_russian VARCHAR(200) UNIQUE NOT NULL,
     movie_name_native  VARCHAR(200) UNIQUE NOT NULL,
-    movie_year_of_release INTEGER           NOT NULL,
-    movie_description VARCHAR(1000)       NOT NULL,
-    movie_rating      DOUBLE PRECISION    NOT NULL,
-    movie_price       DOUBLE PRECISION    NOT NULL,
-    movie_picture_path VARCHAR(500)       NOT NULL
+    movie_year_of_release INTEGER,
+    movie_description VARCHAR(1000),
+    movie_rating      DOUBLE PRECISION,
+    movie_price       DOUBLE PRECISION,
+    movie_picture_path VARCHAR(500) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS movies_genres

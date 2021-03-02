@@ -1,8 +1,8 @@
 package com.hlushkov.movieland.web.filter;
 
-import com.hlushkov.movieland.security.util.UserHolder;
 import com.hlushkov.movieland.entity.User;
 import com.hlushkov.movieland.security.SecurityService;
+import com.hlushkov.movieland.security.util.UserHolder;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.FilterChain;
@@ -23,7 +23,7 @@ import static org.springframework.web.context.support.WebApplicationContextUtils
 @Slf4j
 @WebFilter("/*")
 public class AuthenticatingFilter extends HttpFilter {
-    private SecurityService securityService;
+    private transient SecurityService securityService;
 
     @Override
     public void init(FilterConfig config) {
@@ -33,7 +33,8 @@ public class AuthenticatingFilter extends HttpFilter {
     }
 
     @Override
-    protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+    protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
 
         List<String> allowedUrls = new ArrayList<>();
         allowedUrls.add("/login");

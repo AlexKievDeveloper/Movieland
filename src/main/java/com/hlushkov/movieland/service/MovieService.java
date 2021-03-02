@@ -18,8 +18,6 @@ public interface MovieService {
 
     MovieDetails findMovieDetailsByMovieId(int movieId, Optional<String> requestedCurrency);
 
-    void addMovie(CreateUpdateMovieRequest createUpdateMovieRequest);
-
-    void editMovie(int movieId, CreateUpdateMovieRequest createUpdateMovieRequest);
+    void modifyMovie(CreateUpdateMovieRequest createUpdateMovieRequest);
 }
 

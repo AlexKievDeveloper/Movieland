@@ -200,7 +200,7 @@ class JdbcMovieDaoTest {
     @DisplayName("Generate value with counties for addMovieFull query from list with country ids")
     void getRowWithCountryParameters() {
         //prepare
-        String expectedString = "((SELECT movie_id_result FROM ins_movies), :country_id0), ((SELECT movie_id_result FROM ins_movies), :country_id1))";
+        String expectedString = "((SELECT movie_id_result FROM ins_movies), :country_id0), ((SELECT movie_id_result FROM ins_movies), :country_id1)";
 
         //when
         String actualString = jdbcMovieDao.getRowWithCountryParameters(List.of(1, 2));
@@ -308,40 +308,11 @@ class JdbcMovieDaoTest {
     }
 
     @Test
-    @DisplayName("Generate value with genres for addMovie query from list with genre ids")
-    void generateFullEditMovieQuery() {
-        //prepare
-        String editMovie = "UPDATE movies SET ";
-
-        CreateUpdateMovieRequest createUpdateMovieRequest = CreateUpdateMovieRequest.builder()
-                .nameRussian("Побег из тюрьмы Шоушенка")
-                .nameNative("The Shawshank Redemption prison")
-                .yearOfRelease(1994)
-                .description("Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает разрабатывать невероятно дерзкий план своего освобождения.")
-                .rating(8.0)
-                .price(123.45)
-                .picturePath("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                .countriesIds(List.of(1, 2))
-                .genresIds(List.of(1, 2, 3))
-                .build();
-
-        String expectedMovieFullQuery = "UPDATE movies SET movie_name_russian = :name_russian, " +
-                "movie_name_native = :name_native, movie_year_of_release = :year_of_release, " +
-                "movie_description = :description, movie_rating = :rating, movie_price = :price, " +
-                "movie_picture_path = :picture_path WHERE movie_id = :movie_id";
-        //when
-        String actualMovieFullQuery = jdbcMovieDao.generateFullEditMovieQuery(editMovie, createUpdateMovieRequest);
-
-        //then
-        assertEquals(expectedMovieFullQuery, actualMovieFullQuery);
-    }
-
-    @Test
     @DisplayName("Generate row with countries for addMoviesCountriesFullQuery from list with country ids")
     void generateAddMoviesCountriesFullQuery() {
         //prepare
         String addMoviesCountries = "INSERT INTO movies_countries (movie_id, country_id) VALUES ";
-        List countriesIds = List.of(1, 2);
+        List<Integer> countriesIds = List.of(1, 2);
         String expectedAddMoviesCountriesFullQuery = "INSERT INTO movies_countries (movie_id, country_id) VALUES (:movie_id, :country_id0), (:movie_id, :country_id1)";
         //when
         String actualAddMoviesCountriesFullQuery = jdbcMovieDao.generateAddMoviesCountriesFullQuery(addMoviesCountries, countriesIds);
@@ -354,13 +325,12 @@ class JdbcMovieDaoTest {
     void generateAddMoviesGenresFullQuery() {
         //prepare
         String addMoviesGenres = "INSERT INTO movies_genres (movie_id, genre_id) VALUES ";
-        List genresIds = List.of(1, 2, 3);
+        List<Integer> genresIds = List.of(1, 2, 3);
         String expectedAddMoviesGenresFullQuery = "INSERT INTO movies_genres (movie_id, genre_id) VALUES (:movie_id, :genre_id0), (:movie_id, :genre_id1), (:movie_id, :genre_id2)";
         //when
         String actualAddMoviesGenresFullQuery = jdbcMovieDao.generateAddMoviesGenresFullQuery(addMoviesGenres, genresIds);
         //then
         assertEquals(expectedAddMoviesGenresFullQuery, actualAddMoviesGenresFullQuery);
     }
-
 
 }

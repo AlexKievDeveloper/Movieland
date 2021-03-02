@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,18 +66,18 @@ public class MovieController {
     }
 
     @Secured({Role.ADMIN})
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    public void addMovie(@RequestBody CreateUpdateMovieRequest createUpdateMovieRequest) {
-        log.info("Request for add movie");
-        movieService.addMovie(createUpdateMovieRequest);
-    }
+    @PutMapping({"{movieId}", ""})
+    public ResponseEntity<Object> modifyMovie(@PathVariable(required = false) Integer movieId, @RequestBody CreateUpdateMovieRequest createUpdateMovieRequest) {
+        log.info("Request for modify movie");
 
-    @Secured({Role.ADMIN})
-    @PutMapping("{movieId}")
-    public void editMovie(@PathVariable int movieId, @RequestBody CreateUpdateMovieRequest createUpdateMovieRequest) {
-        log.info("Request for edit movie");
-        movieService.editMovie(movieId, createUpdateMovieRequest);
+        if (movieId != null) {
+            createUpdateMovieRequest.setId(movieId);
+            movieService.modifyMovie(createUpdateMovieRequest);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            movieService.modifyMovie(createUpdateMovieRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }
     }
 
 }

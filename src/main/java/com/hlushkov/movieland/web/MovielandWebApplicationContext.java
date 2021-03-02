@@ -25,7 +25,6 @@ public class MovielandWebApplicationContext implements WebMvcConfigurer {
     }
 
     @Override
-    /** FIXME Is it necessary?*/
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new SortDirectionRequestParameterConverter());
     }

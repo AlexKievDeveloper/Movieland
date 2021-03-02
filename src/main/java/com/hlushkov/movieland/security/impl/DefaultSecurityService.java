@@ -70,10 +70,7 @@ public class DefaultSecurityService implements SecurityService {
     boolean checkPassword(User user, String passwordFromAuthRequest) {
         String salt = user.getSalt();
         String hashPassword = DigestUtils.sha256Hex(salt.concat(passwordFromAuthRequest));
-        if (user.getPassword().equals(hashPassword)) {
-            return true;
-        }
-        return false;
+        return user.getPassword().equals(hashPassword);
     }
 
     @PostConstruct

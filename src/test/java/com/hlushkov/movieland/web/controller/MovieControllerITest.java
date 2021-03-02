@@ -419,7 +419,7 @@ class MovieControllerITest {
         try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
             theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.ADMIN).build());
 
-            mockMvc.perform(post("/movie")
+            mockMvc.perform(put("/movie")
                     .content(addMovieJson)
                     .contentType("application/json"))
                     .andDo(print())

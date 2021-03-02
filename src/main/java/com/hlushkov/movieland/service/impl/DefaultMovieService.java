@@ -44,13 +44,12 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Override
-    public void addMovie(CreateUpdateMovieRequest createUpdateMovieRequest) {
-        movieDao.addMovie(createUpdateMovieRequest);
-    }
-
-    @Override
-    public void editMovie(int movieId, CreateUpdateMovieRequest createUpdateMovieRequest) {
-        movieDao.editMovie(movieId, createUpdateMovieRequest);
+    public void modifyMovie(CreateUpdateMovieRequest createUpdateMovieRequest) {
+        if (createUpdateMovieRequest.getId() != null) {
+            movieDao.editMovie(createUpdateMovieRequest);
+        } else {
+            movieDao.addMovie(createUpdateMovieRequest);
+        }
     }
 
 }

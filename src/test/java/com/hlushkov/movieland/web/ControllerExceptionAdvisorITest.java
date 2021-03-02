@@ -30,8 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,9 +45,11 @@ class ControllerExceptionAdvisorITest {
     private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext context;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setMockMvc() {
+        objectMapper = new ObjectMapper();
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(sharedHttpSession()).build();
     }
@@ -60,7 +61,6 @@ class ControllerExceptionAdvisorITest {
         Map<String, String> userInfo = new HashMap<>();
         userInfo.put("email", "nouser@gmail.com");
         userInfo.put("password", "user");
-        ObjectMapper objectMapper = new ObjectMapper();
         String jsonNoValidUserCredentials = objectMapper.writeValueAsString(userInfo);
 
         MockHttpServletResponse response = mockMvc.perform(post("/login")
@@ -116,14 +116,13 @@ class ControllerExceptionAdvisorITest {
         parametersMap.put("picturePath", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg");
         parametersMap.put("countriesIds", countriesList);
         parametersMap.put("genresIds", genresList);
-        ObjectMapper objectMapper = new ObjectMapper();
         String addMovieJson = objectMapper.writeValueAsString(parametersMap);
 
         //when
         try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
             theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.ADMIN).build());
 
-            MockHttpServletResponse response = mockMvc.perform(post("/movie")
+            MockHttpServletResponse response = mockMvc.perform(put("/movie")
                     .contentType("application/json")
                     .content(addMovieJson))
                     .andDo(print())

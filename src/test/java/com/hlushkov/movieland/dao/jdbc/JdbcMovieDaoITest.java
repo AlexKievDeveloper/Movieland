@@ -248,15 +248,16 @@ class JdbcMovieDaoITest {
 
         //when+then
         jdbcMovieDao.addMovie(createUpdateMovieRequest);
-    }*/
+    }
 
-/*    @Test
+    @Test
     @DataSet(provider = TestData.EditMovieDataProvider.class, cleanAfter = true)
     @ExpectedDataSet(provider = TestData.EditMovieDataResultProvider.class)
     @DisplayName("Updates movie with genres and countries by movie id")
     void editMovie() {
         //prepare
         CreateUpdateMovieRequest createUpdateMovieRequest = CreateUpdateMovieRequest.builder()
+                .id(2)
                 .nameRussian("Побег из тюрьмы Шоушенка")
                 .nameNative("The Shawshank Redemption prison")
                 .yearOfRelease(1994)
@@ -268,7 +269,7 @@ class JdbcMovieDaoITest {
                 .genresIds(List.of(4, 5, 6))
                 .build();
         //when
-        jdbcMovieDao.editMovie(2, createUpdateMovieRequest);
+        jdbcMovieDao.editMovie(createUpdateMovieRequest);
     }*/
 
     @Test
