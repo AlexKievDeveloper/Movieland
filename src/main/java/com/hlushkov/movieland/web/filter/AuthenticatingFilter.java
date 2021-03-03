@@ -50,6 +50,7 @@ public class AuthenticatingFilter extends HttpFilter {
             if (userOptional.isPresent()) {
                 UserHolder.setUser(userOptional.get());
                 log.info("Successfully finished authentication filtering checking: {}", request.getPathInfo());
+                chain.doFilter(request, response);
                 return;
             }
             log.error("Unauthorized access attempt, servlet path: {}, request path info: {}",
