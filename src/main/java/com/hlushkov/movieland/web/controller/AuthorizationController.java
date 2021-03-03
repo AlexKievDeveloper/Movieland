@@ -6,15 +6,16 @@ import com.hlushkov.movieland.common.response.AuthResponse;
 import com.hlushkov.movieland.security.SecurityService;
 import com.hlushkov.movieland.security.annotation.Secured;
 import com.hlushkov.movieland.security.session.Session;
-import com.hlushkov.movieland.security.util.UserHolder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
