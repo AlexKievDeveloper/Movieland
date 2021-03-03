@@ -6,6 +6,7 @@ import com.hlushkov.movieland.common.response.AuthResponse;
 import com.hlushkov.movieland.security.SecurityService;
 import com.hlushkov.movieland.security.annotation.Secured;
 import com.hlushkov.movieland.security.session.Session;
+import com.hlushkov.movieland.security.util.UserHolder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @Slf4j
@@ -40,9 +42,10 @@ public class AuthorizationController {
 
     @Secured({Role.USER, Role.ADMIN})
     @DeleteMapping("logout")
-    public ResponseEntity<Object> logout(@CookieValue(value = "user_uuid") Cookie cookie) {
+    public ResponseEntity<Object> logout(HttpServletRequest request) {
         log.debug("Request for logout received");
-        if (cookie != null && securityService.removeSession(cookie.getValue())) {
+        String userUUID = request.getHeader("userUUID");
+        if (userUUID != null && securityService.removeSession(userUUID)) {
             return ResponseEntity.ok().build();
         }
         log.debug("userUUID is not found or expired");

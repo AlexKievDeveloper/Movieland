@@ -135,10 +135,11 @@ class AuthorizationControllerITest {
 
             String content = response.getContentAsString();
             String userUUID = objectMapper.readValue(content, AuthResponse.class).getUserUUID();
+
             when(securityService.getUserByUUID(any())).thenReturn(Optional.of(User.builder().build()));
             //when+then
             mockMvcWithSecurityFilter.perform(delete("/logout")
-                    .content(userUUID))
+                    .header("userUUID", userUUID))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andReturn().getResponse();
