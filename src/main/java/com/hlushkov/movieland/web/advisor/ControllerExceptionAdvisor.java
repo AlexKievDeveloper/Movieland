@@ -6,6 +6,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Map;
@@ -15,11 +16,10 @@ import java.util.Map;
 public class ControllerExceptionAdvisor {
     private final String constantMessage = "message";
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DataAccessException.class)
-    public ResponseEntity<Map<String, String>> badRequest(DataAccessException e) {
+    public void badRequest(DataAccessException e) {
         log.error("DataAccessException was thrown ", e);
-        String message = "Please check your input data and try again.";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(constantMessage, message));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

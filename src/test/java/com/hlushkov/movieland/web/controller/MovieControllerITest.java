@@ -322,9 +322,9 @@ class MovieControllerITest {
             assertNotNull(response.getContentAsString());
         }
     }
-
+        //FIXME
     @Test
-    @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
+    @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns movie by id in json format value in USD")
     void findMovieByIdWithCurrencyUSD() throws Exception {
         //prepare
@@ -357,7 +357,7 @@ class MovieControllerITest {
             assertNotNull(response.getContentAsString());
         }
     }
-
+        //FIXME
     @Test
     @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
     @DisplayName("Returns movie by id in json format value in EUR")

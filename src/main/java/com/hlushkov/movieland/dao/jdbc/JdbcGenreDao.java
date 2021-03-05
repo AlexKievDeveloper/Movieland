@@ -15,7 +15,7 @@ public class JdbcGenreDao implements GenreDao {
     private final GenreRowMapper genreRowMapper = new GenreRowMapper();
     private final JdbcTemplate jdbcTemplate;
     private final String findAllGenres;
-    private final String findGenreByMovieId;
+    private final String findGenresByMovieId;
 
     @Override
     public List<Genre> findAll() {
@@ -24,7 +24,7 @@ public class JdbcGenreDao implements GenreDao {
 
     @Override
     public List<Genre> findByMovieId(int movieId) {
-        return jdbcTemplate.query(findGenreByMovieId, genreRowMapper, movieId);
+        return jdbcTemplate.query(findGenresByMovieId, genreRowMapper, movieId);
     }
 
 }

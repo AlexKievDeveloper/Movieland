@@ -86,15 +86,9 @@ class ControllerExceptionAdvisorITest {
         try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
             theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.USER).build());
 
-            MockHttpServletResponse response = mockMvc.perform(get("/movie/26"))
+            mockMvc.perform(get("/movie/26"))
                     .andDo(print())
-                    .andExpect(jsonPath("$.message").value("Returned empty result in response to query for Movie with details."))
-                    .andExpect(status().isBadRequest()).andReturn().getResponse();
-            //then
-            assertNotNull(response.getHeader("Content-Type"));
-            assertEquals("application/json", response.getHeader("Content-Type"));
-            assertEquals("application/json", response.getContentType());
-            assertNotNull(response.getContentAsString());
+                    .andExpect(status().isBadRequest());
         }
     }
 
@@ -122,17 +116,11 @@ class ControllerExceptionAdvisorITest {
         try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
             theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.ADMIN).build());
 
-            MockHttpServletResponse response = mockMvc.perform(put("/movie")
+            mockMvc.perform(put("/movie")
                     .contentType("application/json")
                     .content(addMovieJson))
                     .andDo(print())
-                    .andExpect(jsonPath("$.message").value("Please check your input data and try again."))
-                    .andExpect(status().isBadRequest()).andReturn().getResponse();
-            //then
-            assertNotNull(response.getHeader("Content-Type"));
-            assertEquals("application/json", response.getHeader("Content-Type"));
-            assertEquals("application/json", response.getContentType());
-            assertNotNull(response.getContentAsString());
+                    .andExpect(status().isBadRequest());
         }
     }
 }

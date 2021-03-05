@@ -1,14 +1,13 @@
 package com.hlushkov.movieland.dao.jdbc;
 
 import com.hlushkov.movieland.common.SortDirection;
-import com.hlushkov.movieland.common.dto.MovieDetails;
 import com.hlushkov.movieland.common.request.CreateUpdateMovieRequest;
 import com.hlushkov.movieland.common.request.MovieRequest;
 import com.hlushkov.movieland.dao.MovieDao;
-import com.hlushkov.movieland.dao.jdbc.extractor.MovieDetailsResultSetExtractor;
 import com.hlushkov.movieland.dao.jdbc.mapper.MovieRowMapper;
 import com.hlushkov.movieland.entity.Movie;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -19,17 +18,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.StringJoiner;
 
+@Slf4j
 @RequiredArgsConstructor
 @Repository
 public class JdbcMovieDao implements MovieDao {
     private final MovieRowMapper movieRowMapper = new MovieRowMapper();
-    private final MovieDetailsResultSetExtractor movieDetailsResultSetExtractor = new MovieDetailsResultSetExtractor();
+
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final String findAllMovies;
     private final String findRandomMovies;
     private final String findMoviesByGenre;
-    private final String findMovieWithDetailsByMovieId;
+
     private final String addMovie;
     private final String editMovie;
     private final String removeMoviesCountries;
@@ -37,8 +37,11 @@ public class JdbcMovieDao implements MovieDao {
     private final String addMoviesCountries;
     private final String addMoviesGenres;
     private final String constantMovieId = "movie_id";
+    private final String findMovieById;
+
     @Value("${movie.random.count}")
     private Long randomMovieCount;
+
 
     @Override
     public List<Movie> findMovies(MovieRequest movieRequest) {
@@ -55,11 +58,6 @@ public class JdbcMovieDao implements MovieDao {
     public List<Movie> findMoviesByGenre(int genreId, MovieRequest movieRequest) {
         String generatedQueryForFindMoviesByGenre = generateQuery(findMoviesByGenre, movieRequest);
         return jdbcTemplate.query(generatedQueryForFindMoviesByGenre, movieRowMapper, genreId);
-    }
-
-    @Override
-    public MovieDetails findMovieDetailsByMovieId(int movieId) {
-        return jdbcTemplate.query(findMovieWithDetailsByMovieId, movieDetailsResultSetExtractor, movieId);
     }
 
     @Override
@@ -90,6 +88,11 @@ public class JdbcMovieDao implements MovieDao {
         }
 
         namedParameterJdbcTemplate.update(editMovie, parametersMap);
+    }
+
+    @Override
+    public Movie findMovieById(int movieId) {
+        return jdbcTemplate.queryForObject(findMovieById, movieRowMapper, movieId);
     }
 
     MapSqlParameterSource getSqlParameterSource(CreateUpdateMovieRequest createUpdateMovieRequest) {

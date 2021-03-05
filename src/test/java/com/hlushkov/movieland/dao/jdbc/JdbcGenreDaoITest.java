@@ -49,7 +49,7 @@ class JdbcGenreDaoITest {
     @Test
     @DataSet(provider = TestData.MoviesGenresFullProvider.class, cleanAfter = true)
     @DisplayName("Returns list of genres by movie id")
-    void getById() {
+    void getByMovieId() {
         //when
         List<Genre> actualGenreList = jdbcGenreDao.findByMovieId(1);
         //then

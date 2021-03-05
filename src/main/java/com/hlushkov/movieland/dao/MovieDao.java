@@ -1,6 +1,5 @@
 package com.hlushkov.movieland.dao;
 
-import com.hlushkov.movieland.common.dto.MovieDetails;
 import com.hlushkov.movieland.common.request.CreateUpdateMovieRequest;
 import com.hlushkov.movieland.common.request.MovieRequest;
 import com.hlushkov.movieland.entity.Movie;
@@ -15,11 +14,11 @@ public interface MovieDao {
 
     List<Movie> findMoviesByGenre(int genreId, MovieRequest movieRequest);
 
-    MovieDetails findMovieDetailsByMovieId(int movieId);
-
     void addMovie(CreateUpdateMovieRequest createUpdateMovieRequest);
 
     void editMovie(CreateUpdateMovieRequest createUpdateMovieRequest);
+
+    Movie findMovieById(int movieId);
 }
 
 

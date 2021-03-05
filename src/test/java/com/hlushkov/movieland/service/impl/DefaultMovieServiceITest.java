@@ -20,6 +20,7 @@ import java.math.RoundingMode;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DBRider
 @DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
@@ -43,6 +44,32 @@ class DefaultMovieServiceITest {
         MovieDetails actualMovieDetails = movieService.findMovieDetailsByMovieId(1, Optional.of("USD"));
         //then
         assertEquals(expectedPrice, actualMovieDetails.getPrice());
+    }
+
+    //FIXME
+    @Test
+    @DataSet(provider = TestData.AddMovieResultProvider.class, cleanAfter = true)
+    @DisplayName("Returns movie details")
+    void findMovieDetailsByMovieId() {
+        //when
+        MovieDetails actualMovieDetails = movieService.findMovieDetailsByMovieId(1, Optional.ofNullable(null));
+        System.out.println("Actual movie details: " +  actualMovieDetails);
+        //then
+        assertNotNull(actualMovieDetails.getCountries());
+        assertNotNull(actualMovieDetails.getGenres());
+        assertNotNull(actualMovieDetails.getReviews());
+
+        assertEquals("США", actualMovieDetails.getCountries().get(0).getName());
+        assertEquals("драма", actualMovieDetails.getGenres().get(0).getName());
+        assertEquals("криминал", actualMovieDetails.getGenres().get(1).getName());
+        assertEquals(1, actualMovieDetails.getReviews().get(0).getId());
+        assertEquals(1, actualMovieDetails.getReviews().get(0).getMovieId());
+        assertEquals(2, actualMovieDetails.getReviews().get(0).getUser().getId());
+        assertEquals("Гениальное кино! Смотришь и думаешь «Так не бывает!», но позже понимаешь, то только так и должно быть. Начинаешь заново осмысливать значение фразы, которую постоянно используешь в своей жизни, «Надежда умирает последней». Ведь если ты не надеешься, то все в твоей жизни гаснет, не остается смысла. Фильм наполнен бесконечным числом правильных афоризмов. Я уверена, что буду пересматривать его сотни раз.", actualMovieDetails.getReviews().get(0).getText());
+        assertEquals(2, actualMovieDetails.getReviews().get(1).getId());
+        assertEquals(1, actualMovieDetails.getReviews().get(1).getMovieId());
+        assertEquals(3, actualMovieDetails.getReviews().get(1).getUser().getId());
+        assertEquals("Кино это является, безусловно, «со знаком качества». Что же до первого места в рейтинге, то, думаю, здесь имело место быть выставление «десяточек» от большинства зрителей вкупе с раздутыми восторженными откликами кинокритиков. 'Фильм атмосферный. Он драматичный. И, конечно, заслуживает того, чтобы находиться довольно высоко в мировом кинематографе.", actualMovieDetails.getReviews().get(1).getText());
     }
 
 }

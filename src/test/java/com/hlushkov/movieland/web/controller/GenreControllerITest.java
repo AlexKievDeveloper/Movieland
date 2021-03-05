@@ -1,5 +1,6 @@
 package com.hlushkov.movieland.web.controller;
 
+import com.github.database.rider.core.api.dataset.DataSet;
 import com.hlushkov.movieland.common.Role;
 import com.hlushkov.movieland.security.util.UserHolder;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
@@ -42,6 +43,7 @@ class GenreControllerITest {
     }
 
     @Test
+    @DataSet(cleanAfter = true)
     @DisplayName("Returns all genres")
     void findAllGenres() throws Exception {
         //when
