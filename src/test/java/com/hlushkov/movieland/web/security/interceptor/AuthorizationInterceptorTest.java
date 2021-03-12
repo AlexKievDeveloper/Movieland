@@ -1,4 +1,4 @@
-package com.hlushkov.movieland.web;
+package com.hlushkov.movieland.web.security.interceptor;
 
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
@@ -11,7 +11,7 @@ import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.entity.User;
 import com.hlushkov.movieland.web.controller.AuthorizationController;
 import com.hlushkov.movieland.web.controller.MovieController;
-import com.hlushkov.movieland.web.interceptor.AuthorizationInterceptor;
+import com.hlushkov.movieland.web.security.interceptor.AuthorizationInterceptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,7 +64,7 @@ class AuthorizationInterceptorTest {
         try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
             theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.USER).build());
 
-            MockHttpServletResponse response = mockMvcWithMovieController.perform(get("/movie"))
+            MockHttpServletResponse response = mockMvcWithMovieController.perform(get("/movies"))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andReturn().getResponse();

@@ -42,14 +42,14 @@ public class MovieDetailsResultSetExtractor implements ResultSetExtractor<MovieD
                 .id(resultSet.getInt("country_id"))
                 .name(resultSet.getString("country_name"))
                 .build();
-        User firstUser = User.builder()
+/*        User firstUser = User.builder()
                 .id(resultSet.getInt("user_id"))
                 .nickname(resultSet.getString("user_nickname"))
-                .build();
+                .build();*/
 
         Review firstReview = Review.builder()
                 .id(resultSet.getInt("review_id"))
-                .user(firstUser)
+                .userId(resultSet.getInt("user_id"))
                 .text(resultSet.getString("review_text"))
                 .build();
 
@@ -69,14 +69,14 @@ public class MovieDetailsResultSetExtractor implements ResultSetExtractor<MovieD
                     .id(resultSet.getInt("country_id"))
                     .name(resultSet.getString("country_name"))
                     .build();
-            User user = User.builder()
+/*            User user = User.builder()
                     .id(resultSet.getInt("user_id"))
                     .nickname(resultSet.getString("user_nickname"))
-                    .build();
+                    .build();*/
 
             Review review = Review.builder()
                     .id(resultSet.getInt("review_id"))
-                    .user(user)
+                    .userId(resultSet.getInt("user_id"))
                     .text(resultSet.getString("review_text"))
                     .build();
 

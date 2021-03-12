@@ -1,7 +1,6 @@
 package com.hlushkov.movieland.dao.jdbc;
 
 import com.hlushkov.movieland.common.SortDirection;
-import com.hlushkov.movieland.common.request.CreateUpdateMovieRequest;
 import com.hlushkov.movieland.common.request.MovieRequest;
 import com.hlushkov.movieland.dao.MovieDao;
 import com.hlushkov.movieland.dao.jdbc.mapper.MovieRowMapper;
@@ -12,36 +11,54 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.PreparedStatement;
 import java.util.List;
-import java.util.StringJoiner;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
 @Repository
 public class JdbcMovieDao implements MovieDao {
     private final MovieRowMapper movieRowMapper = new MovieRowMapper();
-
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final String constantMovieId = "movie_id";
     private final String findAllMovies;
     private final String findRandomMovies;
     private final String findMoviesByGenre;
-
-    private final String addMovie;
+    private final String saveMovie;
     private final String editMovie;
     private final String removeMoviesCountries;
     private final String removeMoviesGenres;
     private final String addMoviesCountries;
     private final String addMoviesGenres;
-    private final String constantMovieId = "movie_id";
     private final String findMovieById;
+    private final String removeReviewsByMovieId;
 
     @Value("${movie.random.count}")
     private Long randomMovieCount;
 
+    @Override
+    public Integer saveMovie(Movie movie) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement statement = connection.prepareStatement(saveMovie, new String[]{constantMovieId});
+            statement.setString(1, movie.getNameRussian());
+            statement.setString(2, movie.getNameNative());
+            statement.setInt(3, movie.getYearOfRelease());
+            statement.setString(4, movie.getDescription());
+            statement.setDouble(5, movie.getRating());
+            statement.setDouble(6, movie.getPrice());
+            statement.setString(7, movie.getPicturePath());
+            return statement;
+        }, keyHolder);
+
+        return (Integer) Objects.requireNonNull(keyHolder.getKey());
+    }
 
     @Override
     public List<Movie> findMovies(MovieRequest movieRequest) {
@@ -50,62 +67,56 @@ public class JdbcMovieDao implements MovieDao {
     }
 
     @Override
-    public List<Movie> findRandomMovies() {
+    public List<Movie> findRandom() {
         return jdbcTemplate.query(findRandomMovies, movieRowMapper, randomMovieCount);
     }
 
     @Override
-    public List<Movie> findMoviesByGenre(int genreId, MovieRequest movieRequest) {
+    public List<Movie> findByGenre(int genreId, MovieRequest movieRequest) {
         String generatedQueryForFindMoviesByGenre = generateQuery(findMoviesByGenre, movieRequest);
         return jdbcTemplate.query(generatedQueryForFindMoviesByGenre, movieRowMapper, genreId);
     }
 
     @Override
-    public void addMovie(CreateUpdateMovieRequest createUpdateMovieRequest) {
-        MapSqlParameterSource parametersMap = getSqlParameterSource(createUpdateMovieRequest);
-        String addMovieFullQuery = addMovie
-                .concat(getRowWithCountryParameters(createUpdateMovieRequest.getCountriesIds()))
-                .concat(") INSERT INTO movies_genres (movie_id, genre_id) VALUES ")
-                .concat(getRowWithGenreParameters(createUpdateMovieRequest.getGenresIds()));
-
-        namedParameterJdbcTemplate.update(addMovieFullQuery, parametersMap);
+    public Movie findById(int movieId) {
+        return jdbcTemplate.queryForObject(findMovieById, movieRowMapper, movieId);
     }
 
-    @Transactional
     @Override
-    public void editMovie(CreateUpdateMovieRequest createUpdateMovieRequest) {
-        MapSqlParameterSource parametersMap = getSqlParameterSource(createUpdateMovieRequest);
-        parametersMap.addValue(constantMovieId, createUpdateMovieRequest.getId());
-
-        if (createUpdateMovieRequest.getCountriesIds() != null) {
-            removeMoviesCountriesByMovieId(createUpdateMovieRequest.getId());
-            addMoviesCountries(parametersMap, createUpdateMovieRequest.getCountriesIds());
-        }
-
-        if (createUpdateMovieRequest.getGenresIds() != null) {
-            removeMoviesGenresByMovieId(createUpdateMovieRequest.getId());
-            addMoviesGenres(parametersMap, createUpdateMovieRequest.getGenresIds());
-        }
-
+    public void editMovie(Movie movie) {
+        MapSqlParameterSource parametersMap = getSqlParameterSource(movie);
+        parametersMap.addValue(constantMovieId, movie.getId());
         namedParameterJdbcTemplate.update(editMovie, parametersMap);
     }
 
     @Override
-    public Movie findMovieById(int movieId) {
-        return jdbcTemplate.queryForObject(findMovieById, movieRowMapper, movieId);
+    public void editMovieGenres(Integer movieId, List<Integer> genreIds) {
+        removeMoviesGenresByMovieId(movieId);
+        addMoviesGenres(movieId, genreIds);
     }
 
-    MapSqlParameterSource getSqlParameterSource(CreateUpdateMovieRequest createUpdateMovieRequest) {
+    @Override
+    public void editMovieCountries(Integer movieId, List<Integer> countryIds) {
+        removeMoviesCountriesByMovieId(movieId);
+        addMoviesCountries(movieId, countryIds);
+    }
+
+    @Override
+    public boolean removeReviewsByMovieId(Integer movieId) {
+        MapSqlParameterSource parametersMap = new MapSqlParameterSource();
+        parametersMap.addValue(constantMovieId, movieId);
+        return namedParameterJdbcTemplate.update(removeReviewsByMovieId, parametersMap) != 0;
+    }
+
+    MapSqlParameterSource getSqlParameterSource(Movie movie) {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("name_russian", createUpdateMovieRequest.getNameRussian());
-        parameterSource.addValue("name_native", createUpdateMovieRequest.getNameNative());
-        parameterSource.addValue("year_of_release", createUpdateMovieRequest.getYearOfRelease());
-        parameterSource.addValue("description", createUpdateMovieRequest.getDescription());
-        parameterSource.addValue("rating", createUpdateMovieRequest.getRating());
-        parameterSource.addValue("price", createUpdateMovieRequest.getPrice());
-        parameterSource.addValue("picture_path", createUpdateMovieRequest.getPicturePath());
-        addMapSqlParametersForCountryIds(parameterSource, createUpdateMovieRequest.getCountriesIds());
-        addMapSqlParametersForGenreIds(parameterSource, createUpdateMovieRequest.getGenresIds());
+        parameterSource.addValue("name_russian", movie.getNameRussian());
+        parameterSource.addValue("name_native", movie.getNameNative());
+        parameterSource.addValue("year_of_release", movie.getYearOfRelease());
+        parameterSource.addValue("description", movie.getDescription());
+        parameterSource.addValue("rating", movie.getRating());
+        parameterSource.addValue("price", movie.getPrice());
+        parameterSource.addValue("picture_path", movie.getPicturePath());
         return parameterSource;
     }
 
@@ -129,38 +140,26 @@ public class JdbcMovieDao implements MovieDao {
         }
     }
 
-    String getRowWithCountryParameters(List<Integer> listWithCountryIds) {
-        MapSqlParameterSource parametersMap = new MapSqlParameterSource();
-        addMapSqlParametersForCountryIds(parametersMap, listWithCountryIds);
-        return getRowWithParameters(parametersMap);
+    void addMoviesCountries(Integer movieId, List<Integer> countryIds) {
+        jdbcTemplate.batchUpdate(
+                addMoviesCountries,
+                countryIds,
+                countryIds.size(),
+                (statementInLinks, countryId) -> {
+                    statementInLinks.setInt(1, movieId);
+                    statementInLinks.setInt(2, countryId);
+                });
     }
 
-    String getRowWithGenreParameters(List<Integer> listWithGenreIds) {
-        MapSqlParameterSource parametersMap = new MapSqlParameterSource();
-        addMapSqlParametersForGenreIds(parametersMap, listWithGenreIds);
-        return getRowWithParameters(parametersMap);
-    }
-
-    String getRowWithParameters(MapSqlParameterSource parametersMap) {
-        StringJoiner stringJoiner = new StringJoiner(", ", "", "");
-        String[] listParams = parametersMap.getParameterNames();
-
-        for (String listParam : listParams) {
-            stringJoiner.add("((SELECT movie_id_result FROM ins_movies), :" + listParam + ")");
-        }
-        return stringJoiner.toString();
-    }
-
-    void addMoviesCountries(MapSqlParameterSource parametersMap, List<Integer> countriesIds) {
-        addMapSqlParametersForCountryIds(parametersMap, countriesIds);
-        String addMoviesCountriesFullQuery = generateAddMoviesCountriesFullQuery(addMoviesCountries, countriesIds);
-        namedParameterJdbcTemplate.update(addMoviesCountriesFullQuery, parametersMap);
-    }
-
-    void addMoviesGenres(MapSqlParameterSource parametersMap, List<Integer> genresIds) {
-        addMapSqlParametersForGenreIds(parametersMap, genresIds);
-        String addMoviesGenresFullQuery = generateAddMoviesGenresFullQuery(addMoviesGenres, genresIds);
-        namedParameterJdbcTemplate.update(addMoviesGenresFullQuery, parametersMap);
+    void addMoviesGenres(Integer movieId, List<Integer> genreIds) {
+        jdbcTemplate.batchUpdate(
+                addMoviesGenres,
+                genreIds,
+                genreIds.size(),
+                (statementInLinks, genreId) -> {
+                    statementInLinks.setInt(1, movieId);
+                    statementInLinks.setInt(2, genreId);
+                });
     }
 
     void removeMoviesCountriesByMovieId(int movieId) {
@@ -173,32 +172,6 @@ public class JdbcMovieDao implements MovieDao {
         MapSqlParameterSource parametersMap = new MapSqlParameterSource();
         parametersMap.addValue(constantMovieId, movieId);
         namedParameterJdbcTemplate.update(removeMoviesGenres, parametersMap);
-    }
-
-    String generateAddMoviesCountriesFullQuery(String addMoviesCountries, List<Integer> countriesIds) {
-        MapSqlParameterSource parametersMap = new MapSqlParameterSource();
-        addMapSqlParametersForCountryIds(parametersMap, countriesIds);
-
-        StringJoiner stringJoiner = new StringJoiner(", ", "", "");
-        String[] listParams = parametersMap.getParameterNames();
-
-        for (String listParam : listParams) {
-            stringJoiner.add("(:movie_id, :" + listParam + ")");
-        }
-        return addMoviesCountries + stringJoiner.toString();
-    }
-
-    String generateAddMoviesGenresFullQuery(String addMoviesGenres, List<Integer> genresIds) {
-        MapSqlParameterSource parametersMap = new MapSqlParameterSource();
-        addMapSqlParametersForGenreIds(parametersMap, genresIds);
-
-        StringJoiner stringJoiner = new StringJoiner(", ", "", "");
-        String[] listParams = parametersMap.getParameterNames();
-
-        for (String listParam : listParams) {
-            stringJoiner.add("(:movie_id, :" + listParam + ")");
-        }
-        return addMoviesGenres + stringJoiner.toString();
     }
 
     String generateQuery(String query, MovieRequest movieRequest) {

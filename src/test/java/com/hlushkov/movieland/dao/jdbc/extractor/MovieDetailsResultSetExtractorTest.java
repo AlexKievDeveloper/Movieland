@@ -45,7 +45,6 @@ class MovieDetailsResultSetExtractorTest {
         when(resultSet.getString("country_name")).thenReturn("США");
 
         when(resultSet.getInt("user_id")).thenReturn(2);
-        when(resultSet.getString("user_nickname")).thenReturn("Дарлин Эдвардс");
 
         when(resultSet.getInt("review_id")).thenReturn(1);
         when(resultSet.getString("review_text")).thenReturn("Гениальное кино! Смотришь и думаешь «Так не бывает!»");
@@ -67,8 +66,7 @@ class MovieDetailsResultSetExtractorTest {
         assertEquals(1, actualMovieDetails.getCountries().get(0).getId());
         assertEquals("США", actualMovieDetails.getCountries().get(0).getName());
 
-        assertEquals(2, actualMovieDetails.getReviews().get(0).getUser().getId());
-        assertEquals("Дарлин Эдвардс", actualMovieDetails.getReviews().get(0).getUser().getNickname());
+        assertEquals(2, actualMovieDetails.getReviews().get(0).getUserId());
 
         assertEquals(1, actualMovieDetails.getReviews().get(0).getId());
         assertEquals("Гениальное кино! Смотришь и думаешь «Так не бывает!»", actualMovieDetails.getReviews().get(0).getText());

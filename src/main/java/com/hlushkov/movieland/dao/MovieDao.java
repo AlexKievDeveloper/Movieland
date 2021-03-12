@@ -1,6 +1,5 @@
 package com.hlushkov.movieland.dao;
 
-import com.hlushkov.movieland.common.request.CreateUpdateMovieRequest;
 import com.hlushkov.movieland.common.request.MovieRequest;
 import com.hlushkov.movieland.entity.Movie;
 
@@ -8,17 +7,24 @@ import java.util.List;
 
 public interface MovieDao {
 
+    Integer saveMovie(Movie movie);
+
     List<Movie> findMovies(MovieRequest movieRequest);
 
-    List<Movie> findRandomMovies();
+    List<Movie> findRandom();
 
-    List<Movie> findMoviesByGenre(int genreId, MovieRequest movieRequest);
+    List<Movie> findByGenre(int genreId, MovieRequest movieRequest);
 
-    void addMovie(CreateUpdateMovieRequest createUpdateMovieRequest);
+    Movie findById(int movieId);
 
-    void editMovie(CreateUpdateMovieRequest createUpdateMovieRequest);
+    void editMovie(Movie movie);
 
-    Movie findMovieById(int movieId);
+    void editMovieGenres(Integer movieId, List<Integer> genreIds);
+
+    void editMovieCountries(Integer movieId, List<Integer> countryIds);
+
+    boolean removeReviewsByMovieId(Integer movieId);
+
 }
 
 

@@ -52,9 +52,4 @@ public class MovielandApplicationContext {
         return new DataSourceTransactionManager(dataSource);
     }
 
-    @Bean
-    protected TransactionTemplate transactionTemplate(DataSourceTransactionManager transactionManager) {
-        return new TransactionTemplate(transactionManager);
-    }
-
 }

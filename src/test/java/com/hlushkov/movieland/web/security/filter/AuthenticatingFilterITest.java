@@ -1,4 +1,4 @@
-package com.hlushkov.movieland.web.filter;
+package com.hlushkov.movieland.web.security.filter;
 
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;

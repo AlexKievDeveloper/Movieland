@@ -11,7 +11,7 @@ import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.entity.User;
 import com.hlushkov.movieland.security.SecurityService;
 import com.hlushkov.movieland.security.util.UserHolder;
-import com.hlushkov.movieland.web.filter.AuthenticatingFilter;
+import com.hlushkov.movieland.web.security.filter.AuthenticatingFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -108,8 +108,6 @@ class AuthorizationControllerITest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andReturn().getResponse();
-
-        assertTrue(response.getContentAsString().contains("Invalid email or password. Please check your credentials and try again."));
     }
 
     @Test

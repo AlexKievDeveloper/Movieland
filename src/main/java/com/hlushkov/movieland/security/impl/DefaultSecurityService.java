@@ -4,7 +4,7 @@ import com.hlushkov.movieland.common.request.AuthRequest;
 import com.hlushkov.movieland.dao.UserDao;
 import com.hlushkov.movieland.entity.User;
 import com.hlushkov.movieland.security.SecurityService;
-import com.hlushkov.movieland.security.session.Session;
+import com.hlushkov.movieland.security.entity.Session;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -12,37 +12,37 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class DefaultSecurityService implements SecurityService {
-    private final UserDao jdbcUserDao;
-    private final List<Session> sessionList = new CopyOnWriteArrayList<>();
+    private final UserDao userDao;
+    private final Map<String, Session> sessionMap = new ConcurrentHashMap<>();
     @Value("${session.max.age}")
     private long sessionMaxAge;
 
     @Override
     public Optional<Session> login(AuthRequest authRequest) {
 
-        Optional<User> optionalUser = jdbcUserDao.findByEmail(authRequest.getEmail());
+        User user = userDao.findByEmail(authRequest.getEmail());
 
-        if (optionalUser.isPresent() && checkPassword(optionalUser.get(), authRequest.getPassword())) {
+        if (checkPassword(user, authRequest.getPassword())) {
+            String randomUUID = UUID.randomUUID().toString();
 
             Session session = Session.builder()
-                    .user(optionalUser.get())
-                    .userUUID(UUID.randomUUID().toString())
+                    .user(user)
+                    .userUUID(randomUUID)
                     .expireDate(LocalDateTime.now().plusSeconds(sessionMaxAge))
                     .build();
 
             log.debug("Adding new session : {}", session);
-            sessionList.add(session);
+            sessionMap.put(randomUUID, session);
             return Optional.of(session);
         }
         return Optional.empty();
@@ -50,20 +50,18 @@ public class DefaultSecurityService implements SecurityService {
 
     @Override
     public boolean removeSession(String userUUID) {
-        return sessionList.removeIf(session -> session.getUserUUID().equals(userUUID));
+        return sessionMap.remove(userUUID) != null;
     }
 
     @Override
     public Optional<User> getUserByUUID(String userUUID) {
         if (userUUID != null) {
             log.info("Request for user with UUID: {}", userUUID);
-            for (Session session : sessionList) {
-                if (session.getUserUUID().equals(userUUID)) {
-                    return Optional.of(session.getUser());
-                }
+            if (sessionMap.get(userUUID) != null) {
+                return Optional.of(sessionMap.get(userUUID).getUser());
             }
         }
-        log.info("Returned empty user");
+        log.info("Returned empty optional without user");
         return Optional.empty();
     }
 
@@ -73,10 +71,9 @@ public class DefaultSecurityService implements SecurityService {
         return user.getPassword().equals(hashPassword);
     }
 
-    @PostConstruct
     @Scheduled(initialDelayString = "${clean.session.list.time.interval}", fixedRateString = "${clean.session.list.time.interval}")
-    public void cleanSessionList() {
+    public void cleanSessionMap() {
         log.info("Clean session list");
-        sessionList.removeIf(session -> session.getExpireDate().isBefore(LocalDateTime.now()));
+        sessionMap.entrySet().removeIf(session -> session.getValue().getExpireDate().isBefore(LocalDateTime.now()));
     }
 }

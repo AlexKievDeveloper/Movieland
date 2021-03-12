@@ -14,7 +14,7 @@ public class ReviewRowMapper implements RowMapper<Review> {
                 .id(resultSet.getInt("review_id"))
                 .movieId(resultSet.getInt("movie_id"))
                 .text(resultSet.getString("review_text"))
-                .user(User.builder().id(resultSet.getInt("user_id")).build())
+                .userId(resultSet.getInt("user_id"))
                 .build();
     }
 }

@@ -1,4 +1,4 @@
-package com.hlushkov.movieland.web.filter;
+package com.hlushkov.movieland.web.security.filter;
 
 import com.hlushkov.movieland.entity.User;
 import com.hlushkov.movieland.security.SecurityService;
@@ -14,8 +14,6 @@ import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
@@ -36,26 +34,13 @@ public class AuthenticatingFilter extends HttpFilter {
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        List<String> allowedUrls = new ArrayList<>();
-        allowedUrls.add("/login");
-
         try {
-            if (allowedUrls.contains(request.getPathInfo())) {
-                chain.doFilter(request, response);
-                log.info("Redirecting request with allowed path: {}", request.getPathInfo());
-                return;
-            }
-
             Optional<User> userOptional = securityService.getUserByUUID(request.getHeader("userUUID"));
-            if (userOptional.isPresent()) {
-                UserHolder.setUser(userOptional.get());
+            userOptional.ifPresent(user -> {
+                UserHolder.setUser(user);
                 log.info("Successfully finished authentication filtering checking: {}", request.getPathInfo());
-                chain.doFilter(request, response);
-                return;
-            }
-            log.error("Unauthorized access attempt, servlet path: {}, request path info: {}",
-                    request.getServletPath(), request.getPathInfo());
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            });
+            chain.doFilter(request, response);
         } finally {
             UserHolder.removeUser();
         }

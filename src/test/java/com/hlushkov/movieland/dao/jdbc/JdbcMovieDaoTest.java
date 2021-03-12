@@ -1,9 +1,10 @@
 package com.hlushkov.movieland.dao.jdbc;
 
 import com.hlushkov.movieland.common.SortDirection;
-import com.hlushkov.movieland.common.request.CreateUpdateMovieRequest;
+import com.hlushkov.movieland.common.request.SaveMovieRequest;
 import com.hlushkov.movieland.common.request.MovieRequest;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
+import com.hlushkov.movieland.entity.Movie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -197,36 +198,10 @@ class JdbcMovieDaoTest {
 
 
     @Test
-    @DisplayName("Generate value with counties for addMovieFull query from list with country ids")
-    void getRowWithCountryParameters() {
-        //prepare
-        String expectedString = "((SELECT movie_id_result FROM ins_movies), :country_id0), ((SELECT movie_id_result FROM ins_movies), :country_id1)";
-
-        //when
-        String actualString = jdbcMovieDao.getRowWithCountryParameters(List.of(1, 2));
-
-        //then
-        assertEquals(expectedString, actualString);
-    }
-
-    @Test
-    @DisplayName("Generate value with genres for addMovieFull query from list with genre ids")
-    void getRowWithGenreParameters() {
-        //prepare
-        String expectedString = "((SELECT movie_id_result FROM ins_movies), :genre_id0), ((SELECT movie_id_result FROM ins_movies), :genre_id1), ((SELECT movie_id_result FROM ins_movies), :genre_id2)";
-
-        //when
-        String actualString = jdbcMovieDao.getRowWithGenreParameters(List.of(1, 2, 3));
-
-        //then
-        assertEquals(expectedString, actualString);
-    }
-
-    @Test
     @DisplayName("Returns map with all entries for addMovieFullQuery")
     void getSqlParameterSource() {
         //prepare
-        CreateUpdateMovieRequest createUpdateMovieRequest = CreateUpdateMovieRequest.builder()
+       Movie movie = Movie.builder()
                 .nameRussian("Побег из тюрьмы Шоушенка")
                 .nameNative("The Shawshank Redemption prison")
                 .yearOfRelease(1994)
@@ -234,12 +209,10 @@ class JdbcMovieDaoTest {
                 .rating(8.0)
                 .price(123.45)
                 .picturePath("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-                .countriesIds(List.of(1, 2))
-                .genresIds(List.of(1, 2, 3))
                 .build();
 
         //when
-        MapSqlParameterSource actualParameterSource = jdbcMovieDao.getSqlParameterSource(createUpdateMovieRequest);
+        MapSqlParameterSource actualParameterSource = jdbcMovieDao.getSqlParameterSource(movie);
 
         //then
         assertTrue(actualParameterSource.hasValue("name_russian"));
@@ -249,11 +222,6 @@ class JdbcMovieDaoTest {
         assertTrue(actualParameterSource.hasValue("rating"));
         assertTrue(actualParameterSource.hasValue("price"));
         assertTrue(actualParameterSource.hasValue("picture_path"));
-        assertTrue(actualParameterSource.hasValue("country_id0"));
-        assertTrue(actualParameterSource.hasValue("country_id1"));
-        assertTrue(actualParameterSource.hasValue("genre_id0"));
-        assertTrue(actualParameterSource.hasValue("genre_id1"));
-        assertTrue(actualParameterSource.hasValue("genre_id2"));
 
         assertEquals("Побег из тюрьмы Шоушенка", actualParameterSource.getValue("name_russian"));
         assertEquals("The Shawshank Redemption prison", actualParameterSource.getValue("name_native"));
@@ -264,11 +232,6 @@ class JdbcMovieDaoTest {
         assertEquals(123.45, actualParameterSource.getValue("price"));
         assertEquals("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg",
                 actualParameterSource.getValue("picture_path"));
-        assertEquals(1L, actualParameterSource.getValue("country_id0"));
-        assertEquals(2L, actualParameterSource.getValue("country_id1"));
-        assertEquals(1L, actualParameterSource.getValue("genre_id0"));
-        assertEquals(2L, actualParameterSource.getValue("genre_id1"));
-        assertEquals(3L, actualParameterSource.getValue("genre_id2"));
     }
 
     @Test
@@ -305,32 +268,6 @@ class JdbcMovieDaoTest {
         assertEquals(1L, mapSqlParameterSource.getValue("genre_id0"));
         assertEquals(2L, mapSqlParameterSource.getValue("genre_id1"));
         assertEquals(3L, mapSqlParameterSource.getValue("genre_id2"));
-    }
-
-    @Test
-    @DisplayName("Generate row with countries for addMoviesCountriesFullQuery from list with country ids")
-    void generateAddMoviesCountriesFullQuery() {
-        //prepare
-        String addMoviesCountries = "INSERT INTO movies_countries (movie_id, country_id) VALUES ";
-        List<Integer> countriesIds = List.of(1, 2);
-        String expectedAddMoviesCountriesFullQuery = "INSERT INTO movies_countries (movie_id, country_id) VALUES (:movie_id, :country_id0), (:movie_id, :country_id1)";
-        //when
-        String actualAddMoviesCountriesFullQuery = jdbcMovieDao.generateAddMoviesCountriesFullQuery(addMoviesCountries, countriesIds);
-        //then
-        assertEquals(expectedAddMoviesCountriesFullQuery, actualAddMoviesCountriesFullQuery);
-    }
-
-    @Test
-    @DisplayName("Generate row with genres for addMoviesGenresFullQuery from list with genre ids")
-    void generateAddMoviesGenresFullQuery() {
-        //prepare
-        String addMoviesGenres = "INSERT INTO movies_genres (movie_id, genre_id) VALUES ";
-        List<Integer> genresIds = List.of(1, 2, 3);
-        String expectedAddMoviesGenresFullQuery = "INSERT INTO movies_genres (movie_id, genre_id) VALUES (:movie_id, :genre_id0), (:movie_id, :genre_id1), (:movie_id, :genre_id2)";
-        //when
-        String actualAddMoviesGenresFullQuery = jdbcMovieDao.generateAddMoviesGenresFullQuery(addMoviesGenres, genresIds);
-        //then
-        assertEquals(expectedAddMoviesGenresFullQuery, actualAddMoviesGenresFullQuery);
     }
 
 }

@@ -14,6 +14,11 @@ public class DefaultCountryService implements CountryService {
     private final CountryDao countryDao;
 
     @Override
+    public void saveMoviesCountries(List<Integer> countriesIds, int movieId){
+        countryDao.saveMoviesCountries(countriesIds, movieId);
+    }
+
+    @Override
     public List<Country> findCountriesByMovieId(int movieId) {
         return countryDao.findCountriesByMovieId(movieId);
     }

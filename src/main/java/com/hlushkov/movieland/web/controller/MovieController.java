@@ -3,8 +3,8 @@ package com.hlushkov.movieland.web.controller;
 import com.hlushkov.movieland.common.Role;
 import com.hlushkov.movieland.common.SortDirection;
 import com.hlushkov.movieland.common.dto.MovieDetails;
-import com.hlushkov.movieland.common.request.CreateUpdateMovieRequest;
 import com.hlushkov.movieland.common.request.MovieRequest;
+import com.hlushkov.movieland.common.request.SaveMovieRequest;
 import com.hlushkov.movieland.entity.Movie;
 import com.hlushkov.movieland.security.annotation.Secured;
 import com.hlushkov.movieland.service.MovieService;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "movie", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "movies", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MovieController {
     private final MovieService movieService;
 
@@ -39,10 +39,10 @@ public class MovieController {
 
     @Secured({Role.USER, Role.ADMIN})
     @GetMapping("{movieId}")
-    public MovieDetails findMovieById(@PathVariable int movieId,
+    public MovieDetails findById(@PathVariable int movieId,
                                       @RequestParam(value = "currency", required = false) String currency) {
         log.debug("Request for movie with id: {} received", movieId);
-        return movieService.findMovieDetailsByMovieId(movieId, Optional.ofNullable(currency));
+        return movieService.findById(movieId, Optional.ofNullable(currency));
     }
 
     @Secured({Role.USER, Role.ADMIN})
@@ -66,18 +66,43 @@ public class MovieController {
     }
 
     @Secured({Role.ADMIN})
-    @PutMapping({"{movieId}", ""})
-    public ResponseEntity<Object> modifyMovie(@PathVariable(required = false) Integer movieId, @RequestBody CreateUpdateMovieRequest createUpdateMovieRequest) {
-        log.info("Request for modify movie");
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public void saveMovie(@RequestBody SaveMovieRequest saveMovieRequest) {
+        log.info("Request for add movie");
+        movieService.saveMovie(saveMovieRequest);
+    }
 
-        if (movieId != null) {
-            createUpdateMovieRequest.setId(movieId);
-            movieService.modifyMovie(createUpdateMovieRequest);
+    @Secured({Role.ADMIN})
+    @PutMapping("{movieId}")
+    public void editMovie(@PathVariable(required = false) Integer movieId, @RequestBody Movie movie) {
+        log.info("Request for edit movie");
+        movie.setId(movieId);
+        movieService.editMovie(movie);
+    }
+
+    @Secured({Role.ADMIN})
+    @PutMapping("{movieId}/genres")
+    public void editMovieGenres(@PathVariable(required = false) Integer movieId, @RequestBody List<Integer> genreIds) {
+        log.info("Request for edit movie genres");
+        movieService.editMovieGenres(movieId, genreIds);
+    }
+
+    @Secured({Role.ADMIN})
+    @PutMapping("{movieId}/countries")
+    public void editMovieCountries(@PathVariable(required = false) Integer movieId, @RequestBody List<Integer> countryIds) {
+        log.info("Request for edit movie countries");
+        movieService.editMovieCountries(movieId, countryIds);
+    }
+
+    @Secured({Role.ADMIN})
+    @DeleteMapping("{movieId}/reviews")
+    public ResponseEntity<Object> removeReviewsByMovieId(@PathVariable(required = false) Integer movieId) {
+        log.info("Request for remove reviews by movie id");
+        if (movieService.removeReviewsByMovieId(movieId)) {
             return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            movieService.modifyMovie(createUpdateMovieRequest);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
         }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
 }

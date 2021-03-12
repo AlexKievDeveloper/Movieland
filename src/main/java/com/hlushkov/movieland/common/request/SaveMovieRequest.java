@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateUpdateMovieRequest {
+public class SaveMovieRequest {
     private Integer id;
     private String nameRussian;
     private String nameNative;

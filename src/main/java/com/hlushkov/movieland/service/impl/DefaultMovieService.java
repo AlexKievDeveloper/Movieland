@@ -1,20 +1,17 @@
 package com.hlushkov.movieland.service.impl;
 
 import com.hlushkov.movieland.common.dto.MovieDetails;
-import com.hlushkov.movieland.common.request.CreateUpdateMovieRequest;
 import com.hlushkov.movieland.common.request.MovieRequest;
-import com.hlushkov.movieland.dao.CountryDao;
-import com.hlushkov.movieland.dao.GenreDao;
+import com.hlushkov.movieland.common.request.SaveMovieRequest;
 import com.hlushkov.movieland.dao.MovieDao;
-import com.hlushkov.movieland.dao.ReviewDao;
 import com.hlushkov.movieland.entity.Movie;
-import com.hlushkov.movieland.service.CurrencyService;
-import com.hlushkov.movieland.service.MovieService;
+import com.hlushkov.movieland.service.*;
 import com.hlushkov.movieland.service.util.TimeoutedThreadPool;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,12 +23,29 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class DefaultMovieService implements MovieService {
     private final MovieDao movieDao;
-    private final CountryDao countryDao;
-    private final GenreDao genreDao;
-    private final ReviewDao reviewDao;
+    private final CountryService countryService;
+    private final GenreService genreService;
+    private final ReviewService reviewService;
     private final CurrencyService currencyService;
     @Value("${thread.interrupting.period}")
     private Integer threadInterruptingPeriod;
+
+    @Transactional
+    @Override
+    public void saveMovie(SaveMovieRequest saveMovieRequest) {
+        Integer movieId = movieDao.saveMovie(Movie.builder()
+                .nameRussian(saveMovieRequest.getNameRussian())
+                .nameNative(saveMovieRequest.getNameNative())
+                .description(saveMovieRequest.getDescription())
+                .yearOfRelease(saveMovieRequest.getYearOfRelease())
+                .price(saveMovieRequest.getPrice())
+                .rating(saveMovieRequest.getRating())
+                .picturePath(saveMovieRequest.getPicturePath())
+                .build());
+
+        countryService.saveMoviesCountries(saveMovieRequest.getCountriesIds(), movieId);
+        genreService.saveMoviesGenres(saveMovieRequest.getGenresIds(), movieId);
+    }
 
     @Override
     public List<Movie> findMovies(MovieRequest movieRequest) {
@@ -39,8 +53,18 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Override
-    public MovieDetails findMovieDetailsByMovieId(int movieId, Optional<String> requestedCurrency) {
-        Movie movie = movieDao.findMovieById(movieId);
+    public List<Movie> findRandom() {
+        return movieDao.findRandom();
+    }
+
+    @Override
+    public List<Movie> findByGenre(int genreId, MovieRequest movieRequest) {
+        return movieDao.findByGenre(genreId, movieRequest);
+    }
+
+    @Override
+    public MovieDetails findById(int movieId, Optional<String> requestedCurrency) {
+        Movie movie = movieDao.findById(movieId);
         requestedCurrency.ifPresent(currency -> movie.setPrice(currencyService.convert(movie.getPrice(), currency)));
         MovieDetails movieDetails = MovieDetails.builder()
                 .id(movie.getId())
@@ -54,31 +78,32 @@ public class DefaultMovieService implements MovieService {
 
 
         TimeoutedThreadPool threadPool = new TimeoutedThreadPool(threadInterruptingPeriod, 1, 10, 5, TimeUnit.MINUTES, new SynchronousQueue());
-        threadPool.execute(() -> movieDetails.setGenres(genreDao.findByMovieId(movieId)));
-        threadPool.execute(() -> movieDetails.setCountries(countryDao.findCountriesByMovieId(movieId)));
-        threadPool.execute(() -> movieDetails.setReviews(reviewDao.findReviewsByMovieId(movieId)));
+        threadPool.execute(() -> movieDetails.setGenres(genreService.findByMovieId(movieId)));
+        threadPool.execute(() -> movieDetails.setCountries(countryService.findCountriesByMovieId(movieId)));
+        threadPool.execute(() -> movieDetails.setReviews(reviewService.findReviewsByMovieId(movieId)));
 
         log.debug("MovieDetails: {}", movieDetails);
         return movieDetails;
     }
 
     @Override
-    public List<Movie> findRandom() {
-        return movieDao.findRandomMovies();
+    public void editMovie(Movie movie) {
+        movieDao.editMovie(movie);
     }
 
     @Override
-    public List<Movie> findByGenre(int genreId, MovieRequest movieRequest) {
-        return movieDao.findMoviesByGenre(genreId, movieRequest);
+    public void editMovieGenres(Integer movieId, List<Integer> genreIds) {
+        movieDao.editMovieGenres(movieId, genreIds);
     }
 
     @Override
-    public void modifyMovie(CreateUpdateMovieRequest createUpdateMovieRequest) {
-        if (createUpdateMovieRequest.getId() != null) {
-            movieDao.editMovie(createUpdateMovieRequest);
-        } else {
-            movieDao.addMovie(createUpdateMovieRequest);
-        }
+    public void editMovieCountries(Integer movieId, List<Integer> countryIds) {
+        movieDao.editMovieCountries(movieId, countryIds);
+    }
+
+    @Override
+    public boolean removeReviewsByMovieId(Integer movieId) {
+        return movieDao.removeReviewsByMovieId(movieId);
     }
 
 }

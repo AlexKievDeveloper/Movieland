@@ -14,8 +14,21 @@ import java.util.List;
 public class JdbcGenreDao implements GenreDao {
     private final GenreRowMapper genreRowMapper = new GenreRowMapper();
     private final JdbcTemplate jdbcTemplate;
+    private final String addMoviesGenres;
     private final String findAllGenres;
     private final String findGenresByMovieId;
+
+    @Override
+    public void saveMoviesGenres(List<Integer> genresIds, int movieId) {
+        jdbcTemplate.batchUpdate(
+                addMoviesGenres,
+                genresIds,
+                genresIds.size(),
+                (statementInLinks, genreId) -> {
+                    statementInLinks.setInt(1, movieId);
+                    statementInLinks.setInt(2, genreId);
+                });
+    }
 
     @Override
     public List<Genre> findAll() {

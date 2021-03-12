@@ -42,11 +42,10 @@ public class QueriesContext {
     }
 
     @Bean
-    public String addMovie() {
-        return "WITH ins_movies AS (INSERT INTO movies (movie_name_russian, movie_name_native, movie_year_of_release, " +
-                "movie_description, movie_rating, movie_price, movie_picture_path) VALUES (:name_russian, :name_native, " +
-                ":year_of_release, :description, :rating, :price, :picture_path) RETURNING movie_id AS movie_id_result), " +
-                "ins_movies_countries AS (INSERT INTO movies_countries (movie_id, country_id) VALUES ";
+    public String saveMovie() {
+        return "INSERT INTO movies (movie_name_russian, movie_name_native, movie_year_of_release, " +
+                "movie_description, movie_rating, movie_price, movie_picture_path) VALUES (?, ?, " +
+                "?, ?, ?, ?, ?)";
     }
 
     @Bean
@@ -60,6 +59,31 @@ public class QueriesContext {
     @Bean
     public String findMovieById() {
         return "SELECT movies.movie_id, movie_name_russian, movie_name_native, movie_year_of_release, movie_description, movie_rating, movie_price, movie_picture_path FROM movies WHERE movie_id = ?";
+    }
+
+    @Bean
+    public String addMoviesGenres() {
+        return "INSERT INTO movies_genres (movie_id, genre_id) VALUES (?, ?)";
+    }
+
+    @Bean
+    public String removeMoviesGenres() {
+        return "DELETE FROM movies_genres WHERE movies_genres.movie_id = :movie_id";
+    }
+
+    @Bean
+    public String addMoviesCountries() {
+        return "INSERT INTO movies_countries (movie_id, country_id) VALUES (?, ?)";
+    }
+
+    @Bean
+    public String removeMoviesCountries() {
+        return "DELETE FROM movies_countries WHERE movies_countries.movie_id = :movie_id";
+    }
+
+    @Bean
+    public String removeReviewsByMovieId() {
+        return "DELETE FROM reviews WHERE movie_id = :movie_id";
     }
 
     /**
@@ -76,32 +100,13 @@ public class QueriesContext {
         return "SELECT genres.genre_id, genre_name FROM movies_genres LEFT JOIN genres ON(movies_genres.genre_id = genres.genre_id) WHERE movie_id = ?";
     }
 
-    @Bean
-    public String addMoviesGenres() {
-        return "INSERT INTO movies_genres (movie_id, genre_id) VALUES ";
-    }
-
-    @Bean
-    public String removeMoviesGenres() {
-        return "DELETE from movies_genres WHERE movies_genres.movie_id = :movie_id";
-    }
-
-    /**
-     * JdbcUserDao queries
-     */
-
-    @Bean
-    public String findUserByEmail() {
-        return "SELECT user_id, user_nickname, user_email, user_password, user_salt, user_role FROM users WHERE user_email = ?";
-    }
-
     /**
      * JdbcReviewDao queries
      */
 
     @Bean
     public String addReview() {
-        return "INSERT INTO reviews (user_id, movie_id, review_text) VALUES (:user_id, :movie_id, :text)";
+        return "INSERT INTO reviews (user_id, movie_id, review_text) VALUES (:user_id, :movie_id, :review_text)";
     }
 
     @Bean
@@ -118,13 +123,12 @@ public class QueriesContext {
         return "SELECT countries.country_id, country_name FROM movies_countries LEFT JOIN countries ON(movies_countries.country_id = countries.country_id) WHERE movie_id = ?";
     }
 
-    @Bean
-    public String addMoviesCountries() {
-        return "INSERT INTO movies_countries (movie_id, country_id) VALUES ";
-    }
+    /**
+     * JdbcUserDao queries
+     */
 
     @Bean
-    public String removeMoviesCountries() {
-        return "DELETE from movies_countries WHERE movies_countries.movie_id = :movie_id";
+    public String findUserByEmail() {
+        return "SELECT user_id, user_nickname, user_email, user_password, user_salt, user_role FROM users WHERE user_email = ?";
     }
 }

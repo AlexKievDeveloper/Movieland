@@ -8,7 +8,6 @@ import com.github.database.rider.spring.api.DBRider;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.entity.Review;
-import com.hlushkov.movieland.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -36,7 +35,7 @@ class JdbcReviewDaoITest {
         //prepare
         Review review = Review.builder()
                 .movieId(1)
-                .user(User.builder().id(1).build())
+                .userId(1)
                 .text("Nice film!")
                 .build();
         //when
@@ -54,7 +53,7 @@ class JdbcReviewDaoITest {
         assertEquals(2, actualReviews.size());
         assertEquals(1, actualReviews.get(0).getId());
         assertEquals(1, actualReviews.get(0).getMovieId());
-        assertEquals(2, actualReviews.get(0).getUser().getId());
+        assertEquals(2, actualReviews.get(0).getUserId());
         assertEquals("Гениальное кино! Смотришь и думаешь «Так не бывает!», но позже понимаешь, то " +
                 "только так и должно быть. Начинаешь заново осмысливать значение фразы, которую постоянно " +
                 "используешь в своей жизни, «Надежда умирает последней». Ведь если ты не надеешься, то все " +
@@ -62,7 +61,7 @@ class JdbcReviewDaoITest {
                 "афоризмов. Я уверена, что буду пересматривать его сотни раз.", actualReviews.get(0).getText());
         assertEquals(2, actualReviews.get(1).getId());
         assertEquals(1, actualReviews.get(1).getMovieId());
-        assertEquals(3, actualReviews.get(1).getUser().getId());
+        assertEquals(3, actualReviews.get(1).getUserId());
         assertEquals("Кино это является, безусловно, «со знаком качества». Что же до первого места в рейтинге, " +
                 "то, думаю, здесь имело место быть выставление «десяточек» от большинства зрителей " +
                 "вкупе с раздутыми восторженными откликами кинокритиков. 'Фильм атмосферный. " +

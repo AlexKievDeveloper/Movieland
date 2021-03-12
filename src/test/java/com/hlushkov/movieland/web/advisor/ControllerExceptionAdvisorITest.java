@@ -1,4 +1,4 @@
-package com.hlushkov.movieland.web;
+package com.hlushkov.movieland.web.advisor;
 
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
@@ -67,15 +67,10 @@ class ControllerExceptionAdvisorITest {
                 .contentType("application/json")
                 .content(jsonNoValidUserCredentials))
                 .andDo(print())
-                .andExpect(jsonPath("$.message").value("Invalid email or password. Please check your credentials and try again."))
                 .andExpect(status().isBadRequest())
                 .andReturn().getResponse();
 
         assertNull(response.getCookie("user_uuid"));
-        assertNotNull(response.getHeader("Content-Type"));
-        assertEquals("application/json", response.getHeader("Content-Type"));
-        assertEquals("application/json", response.getContentType());
-        assertNotNull(response.getContentAsString());
     }
 
     @Test
@@ -86,7 +81,7 @@ class ControllerExceptionAdvisorITest {
         try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
             theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.USER).build());
 
-            mockMvc.perform(get("/movie/26"))
+            mockMvc.perform(get("/movies/26"))
                     .andDo(print())
                     .andExpect(status().isBadRequest());
         }
@@ -116,7 +111,7 @@ class ControllerExceptionAdvisorITest {
         try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
             theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.ADMIN).build());
 
-            mockMvc.perform(put("/movie")
+            mockMvc.perform(post("/movies")
                     .contentType("application/json")
                     .content(addMovieJson))
                     .andDo(print())

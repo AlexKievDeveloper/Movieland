@@ -1,10 +1,9 @@
 package com.hlushkov.movieland.web.controller;
 
 import com.hlushkov.movieland.common.Role;
-import com.hlushkov.movieland.security.util.UserHolder;
-import com.hlushkov.movieland.common.request.AddReviewRequest;
 import com.hlushkov.movieland.entity.Review;
 import com.hlushkov.movieland.security.annotation.Secured;
+import com.hlushkov.movieland.security.util.UserHolder;
 import com.hlushkov.movieland.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,20 +14,18 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "reviews", consumes = MediaType.APPLICATION_JSON_VALUE)
 public class ReviewController {
     private final ReviewService reviewService;
 
     @Secured({Role.USER, Role.ADMIN})
-    @PostMapping("review")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void addReview(@RequestBody AddReviewRequest addReviewRequest) {
+    public void addReview(@RequestBody Review review) {
         log.debug("Request to add a review received");
-        Review review = Review.builder()
-                .user(UserHolder.getUser())
-                .text(addReviewRequest.getText())
-                .movieId(addReviewRequest.getMovieId())
-                .build();
+        review.setUserId(UserHolder.getUser().getId());
+        log.info("I am REVIEW: {}", review);
         reviewService.addReview(review);
     }
+
 }

@@ -1,6 +1,6 @@
 package com.hlushkov.movieland.web;
 
-import com.hlushkov.movieland.web.interceptor.AuthorizationInterceptor;
+import com.hlushkov.movieland.web.security.interceptor.AuthorizationInterceptor;
 import com.hlushkov.movieland.web.util.SortDirectionRequestParameterConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

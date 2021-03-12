@@ -27,7 +27,7 @@ class JdbcUserDaoITest {
     @DisplayName("Returns user by email")
     void findByEmail() {
         //when
-        User actualUser = jdbcUserDao.findByEmail("ronald.reynolds66@example.com").get();
+        User actualUser = jdbcUserDao.findByEmail("ronald.reynolds66@example.com");
         //then
         assertEquals(1, actualUser.getId());
         assertEquals("Рональд Рейнольдс", actualUser.getNickname());

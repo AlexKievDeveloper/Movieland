@@ -1,9 +1,9 @@
-package com.hlushkov.movieland.web.interceptor;
+package com.hlushkov.movieland.web.security.interceptor;
 
 import com.hlushkov.movieland.common.Role;
-import com.hlushkov.movieland.security.util.UserHolder;
 import com.hlushkov.movieland.entity.User;
 import com.hlushkov.movieland.security.annotation.Secured;
+import com.hlushkov.movieland.security.util.UserHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -21,18 +21,24 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         log.debug("Secure annotation: {}", annotation);
 
         if (annotation != null) {
-            Role[] roles = annotation.value();
             User user = UserHolder.getUser();
-            log.debug("User from user holder, nickname: {}, email: {}", user.getNickname(), user.getEmail());
+            if (user != null) {
+                log.debug("User from user holder, nickname: {}, email: {}", user.getNickname(), user.getEmail());
+                Role[] roles = annotation.value();
 
-            for (Role role : roles) {
-                log.debug("Annotation role: {}", role);
-                if (role.equals(user.getRole())) {
-                    log.debug("User role: {}", user.getRole());
-                    return true;
+                for (Role role : roles) {
+                    log.debug("Annotation role: {}", role);
+                    if (role.equals(user.getRole())) {
+                        log.debug("User role: {}", user.getRole());
+                        return true;
+                    }
                 }
+
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                return false;
             }
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
         return true;

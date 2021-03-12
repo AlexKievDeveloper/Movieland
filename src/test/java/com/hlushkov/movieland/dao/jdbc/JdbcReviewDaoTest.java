@@ -20,9 +20,9 @@ class JdbcReviewDaoTest {
         //then
         assertTrue(actualSourceMap.hasValue("user_id"));
         assertTrue(actualSourceMap.hasValue("movie_id"));
-        assertTrue(actualSourceMap.hasValue("text"));
+        assertTrue(actualSourceMap.hasValue("review_text"));
         assertEquals(1, actualSourceMap.getValue("user_id"));
         assertEquals(1, actualSourceMap.getValue("movie_id"));
-        assertEquals("Nice text", actualSourceMap.getValue("text"));
+        assertEquals("Nice text", actualSourceMap.getValue("review_text"));
     }
 }

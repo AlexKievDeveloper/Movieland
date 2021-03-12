@@ -38,7 +38,7 @@ class ReviewRowMapperTest {
         //then
         assertEquals(1, actualReview.getId());
         assertEquals(1, actualReview.getMovieId());
-        assertEquals(1, actualReview.getUser().getId());
+        assertEquals(1, actualReview.getUserId());
         assertEquals("Nice film!", actualReview.getText());
     }
 }
