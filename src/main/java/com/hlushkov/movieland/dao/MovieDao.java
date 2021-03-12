@@ -1,19 +1,20 @@
 package com.hlushkov.movieland.dao;
 
-import com.hlushkov.movieland.common.request.MovieRequest;
+import com.hlushkov.movieland.common.request.FindMoviesRequest;
+import com.hlushkov.movieland.common.request.SaveMovieRequest;
 import com.hlushkov.movieland.entity.Movie;
 
 import java.util.List;
 
 public interface MovieDao {
 
-    Integer saveMovie(Movie movie);
+    void saveMovie(SaveMovieRequest saveMovieRequest);
 
-    List<Movie> findMovies(MovieRequest movieRequest);
+    List<Movie> findMovies(FindMoviesRequest findMoviesRequest);
 
     List<Movie> findRandom();
 
-    List<Movie> findByGenre(int genreId, MovieRequest movieRequest);
+    List<Movie> findByGenre(int genreId, FindMoviesRequest findMoviesRequest);
 
     Movie findById(int movieId);
 

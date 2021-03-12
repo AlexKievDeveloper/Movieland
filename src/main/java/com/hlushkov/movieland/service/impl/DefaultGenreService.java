@@ -16,11 +16,6 @@ public class DefaultGenreService implements GenreService {
     private final GenreDao genreDao;
 
     @Override
-    public void saveMoviesGenres(List<Integer> genresIds, int movieId) {
-        genreDao.saveMoviesGenres(genresIds, movieId);
-    }
-
-    @Override
     public List<Genre> findAll() {
         return genreDao.findAll();
     }

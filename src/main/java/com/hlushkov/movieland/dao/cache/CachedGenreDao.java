@@ -21,11 +21,6 @@ public class CachedGenreDao implements GenreDao {
     private volatile List<Genre> cachedGenreList;
 
     @Override
-    public void saveMoviesGenres(List<Integer> genresIds, int movieId) {
-        genreDao.saveMoviesGenres(genresIds, movieId);
-    }
-
-    @Override
     public List<Genre> findAll() {
         return new ArrayList<>(cachedGenreList);
     }

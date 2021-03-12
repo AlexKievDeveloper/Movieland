@@ -3,7 +3,7 @@ package com.hlushkov.movieland.web.controller;
 import com.hlushkov.movieland.common.Role;
 import com.hlushkov.movieland.common.SortDirection;
 import com.hlushkov.movieland.common.dto.MovieDetails;
-import com.hlushkov.movieland.common.request.MovieRequest;
+import com.hlushkov.movieland.common.request.FindMoviesRequest;
 import com.hlushkov.movieland.common.request.SaveMovieRequest;
 import com.hlushkov.movieland.entity.Movie;
 import com.hlushkov.movieland.security.annotation.Secured;
@@ -31,10 +31,10 @@ public class MovieController {
                                   @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
 
         log.debug("Request for all movies received");
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setRatingDirection(Optional.ofNullable(ratingSortDirection));
-        movieRequest.setPriceDirection(Optional.ofNullable(priceSortDirection));
-        return movieService.findMovies(movieRequest);
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(ratingSortDirection));
+        findMoviesRequest.setPriceDirection(Optional.ofNullable(priceSortDirection));
+        return movieService.findMovies(findMoviesRequest);
     }
 
     @Secured({Role.USER, Role.ADMIN})
@@ -59,10 +59,10 @@ public class MovieController {
                                    @RequestParam(value = "price", required = false) SortDirection priceSortDirection) {
 
         log.debug("Request for movies by genre received");
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setRatingDirection(Optional.ofNullable(ratingSortDirection));
-        movieRequest.setPriceDirection(Optional.ofNullable(priceSortDirection));
-        return movieService.findByGenre(genreId, movieRequest);
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(ratingSortDirection));
+        findMoviesRequest.setPriceDirection(Optional.ofNullable(priceSortDirection));
+        return movieService.findByGenre(genreId, findMoviesRequest);
     }
 
     @Secured({Role.ADMIN})

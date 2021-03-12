@@ -59,6 +59,39 @@ class MovieControllerITest {
     }
 
     @Test
+    @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class,
+            executeStatementsBefore = "SELECT setval('movies_movie_id_seq', 25)", cleanAfter = true)
+    @ExpectedDataSet(provider = TestData.AddMovieResultProvider.class)
+    @DisplayName("Saves movie to db")
+    void saveMovie() throws Exception {
+        //prepare
+        List<Integer> countriesList = List.of(1, 2);
+        List<Integer> genresList = List.of(1, 2, 3);
+        Map<String, Object> parametersMap = new HashMap();
+        parametersMap.put("nameRussian", "Побег из тюрьмы Шоушенка");
+        parametersMap.put("nameNative", "The Shawshank Redemption prison");
+        parametersMap.put("yearOfRelease", 1994);
+        parametersMap.put("description", "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает разрабатывать невероятно дерзкий план своего освобождения.");
+        parametersMap.put("price", 123.45);
+        parametersMap.put("rating", 8.0);
+        parametersMap.put("picturePath", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg");
+        parametersMap.put("countriesIds", countriesList);
+        parametersMap.put("genresIds", genresList);
+        String addMovieJson = objectMapper.writeValueAsString(parametersMap);
+
+        //when+then
+        try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
+            theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.ADMIN).build());
+
+            mockMvc.perform(post("/movies")
+                    .content(addMovieJson)
+                    .contentType("application/json"))
+                    .andDo(print())
+                    .andExpect(status().isCreated());
+        }
+    }
+
+    @Test
     @DataSet(provider = TestData.MoviesProvider.class, cleanAfter = true)
     @DisplayName("Returns list of all movies in json format")
     void findAllMovies() throws Exception {
@@ -292,7 +325,8 @@ class MovieControllerITest {
         }
     }
 
-    @Test
+    //FIXME
+/*    @Test
     @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
     @DisplayName("Returns movie by id in json format")
     void findById() throws Exception {
@@ -323,13 +357,13 @@ class MovieControllerITest {
             assertEquals("application/json", response.getContentType());
             assertNotNull(response.getContentAsString());
         }
-    }
+    }*/
 
 /*    //FIXME
     @Test
     @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns movie by id in json format value in USD")
-    void findMovieByIdWithCurrencyUSD() throws Exception {
+    void findByIdWithCurrencyUSD() throws Exception {
         //prepare
         double expectedPrice = 123.45 / currencyService.getCurrencyExchangeRate("USD");
         //when
@@ -366,7 +400,7 @@ class MovieControllerITest {
     @Test
     @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
     @DisplayName("Returns movie by id in json format value in EUR")
-    void findMovieByIdWithCurrencyEUR() throws Exception {
+    void findByIdWithCurrencyEUR() throws Exception {
         //prepare
         double expectedPrice = 123.45 / currencyService.getCurrencyExchangeRate("EUR");
         //when
@@ -398,39 +432,6 @@ class MovieControllerITest {
             assertNotNull(response.getContentAsString());
         }
     }*/
-
-    @Test
-    @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class,
-            executeStatementsBefore = "SELECT setval('movies_movie_id_seq', 25)", cleanAfter = true)
-    @ExpectedDataSet(provider = TestData.AddMovieResultProvider.class)
-    @DisplayName("Saves movie to db")
-    void saveMovie() throws Exception {
-        //prepare
-        List<Integer> countriesList = List.of(1, 2);
-        List<Integer> genresList = List.of(1, 2, 3);
-        Map<String, Object> parametersMap = new HashMap();
-        parametersMap.put("nameRussian", "Побег из тюрьмы Шоушенка");
-        parametersMap.put("nameNative", "The Shawshank Redemption prison");
-        parametersMap.put("yearOfRelease", 1994);
-        parametersMap.put("description", "Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк, он сталкивается с жестокостью и беззаконием, царящими по обе стороны решетки. Каждый, кто попадает в эти стены, становится их рабом до конца жизни. Но Энди, вооруженный живым умом и доброй душой, отказывается мириться с приговором судьбы и начинает разрабатывать невероятно дерзкий план своего освобождения.");
-        parametersMap.put("price", 123.45);
-        parametersMap.put("rating", 8.0);
-        parametersMap.put("picturePath", "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg");
-        parametersMap.put("countriesIds", countriesList);
-        parametersMap.put("genresIds", genresList);
-        String addMovieJson = objectMapper.writeValueAsString(parametersMap);
-
-        //when+then
-        try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
-            theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.ADMIN).build());
-
-            mockMvc.perform(post("/movies")
-                    .content(addMovieJson)
-                    .contentType("application/json"))
-                    .andDo(print())
-                    .andExpect(status().isCreated());
-        }
-    }
 
     @Test
     @DataSet(provider = TestData.EditMovieDataProvider.class, cleanAfter = true)

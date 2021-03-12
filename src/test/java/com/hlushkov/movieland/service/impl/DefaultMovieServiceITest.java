@@ -3,8 +3,10 @@ package com.hlushkov.movieland.service.impl;
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.hlushkov.movieland.common.dto.MovieDetails;
+import com.hlushkov.movieland.common.request.SaveMovieRequest;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.service.MovieService;
@@ -15,9 +17,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DBRider
 @DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
@@ -30,11 +34,10 @@ class DefaultMovieServiceITest {
     @Autowired
     private DefaultCurrencyService currencyService;
 
-    //FIXME не работает по принципу 2 методов из jdbc муви дао как будто данные в таблицу изначальную не накатились,
-    // или новые данные затираются старые, новые вставились
-/*    @Test
-    @DataSet(provider = TestData.SaveMovieServiceProvider.class, executeStatementsBefore = {"SELECT setval('movies_movie_id_seq', 1)", "SELECT setval('genres_genre_id_seq', 2)"}, cleanAfter = true)
-    @ExpectedDataSet(provider = TestData.SaveMovieServiceResultProvider.class)
+    @Test
+    @DataSet(provider = TestData.SaveMovieServiceProvider.class,
+            executeStatementsBefore = "SELECT setval('movies_movie_id_seq', 1)", disableConstraints = true, cleanAfter = true)
+    @ExpectedDataSet(provider = TestData.SaveMovieServiceResultProvider.class, orderBy = "movie_id")
     @DisplayName("Returns movie details with converted price")
     void saveMovie() {
         //prepare
@@ -51,7 +54,7 @@ class DefaultMovieServiceITest {
                 .build();
         //when
         movieService.saveMovie(saveMovieRequest);
-    }*/
+    }
 
     @Test
     @DataSet(provider = TestData.MovieProvider.class, cleanAfter = true)
@@ -70,19 +73,17 @@ class DefaultMovieServiceITest {
     @DisplayName("Returns movie details")
     void findById() {
         //when
-        MovieDetails actualMovieDetails = movieService.findMovieDetailsByMovieId(1, Optional.ofNullable(null));
+        MovieDetails actualMovieDetails = movieService.findById(1, Optional.ofNullable(null));
 
-        *//** FIXME БЕЗ вывода в консоль тест не проходит. Причём в вызове в консоль строка 58 страны, жанры и отзывы пусты,
-     а в cтроке 64 полны
-     */
-        /*
-        System.out.println(actualMovieDetails);
+        *//* FIXME БЕЗ вывода в консоль тест не проходит. Причём в вызове в консоль строка 58 страны, жанры и отзывы пусты,
+     а в cтроке 64 полны*//*
+        //System.out.println(actualMovieDetails);
 
         //then
         assertNotNull(actualMovieDetails.getGenres());
         assertNotNull(actualMovieDetails.getReviews());
         assertNotNull(actualMovieDetails.getCountries());
-        System.out.println(actualMovieDetails);
+        //System.out.println(actualMovieDetails);
 
         assertEquals("США", actualMovieDetails.getCountries().get(0).getName());
         assertEquals("драма", actualMovieDetails.getGenres().get(0).getName());

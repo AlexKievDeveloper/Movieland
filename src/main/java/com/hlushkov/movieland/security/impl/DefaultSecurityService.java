@@ -58,7 +58,11 @@ public class DefaultSecurityService implements SecurityService {
         if (userUUID != null) {
             log.info("Request for user with UUID: {}", userUUID);
             if (sessionMap.get(userUUID) != null) {
-                return Optional.of(sessionMap.get(userUUID).getUser());
+                if (sessionMap.get(userUUID).getExpireDate().isAfter(LocalDateTime.now())) {
+                    return Optional.of(sessionMap.get(userUUID).getUser());
+                } else {
+                    sessionMap.remove(userUUID);
+                }
             }
         }
         log.info("Returned empty optional without user");

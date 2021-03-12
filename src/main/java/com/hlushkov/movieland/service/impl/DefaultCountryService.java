@@ -11,12 +11,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class DefaultCountryService implements CountryService {
-    private final CountryDao countryDao;
 
-    @Override
-    public void saveMoviesCountries(List<Integer> countriesIds, int movieId){
-        countryDao.saveMoviesCountries(countriesIds, movieId);
-    }
+    private final CountryDao countryDao;
 
     @Override
     public List<Country> findCountriesByMovieId(int movieId) {

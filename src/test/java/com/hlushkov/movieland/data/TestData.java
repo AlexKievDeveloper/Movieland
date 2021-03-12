@@ -2067,6 +2067,7 @@ public class TestData {
                     .values("23", "2").values("23", "7")
                     .values("24", "1").values("24", "7").values("24", "11").values("24", "15")
                     .values("25", "1").values("25", "11").values("25", "15")
+                    .values("26", "3").values("26", "4")
 
                     .table("countries")
                     .columns("country_id", "country_name")
@@ -2113,6 +2114,8 @@ public class TestData {
                     .values("24", "1")
                     .values("25", "1")
                     .values("25", "3")
+                    .values("26", "3")
+                    .values("26", "4")
 
                     .table("users")
                     .columns("user_id", "user_nickname", "user_email", "user_password", "user_salt", "user_role")

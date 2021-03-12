@@ -1,7 +1,7 @@
 package com.hlushkov.movieland.service.impl;
 
 import com.hlushkov.movieland.common.dto.MovieDetails;
-import com.hlushkov.movieland.common.request.MovieRequest;
+import com.hlushkov.movieland.common.request.FindMoviesRequest;
 import com.hlushkov.movieland.common.request.SaveMovieRequest;
 import com.hlushkov.movieland.dao.MovieDao;
 import com.hlushkov.movieland.entity.Movie;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,26 +29,14 @@ public class DefaultMovieService implements MovieService {
     @Value("${thread.interrupting.period}")
     private Integer threadInterruptingPeriod;
 
-    @Transactional
     @Override
     public void saveMovie(SaveMovieRequest saveMovieRequest) {
-        Integer movieId = movieDao.saveMovie(Movie.builder()
-                .nameRussian(saveMovieRequest.getNameRussian())
-                .nameNative(saveMovieRequest.getNameNative())
-                .description(saveMovieRequest.getDescription())
-                .yearOfRelease(saveMovieRequest.getYearOfRelease())
-                .price(saveMovieRequest.getPrice())
-                .rating(saveMovieRequest.getRating())
-                .picturePath(saveMovieRequest.getPicturePath())
-                .build());
-
-        countryService.saveMoviesCountries(saveMovieRequest.getCountriesIds(), movieId);
-        genreService.saveMoviesGenres(saveMovieRequest.getGenresIds(), movieId);
+        movieDao.saveMovie(saveMovieRequest);
     }
 
     @Override
-    public List<Movie> findMovies(MovieRequest movieRequest) {
-        return movieDao.findMovies(movieRequest);
+    public List<Movie> findMovies(FindMoviesRequest findMoviesRequest) {
+        return movieDao.findMovies(findMoviesRequest);
     }
 
     @Override
@@ -58,8 +45,8 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Override
-    public List<Movie> findByGenre(int genreId, MovieRequest movieRequest) {
-        return movieDao.findByGenre(genreId, movieRequest);
+    public List<Movie> findByGenre(int genreId, FindMoviesRequest findMoviesRequest) {
+        return movieDao.findByGenre(genreId, findMoviesRequest);
     }
 
     @Override

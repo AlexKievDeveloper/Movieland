@@ -1,7 +1,8 @@
 package com.hlushkov.movieland.dao.jdbc;
 
 import com.hlushkov.movieland.common.SortDirection;
-import com.hlushkov.movieland.common.request.MovieRequest;
+import com.hlushkov.movieland.common.request.FindMoviesRequest;
+import com.hlushkov.movieland.common.request.SaveMovieRequest;
 import com.hlushkov.movieland.dao.MovieDao;
 import com.hlushkov.movieland.dao.jdbc.mapper.MovieRowMapper;
 import com.hlushkov.movieland.entity.Movie;
@@ -14,6 +15,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -42,27 +44,30 @@ public class JdbcMovieDao implements MovieDao {
     @Value("${movie.random.count}")
     private Long randomMovieCount;
 
+    @Transactional
     @Override
-    public Integer saveMovie(Movie movie) {
+    public void saveMovie(SaveMovieRequest saveMovieRequest) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement statement = connection.prepareStatement(saveMovie, new String[]{constantMovieId});
-            statement.setString(1, movie.getNameRussian());
-            statement.setString(2, movie.getNameNative());
-            statement.setInt(3, movie.getYearOfRelease());
-            statement.setString(4, movie.getDescription());
-            statement.setDouble(5, movie.getRating());
-            statement.setDouble(6, movie.getPrice());
-            statement.setString(7, movie.getPicturePath());
+            statement.setString(1, saveMovieRequest.getNameRussian());
+            statement.setString(2, saveMovieRequest.getNameNative());
+            statement.setInt(3, saveMovieRequest.getYearOfRelease());
+            statement.setString(4, saveMovieRequest.getDescription());
+            statement.setDouble(5, saveMovieRequest.getRating());
+            statement.setDouble(6, saveMovieRequest.getPrice());
+            statement.setString(7, saveMovieRequest.getPicturePath());
             return statement;
         }, keyHolder);
 
-        return (Integer) Objects.requireNonNull(keyHolder.getKey());
+        Integer movieId = (Integer) Objects.requireNonNull(keyHolder.getKey());
+        addMoviesCountries(movieId, saveMovieRequest.getCountriesIds());
+        addMoviesGenres(movieId, saveMovieRequest.getGenresIds());
     }
 
     @Override
-    public List<Movie> findMovies(MovieRequest movieRequest) {
-        String generatedQueryForFindMovies = generateQuery(findAllMovies, movieRequest);
+    public List<Movie> findMovies(FindMoviesRequest findMoviesRequest) {
+        String generatedQueryForFindMovies = generateQuery(findAllMovies, findMoviesRequest);
         return jdbcTemplate.query(generatedQueryForFindMovies, movieRowMapper);
     }
 
@@ -72,8 +77,8 @@ public class JdbcMovieDao implements MovieDao {
     }
 
     @Override
-    public List<Movie> findByGenre(int genreId, MovieRequest movieRequest) {
-        String generatedQueryForFindMoviesByGenre = generateQuery(findMoviesByGenre, movieRequest);
+    public List<Movie> findByGenre(int genreId, FindMoviesRequest findMoviesRequest) {
+        String generatedQueryForFindMoviesByGenre = generateQuery(findMoviesByGenre, findMoviesRequest);
         return jdbcTemplate.query(generatedQueryForFindMoviesByGenre, movieRowMapper, genreId);
     }
 
@@ -174,14 +179,14 @@ public class JdbcMovieDao implements MovieDao {
         namedParameterJdbcTemplate.update(removeMoviesGenres, parametersMap);
     }
 
-    String generateQuery(String query, MovieRequest movieRequest) {
+    String generateQuery(String query, FindMoviesRequest findMoviesRequest) {
         String orderBy = " ORDER BY ";
-        if (movieRequest.getRatingDirection().isPresent()) {
-            if (movieRequest.getRatingDirection().get() == SortDirection.DESC) {
+        if (findMoviesRequest.getRatingDirection().isPresent()) {
+            if (findMoviesRequest.getRatingDirection().get() == SortDirection.DESC) {
                 return query + orderBy + "movie_rating " + SortDirection.DESC.getDirection();
             }
-        } else if (movieRequest.getPriceDirection().isPresent()) {
-            if (movieRequest.getPriceDirection().get() == SortDirection.DESC) {
+        } else if (findMoviesRequest.getPriceDirection().isPresent()) {
+            if (findMoviesRequest.getPriceDirection().get() == SortDirection.DESC) {
                 return query + orderBy + "movie_price " + SortDirection.DESC.getDirection();
             } else {
                 return query + orderBy + "movie_price " + SortDirection.ASC.getDirection();

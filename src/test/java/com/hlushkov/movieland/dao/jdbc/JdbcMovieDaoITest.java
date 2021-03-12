@@ -6,7 +6,8 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.hlushkov.movieland.common.SortDirection;
-import com.hlushkov.movieland.common.request.MovieRequest;
+import com.hlushkov.movieland.common.request.FindMoviesRequest;
+import com.hlushkov.movieland.common.request.SaveMovieRequest;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.entity.Movie;
@@ -30,12 +31,12 @@ class JdbcMovieDaoITest {
 
     @Test
     @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class,
-            executeStatementsBefore = "SELECT setval('movies_movie_id_seq', 25)", cleanAfter = true)
-    @ExpectedDataSet(provider = TestData.SaveMovieForDaoResultProvider.class)
+            executeStatementsBefore = "SELECT setval('movies_movie_id_seq', 25)", disableConstraints = true, cleanAfter = true)
+    @ExpectedDataSet(provider = TestData.SaveMovieForDaoResultProvider.class, orderBy = "movie_id")
     @DisplayName("Adds Movie to DB")
     void saveMovie() {
         //prepare
-        Movie movie = Movie.builder()
+        SaveMovieRequest saveMovieRequest = SaveMovieRequest.builder()
                 .nameRussian("Побег из тюрьмы Шоушенка")
                 .nameNative("The Shawshank Redemption prison")
                 .yearOfRelease(1994)
@@ -43,10 +44,12 @@ class JdbcMovieDaoITest {
                 .rating(8.0)
                 .price(123.45)
                 .picturePath("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
+                .genresIds(List.of(3, 4))
+                .countriesIds(List.of(3, 4))
                 .build();
 
         //when+then
-        jdbcMovieDao.saveMovie(movie);
+        jdbcMovieDao.saveMovie(saveMovieRequest);
     }
 
     @Test
@@ -54,11 +57,11 @@ class JdbcMovieDaoITest {
     @DisplayName("Returns list with all movies from DB")
     void findMovies() {
         //prepare
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setRatingDirection(Optional.ofNullable(null));
-        movieRequest.setPriceDirection(Optional.ofNullable(null));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(null));
+        findMoviesRequest.setPriceDirection(Optional.ofNullable(null));
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findMovies(movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findMovies(findMoviesRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(2, actualMovieList.size());
@@ -69,11 +72,11 @@ class JdbcMovieDaoITest {
     @DisplayName("Returns list with all movies from DB sorting by rating DESC")
     void findMoviesWithRatingDirectionTest() {
         //prepare
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setRatingDirection(Optional.of(SortDirection.DESC));
-        movieRequest.setPriceDirection(Optional.ofNullable(null));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setRatingDirection(Optional.of(SortDirection.DESC));
+        findMoviesRequest.setPriceDirection(Optional.ofNullable(null));
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findMovies(movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findMovies(findMoviesRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(2, actualMovieList.size());
@@ -86,11 +89,11 @@ class JdbcMovieDaoITest {
     @DisplayName("Returns list with all movies from DB sorted by price DESC")
     void findMoviesWithPriceDESCDirectionTest() {
         //prepare
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(Optional.of(SortDirection.DESC));
-        movieRequest.setRatingDirection(Optional.ofNullable(null));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setPriceDirection(Optional.of(SortDirection.DESC));
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(null));
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findMovies(movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findMovies(findMoviesRequest);
 
         //then
         assertNotNull(actualMovieList);
@@ -104,11 +107,11 @@ class JdbcMovieDaoITest {
     @DisplayName("Returns list with all movies from DB sorted by price ASC")
     void findMoviesWithPriceASCDirectionTest() {
         //prepare
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(Optional.ofNullable(SortDirection.ASC));
-        movieRequest.setRatingDirection(Optional.ofNullable(null));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setPriceDirection(Optional.ofNullable(SortDirection.ASC));
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(null));
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findMovies(movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findMovies(findMoviesRequest);
 
         //then
         assertNotNull(actualMovieList);
@@ -133,11 +136,11 @@ class JdbcMovieDaoITest {
     @DisplayName("Returns list with movies by genre from DB")
     void findMoviesByGenre() {
         //prepare
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(Optional.of(SortDirection.ASC));
-        movieRequest.setRatingDirection(Optional.ofNullable(null));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setPriceDirection(Optional.of(SortDirection.ASC));
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(null));
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findByGenre(2, movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findByGenre(2, findMoviesRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(2, actualMovieList.size());
@@ -148,11 +151,11 @@ class JdbcMovieDaoITest {
     @DisplayName("Returns list with movies by genre sorted by rating from DB")
     void findMoviesByGenreSortedByRating() {
         //prepare
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setRatingDirection(Optional.of(SortDirection.DESC));
-        movieRequest.setPriceDirection(Optional.ofNullable(null));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setRatingDirection(Optional.of(SortDirection.DESC));
+        findMoviesRequest.setPriceDirection(Optional.ofNullable(null));
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findByGenre(2, movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findByGenre(2, findMoviesRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(2, actualMovieList.size());
@@ -165,11 +168,11 @@ class JdbcMovieDaoITest {
     @DisplayName("Returns list with movies by genre sorted by price DESC from DB")
     void findMoviesByGenreSortedByPriceDesc() {
         //prepare
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(Optional.of(SortDirection.DESC));
-        movieRequest.setRatingDirection(Optional.ofNullable(null));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setPriceDirection(Optional.of(SortDirection.DESC));
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(null));
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findByGenre(2, movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findByGenre(2, findMoviesRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(2, actualMovieList.size());
@@ -182,11 +185,11 @@ class JdbcMovieDaoITest {
     @DisplayName("Returns list with movies by genre sorted by price ASC from DB")
     void findMoviesByGenreSortedByPriceAsc() {
         //prepare
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(Optional.of(SortDirection.ASC));
-        movieRequest.setRatingDirection(Optional.ofNullable(null));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setPriceDirection(Optional.of(SortDirection.ASC));
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(null));
         //when
-        List<Movie> actualMovieList = jdbcMovieDao.findByGenre(2, movieRequest);
+        List<Movie> actualMovieList = jdbcMovieDao.findByGenre(2, findMoviesRequest);
         //then
         assertNotNull(actualMovieList);
         assertEquals(2, actualMovieList.size());
@@ -215,11 +218,9 @@ class JdbcMovieDaoITest {
         assertEquals("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg", actualMovie.getPicturePath());
     }
 
-//FIXME
-
-/*    @Test
-    @DataSet(provider = TestData.AddMoviesGenresDataProvider.class, cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet(provider = TestData.AddMoviesGenresResultProvider.class)
+    @Test
+    @DataSet(provider = TestData.AddMoviesGenresDataProvider.class, disableConstraints = true, cleanAfter = true)
+    @ExpectedDataSet(provider = TestData.AddMoviesGenresResultProvider.class, orderBy = "genre_id")
     @DisplayName("Adds movies-genres")
     void addMoviesGenres() {
         //prepare
@@ -228,11 +229,10 @@ class JdbcMovieDaoITest {
         //when
         jdbcMovieDao.addMoviesGenres(1, genresIds);
     }
-//FIXME
 
     @Test
-    @DataSet(provider = TestData.AddMoviesCountriesDataProvider.class, cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet(provider = TestData.AddMoviesCountriesResultProvider.class)
+    @DataSet(provider = TestData.AddMoviesCountriesDataProvider.class, disableConstraints = true, cleanAfter = true)
+    @ExpectedDataSet(provider = TestData.AddMoviesCountriesResultProvider.class, orderBy = "movie_id")
     @DisplayName("Adds movies-countries")
     void addMoviesCountries() {
         //prepare
@@ -240,7 +240,7 @@ class JdbcMovieDaoITest {
 
         //when
         jdbcMovieDao.addMoviesCountries(1, countryIds);
-    }*/
+    }
 
     @Test
     @DataSet(provider = TestData.EditMovieDataProvider.class, cleanAfter = true)

@@ -1,7 +1,7 @@
 package com.hlushkov.movieland.service;
 
 import com.hlushkov.movieland.common.dto.MovieDetails;
-import com.hlushkov.movieland.common.request.MovieRequest;
+import com.hlushkov.movieland.common.request.FindMoviesRequest;
 import com.hlushkov.movieland.common.request.SaveMovieRequest;
 import com.hlushkov.movieland.entity.Movie;
 
@@ -12,11 +12,11 @@ public interface MovieService {
 
     void saveMovie(SaveMovieRequest saveMovieRequest);
 
-    List<Movie> findMovies(MovieRequest movieRequest);
+    List<Movie> findMovies(FindMoviesRequest findMoviesRequest);
 
     List<Movie> findRandom();
 
-    List<Movie> findByGenre(int genreId, MovieRequest movieRequest);
+    List<Movie> findByGenre(int genreId, FindMoviesRequest findMoviesRequest);
 
     MovieDetails findById(int movieId, Optional<String> requestedCurrency);
 

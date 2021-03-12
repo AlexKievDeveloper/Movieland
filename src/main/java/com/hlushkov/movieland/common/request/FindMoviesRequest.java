@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Optional;
 
 @Data
-public class MovieRequest {
+public class FindMoviesRequest {
     private Optional<SortDirection> ratingDirection;
     private Optional<SortDirection> priceDirection;
 }

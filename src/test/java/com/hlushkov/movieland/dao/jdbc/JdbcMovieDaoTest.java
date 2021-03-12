@@ -1,8 +1,7 @@
 package com.hlushkov.movieland.dao.jdbc;
 
 import com.hlushkov.movieland.common.SortDirection;
-import com.hlushkov.movieland.common.request.SaveMovieRequest;
-import com.hlushkov.movieland.common.request.MovieRequest;
+import com.hlushkov.movieland.common.request.FindMoviesRequest;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.entity.Movie;
 import org.junit.jupiter.api.DisplayName;
@@ -32,12 +31,12 @@ class JdbcMovieDaoTest {
         String expectedQuery = "SELECT movies.movie_id, movie_name_russian, movie_name_native, movie_year_of_release, " +
                 "movie_description, movie_rating, movie_price, movie_picture_path FROM movies";
 
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(Optional.ofNullable(null));
-        movieRequest.setRatingDirection(Optional.ofNullable(null));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setPriceDirection(Optional.ofNullable(null));
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(null));
 
         //when
-        String actualQuery = jdbcMovieDao.generateQuery(findAllMovies, movieRequest);
+        String actualQuery = jdbcMovieDao.generateQuery(findAllMovies, findMoviesRequest);
 
         //then
         assertEquals(expectedQuery, actualQuery);
@@ -50,12 +49,12 @@ class JdbcMovieDaoTest {
         String expectedQuery = "SELECT movies.movie_id, movie_name_russian, movie_name_native, movie_year_of_release, " +
                 "movie_description, movie_rating, movie_price, movie_picture_path FROM movies ORDER BY movie_rating desc";
 
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(Optional.ofNullable(null));
-        movieRequest.setRatingDirection(Optional.ofNullable(SortDirection.DESC));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setPriceDirection(Optional.ofNullable(null));
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(SortDirection.DESC));
 
         //when
-        String actualQuery = jdbcMovieDao.generateQuery(findAllMovies, movieRequest);
+        String actualQuery = jdbcMovieDao.generateQuery(findAllMovies, findMoviesRequest);
 
         //then
         assertEquals(expectedQuery, actualQuery);
@@ -68,12 +67,12 @@ class JdbcMovieDaoTest {
         String expectedQuery = "SELECT movies.movie_id, movie_name_russian, movie_name_native, movie_year_of_release, " +
                 "movie_description, movie_rating, movie_price, movie_picture_path FROM movies ORDER BY movie_price asc";
 
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(Optional.ofNullable(SortDirection.ASC));
-        movieRequest.setRatingDirection(Optional.ofNullable(null));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setPriceDirection(Optional.ofNullable(SortDirection.ASC));
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(null));
 
         //when
-        String actualQuery = jdbcMovieDao.generateQuery(findAllMovies, movieRequest);
+        String actualQuery = jdbcMovieDao.generateQuery(findAllMovies, findMoviesRequest);
 
         //then
         assertEquals(expectedQuery, actualQuery);
@@ -86,12 +85,12 @@ class JdbcMovieDaoTest {
         String expectedQuery = "SELECT movies.movie_id, movie_name_russian, movie_name_native, movie_year_of_release, " +
                 "movie_description, movie_rating, movie_price, movie_picture_path FROM movies ORDER BY movie_price desc";
 
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(Optional.ofNullable(SortDirection.DESC));
-        movieRequest.setRatingDirection(Optional.ofNullable(null));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setPriceDirection(Optional.ofNullable(SortDirection.DESC));
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(null));
 
         //when
-        String actualQuery = jdbcMovieDao.generateQuery(findAllMovies, movieRequest);
+        String actualQuery = jdbcMovieDao.generateQuery(findAllMovies, findMoviesRequest);
 
         //then
         assertEquals(expectedQuery, actualQuery);
@@ -105,12 +104,12 @@ class JdbcMovieDaoTest {
                 "movie_description, movie_rating, movie_price, movie_picture_path FROM movies LEFT JOIN movies_genres " +
                 "ON (movies.movie_id = movies_genres.movie_id) WHERE movies_genres.genre_id = ?";
 
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(Optional.ofNullable(null));
-        movieRequest.setRatingDirection(Optional.ofNullable(null));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setPriceDirection(Optional.ofNullable(null));
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(null));
 
         //when
-        String actualQuery = jdbcMovieDao.generateQuery(findMoviesByGenre, movieRequest);
+        String actualQuery = jdbcMovieDao.generateQuery(findMoviesByGenre, findMoviesRequest);
 
         //then
         assertEquals(expectedQuery, actualQuery);
@@ -125,12 +124,12 @@ class JdbcMovieDaoTest {
                 "LEFT JOIN movies_genres ON (movies.movie_id = movies_genres.movie_id) " +
                 "WHERE movies_genres.genre_id = ?";
 
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(Optional.ofNullable(null));
-        movieRequest.setRatingDirection(Optional.ofNullable(SortDirection.ASC));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setPriceDirection(Optional.ofNullable(null));
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(SortDirection.ASC));
 
         //when
-        String actualQuery = jdbcMovieDao.generateQuery(findMoviesByGenre, movieRequest);
+        String actualQuery = jdbcMovieDao.generateQuery(findMoviesByGenre, findMoviesRequest);
 
         //then
         assertEquals(expectedQuery, actualQuery);
@@ -146,12 +145,12 @@ class JdbcMovieDaoTest {
                 "LEFT JOIN movies_genres ON (movies.movie_id = movies_genres.movie_id) " +
                 "WHERE movies_genres.genre_id = ? ORDER BY movie_rating desc";
 
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(Optional.ofNullable(null));
-        movieRequest.setRatingDirection(Optional.ofNullable(SortDirection.DESC));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setPriceDirection(Optional.ofNullable(null));
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(SortDirection.DESC));
 
         //when
-        String actualQuery = jdbcMovieDao.generateQuery(findMoviesByGenre, movieRequest);
+        String actualQuery = jdbcMovieDao.generateQuery(findMoviesByGenre, findMoviesRequest);
 
         //then
         assertEquals(expectedQuery, actualQuery);
@@ -165,12 +164,12 @@ class JdbcMovieDaoTest {
                 "movie_description, movie_rating, movie_price, movie_picture_path FROM movies LEFT JOIN movies_genres " +
                 "ON (movies.movie_id = movies_genres.movie_id) WHERE movies_genres.genre_id = ? ORDER BY movie_price desc";
 
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(Optional.ofNullable(SortDirection.DESC));
-        movieRequest.setRatingDirection(Optional.ofNullable(null));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setPriceDirection(Optional.ofNullable(SortDirection.DESC));
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(null));
 
         //when
-        String actualQuery = jdbcMovieDao.generateQuery(findMoviesByGenre, movieRequest);
+        String actualQuery = jdbcMovieDao.generateQuery(findMoviesByGenre, findMoviesRequest);
 
         //then
         assertEquals(expectedQuery, actualQuery);
@@ -185,12 +184,12 @@ class JdbcMovieDaoTest {
                 "LEFT JOIN movies_genres ON (movies.movie_id = movies_genres.movie_id) " +
                 "WHERE movies_genres.genre_id = ? ORDER BY movie_price asc";
 
-        MovieRequest movieRequest = new MovieRequest();
-        movieRequest.setPriceDirection(Optional.ofNullable(SortDirection.ASC));
-        movieRequest.setRatingDirection(Optional.ofNullable(null));
+        FindMoviesRequest findMoviesRequest = new FindMoviesRequest();
+        findMoviesRequest.setPriceDirection(Optional.ofNullable(SortDirection.ASC));
+        findMoviesRequest.setRatingDirection(Optional.ofNullable(null));
 
         //when
-        String actualQuery = jdbcMovieDao.generateQuery(findMoviesByGenre, movieRequest);
+        String actualQuery = jdbcMovieDao.generateQuery(findMoviesByGenre, findMoviesRequest);
 
         //then
         assertEquals(expectedQuery, actualQuery);
