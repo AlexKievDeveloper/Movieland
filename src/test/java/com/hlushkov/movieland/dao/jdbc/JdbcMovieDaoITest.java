@@ -232,7 +232,7 @@ class JdbcMovieDaoITest {
 
     @Test
     @DataSet(provider = TestData.AddMoviesCountriesDataProvider.class, disableConstraints = true, cleanAfter = true)
-    @ExpectedDataSet(provider = TestData.AddMoviesCountriesResultProvider.class, orderBy = "movie_id")
+    @ExpectedDataSet(provider = TestData.AddMoviesCountriesResultProvider.class, orderBy = "country_id")
     @DisplayName("Adds movies-countries")
     void addMoviesCountries() {
         //prepare

@@ -10,5 +10,4 @@ public interface ReviewService {
 
     List<Review> findReviewsByMovieId(int movieId);
 
-    //void updateReviews(int movieId, List<Review> reviews);
 }

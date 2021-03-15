@@ -10,5 +10,4 @@ public interface ReviewDao {
 
     List<Review> findReviewsByMovieId(int movieId);
 
-    //void removeReviewByMovieId(int movieId);
 }

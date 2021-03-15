@@ -325,8 +325,7 @@ class MovieControllerITest {
         }
     }
 
-    //FIXME
-/*    @Test
+    @Test
     @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
     @DisplayName("Returns movie by id in json format")
     void findById() throws Exception {
@@ -357,9 +356,8 @@ class MovieControllerITest {
             assertEquals("application/json", response.getContentType());
             assertNotNull(response.getContentAsString());
         }
-    }*/
+    }
 
-/*    //FIXME
     @Test
     @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Returns movie by id in json format value in USD")
@@ -396,7 +394,6 @@ class MovieControllerITest {
         }
     }
 
-    //FIXME
     @Test
     @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
     @DisplayName("Returns movie by id in json format value in EUR")
@@ -431,7 +428,7 @@ class MovieControllerITest {
             assertEquals("application/json", response.getContentType());
             assertNotNull(response.getContentAsString());
         }
-    }*/
+    }
 
     @Test
     @DataSet(provider = TestData.EditMovieDataProvider.class, cleanAfter = true)

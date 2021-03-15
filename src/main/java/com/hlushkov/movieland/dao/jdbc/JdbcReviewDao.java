@@ -19,7 +19,6 @@ public class JdbcReviewDao implements ReviewDao {
     private final JdbcTemplate jdbcTemplate;
     private final String addReview;
     private final String findReviewsByMovieId;
-    //private final String removeMoviesReviewByMovieId;
 
     @Override
     public void addReview(Review review) {
@@ -32,11 +31,6 @@ public class JdbcReviewDao implements ReviewDao {
     public List<Review> findReviewsByMovieId(int movieId) {
         return jdbcTemplate.query(findReviewsByMovieId, reviewRowMapper, movieId);
     }
-
-/*    @Override
-    public void removeReviewsByMovieId(int movieId) {
-        return;jdbcTemplate.update(, movieId);
-    }*/
 
     MapSqlParameterSource getSqlParameterSource(int userId, int movieId, String text) {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();

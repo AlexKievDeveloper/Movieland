@@ -20,8 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DBRider
 @DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
@@ -68,22 +67,17 @@ class DefaultMovieServiceITest {
         assertEquals(expectedPrice, actualMovieDetails.getPrice());
     }
 
-/*    @Test
+    @Test
     @DataSet(provider = TestData.AddMovieResultProvider.class, cleanAfter = true)
     @DisplayName("Returns movie details")
     void findById() {
         //when
         MovieDetails actualMovieDetails = movieService.findById(1, Optional.ofNullable(null));
 
-        *//* FIXME БЕЗ вывода в консоль тест не проходит. Причём в вызове в консоль строка 58 страны, жанры и отзывы пусты,
-     а в cтроке 64 полны*//*
-        //System.out.println(actualMovieDetails);
-
         //then
         assertNotNull(actualMovieDetails.getGenres());
         assertNotNull(actualMovieDetails.getReviews());
         assertNotNull(actualMovieDetails.getCountries());
-        //System.out.println(actualMovieDetails);
 
         assertEquals("США", actualMovieDetails.getCountries().get(0).getName());
         assertEquals("драма", actualMovieDetails.getGenres().get(0).getName());
@@ -96,6 +90,6 @@ class DefaultMovieServiceITest {
         assertEquals(1, actualMovieDetails.getReviews().get(1).getMovieId());
         assertEquals(3, actualMovieDetails.getReviews().get(1).getUserId());
         assertEquals("Кино это является, безусловно, «со знаком качества». Что же до первого места в рейтинге, то, думаю, здесь имело место быть выставление «десяточек» от большинства зрителей вкупе с раздутыми восторженными откликами кинокритиков. 'Фильм атмосферный. Он драматичный. И, конечно, заслуживает того, чтобы находиться довольно высоко в мировом кинематографе.", actualMovieDetails.getReviews().get(1).getText());
-    }*/
+    }
 
 }

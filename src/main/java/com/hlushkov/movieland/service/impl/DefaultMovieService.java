@@ -4,18 +4,21 @@ import com.hlushkov.movieland.common.dto.MovieDetails;
 import com.hlushkov.movieland.common.request.FindMoviesRequest;
 import com.hlushkov.movieland.common.request.SaveMovieRequest;
 import com.hlushkov.movieland.dao.MovieDao;
+import com.hlushkov.movieland.entity.Country;
+import com.hlushkov.movieland.entity.Genre;
 import com.hlushkov.movieland.entity.Movie;
+import com.hlushkov.movieland.entity.Review;
 import com.hlushkov.movieland.service.*;
-import com.hlushkov.movieland.service.util.TimeoutedThreadPool;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Slf4j
 @Service
@@ -26,6 +29,7 @@ public class DefaultMovieService implements MovieService {
     private final GenreService genreService;
     private final ReviewService reviewService;
     private final CurrencyService currencyService;
+    @Setter(AccessLevel.PACKAGE)
     @Value("${thread.interrupting.period}")
     private Integer threadInterruptingPeriod;
 
@@ -63,12 +67,26 @@ public class DefaultMovieService implements MovieService {
                 .rating(movie.getRating())
                 .picturePath(movie.getPicturePath()).build();
 
+        Callable<List<Genre>> getGenres = () -> genreService.findByMovieId(movieId);
+        Callable<List<Country>> getCountries = () -> countryService.findCountriesByMovieId(movieId);
+        Callable<List<Review>> getReviews = () -> reviewService.findReviewsByMovieId(movieId);
 
-        TimeoutedThreadPool threadPool = new TimeoutedThreadPool(threadInterruptingPeriod, 1, 10, 5, TimeUnit.MINUTES, new SynchronousQueue());
-        threadPool.execute(() -> movieDetails.setGenres(genreService.findByMovieId(movieId)));
-        threadPool.execute(() -> movieDetails.setCountries(countryService.findCountriesByMovieId(movieId)));
-        threadPool.execute(() -> movieDetails.setReviews(reviewService.findReviewsByMovieId(movieId)));
+        ExecutorService service = Executors.newCachedThreadPool();
 
+        try {
+            movieDetails.setGenres(service.submit(getGenres).get(threadInterruptingPeriod, TimeUnit.MILLISECONDS));
+            movieDetails.setCountries(service.submit(getCountries).get(threadInterruptingPeriod, TimeUnit.MILLISECONDS));
+            movieDetails.setReviews(service.submit(getReviews).get(threadInterruptingPeriod, TimeUnit.MILLISECONDS));
+        } catch (InterruptedException e) {
+            log.error("InterruptedException, thread name: {}: ", Thread.currentThread().getName(), e);
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e) {
+            log.error("Execution Exception, thread name: {}: ", Thread.currentThread().getName(), e);
+        } catch (TimeoutException e) {
+            log.error("Timeout Exception, thread name: {}: ", Thread.currentThread().getName(), e);
+        }
+
+        service.shutdown();
         log.debug("MovieDetails: {}", movieDetails);
         return movieDetails;
     }

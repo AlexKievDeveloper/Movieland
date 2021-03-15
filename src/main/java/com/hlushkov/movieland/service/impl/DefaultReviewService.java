@@ -2,7 +2,6 @@ package com.hlushkov.movieland.service.impl;
 
 import com.hlushkov.movieland.dao.ReviewDao;
 import com.hlushkov.movieland.entity.Review;
-import com.hlushkov.movieland.security.util.UserHolder;
 import com.hlushkov.movieland.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,13 +25,4 @@ public class DefaultReviewService implements ReviewService {
         return reviewDao.findReviewsByMovieId(movieId);
     }
 
-/*    @Override
-    public void updateReviews(int movieId, List<Review> reviews) {
-        reviewDao.removeReviewByMovieId(movieId);
-
-        for (Review review : reviews) {
-            reviewDao.addReview(review);
-        }
-
-    }*/
 }
