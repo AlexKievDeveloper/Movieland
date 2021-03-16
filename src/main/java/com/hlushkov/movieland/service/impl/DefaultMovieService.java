@@ -56,16 +56,16 @@ public class DefaultMovieService implements MovieService {
     @Override
     public MovieDetails findById(int movieId, Optional<String> requestedCurrency) {
         Movie movie = movieDao.findById(movieId);
-        requestedCurrency.ifPresent(currency -> movie.setPrice(currencyService.convert(movie.getPrice(), currency)));
-        MovieDetails movieDetails = MovieDetails.builder()
-                .id(movie.getId())
-                .nameNative(movie.getNameNative())
-                .nameRussian(movie.getNameRussian())
-                .yearOfRelease(movie.getYearOfRelease())
-                .description(movie.getDescription())
-                .price(movie.getPrice())
-                .rating(movie.getRating())
-                .picturePath(movie.getPicturePath()).build();
+        MovieDetails movieDetails = MovieDetails.builder().build();
+        movieDetails.setId(movie.getId());
+        movieDetails.setNameNative(movie.getNameNative());
+        movieDetails.setNameRussian(movie.getNameRussian());
+        movieDetails.setYearOfRelease(movie.getYearOfRelease());
+        movieDetails.setDescription(movie.getDescription());
+        movieDetails.setPrice(movie.getPrice());
+        movieDetails.setRating(movie.getRating());
+        movieDetails.setPicturePath(movie.getPicturePath());
+        requestedCurrency.ifPresent(currency -> movieDetails.setPrice(currencyService.convert(movie.getPrice(), currency)));
 
         Callable<List<Genre>> getGenres = () -> genreService.findByMovieId(movieId);
         Callable<List<Country>> getCountries = () -> countryService.findCountriesByMovieId(movieId);
@@ -82,7 +82,9 @@ public class DefaultMovieService implements MovieService {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
             log.error("Execution Exception, thread name: {}: ", Thread.currentThread().getName(), e);
+            Thread.currentThread().interrupt();
         } catch (TimeoutException e) {
+            Thread.currentThread().interrupt();
             log.error("Timeout Exception, thread name: {}: ", Thread.currentThread().getName(), e);
         }
 

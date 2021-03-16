@@ -84,6 +84,7 @@ public class JdbcMovieDao implements MovieDao {
 
     @Override
     public Movie findById(int movieId) {
+        log.info("Request for find movie by id from database, id {}", movieId);
         return jdbcTemplate.queryForObject(findMovieById, movieRowMapper, movieId);
     }
 

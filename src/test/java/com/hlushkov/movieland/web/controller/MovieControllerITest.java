@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfig
 @DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
 @ExtendWith(MockitoExtension.class)
 @TestWebContextConfiguration
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+/*@TestInstance(TestInstance.Lifecycle.PER_CLASS)*/
 class MovieControllerITest {
     private MockMvc mockMvc;
     @Autowired
@@ -359,7 +359,7 @@ class MovieControllerITest {
     }
 
     @Test
-    @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanBefore = true, cleanAfter = true)
+    @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
     @DisplayName("Returns movie by id in json format value in USD")
     void findByIdWithCurrencyUSD() throws Exception {
         //prepare

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @TestWebContextConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CachedGenreDaoTest {
+class CachedGenreDaoITest {
     @Autowired
     private CachedGenreDao cachedDao;
 

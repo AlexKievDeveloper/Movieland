@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Movie {
+public class Movie implements Cloneable {
     private int id;
     private String nameRussian;
     private String nameNative;
@@ -18,4 +18,18 @@ public class Movie {
     private double rating;
     private double price;
     private String picturePath;
+
+    @Override
+    public Movie clone() {
+        return Movie.builder()
+                .id(this.getId())
+                .nameRussian(this.getNameRussian())
+                .nameNative(this.getNameNative())
+                .description(this.getDescription())
+                .yearOfRelease(this.getYearOfRelease())
+                .rating(this.getRating())
+                .price(this.getPrice())
+                .picturePath(this.getPicturePath())
+                .build();
+    }
 }
