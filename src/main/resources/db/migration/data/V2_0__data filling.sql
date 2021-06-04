@@ -1,13 +1,3 @@
-INSERT INTO countries (country_name) VALUES ('США');
-INSERT INTO countries (country_name) VALUES ('Франция');
-INSERT INTO countries (country_name) VALUES ('Великобритания');
-INSERT INTO countries (country_name) VALUES ('Италия');
-INSERT INTO countries (country_name) VALUES ('Германия');
-INSERT INTO countries (country_name) VALUES ('Япония');
-INSERT INTO countries (country_name) VALUES ('Испания');
-
-
-
 INSERT INTO movies (movie_name_russian, movie_name_native, movie_year_of_release, movie_description, movie_rating, movie_price, movie_picture_path)
 VALUES ('Побег из Шоушенка', 'The Shawshank Redemption', '1994',
         'Успешный банкир Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника. Оказавшись в тюрьме под названием Шоушенк,' ||
@@ -187,9 +177,6 @@ VALUES ('Танцующий с волками', 'Dances with Wolves', '1990',
         'обитателями Северной Америки, просто не осталось. Казалось, он покинут всеми. Постепенно лейтенант осваивается, ' ||
         'он ведет записи в дневнике…',
         '8.00', '120.55', 'https://images-na.ssl-images-amazon.com/images/M/MV5BMTY3OTI5NDczN15BMl5BanBnXkFtZTcwNDA0NDY3Mw@@._V1._SX140_CR0,0,140,209_.jpg');
-
-
-
 
 INSERT INTO users (user_nickname, user_email, user_password, user_salt, user_role)
 VALUES ('Рональд Рейнольдс', 'ronald.reynolds66@example.com', 'paco', 'salt1', 'user');

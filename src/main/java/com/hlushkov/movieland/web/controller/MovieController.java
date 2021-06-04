@@ -40,7 +40,7 @@ public class MovieController {
     @Secured({Role.USER, Role.ADMIN})
     @GetMapping("{movieId}")
     public MovieDetails findById(@PathVariable int movieId,
-                                      @RequestParam(value = "currency", required = false) String currency) {
+                                 @RequestParam(value = "currency", required = false) String currency) {
         log.debug("Request for movie with id: {} received", movieId);
         return movieService.findById(movieId, Optional.ofNullable(currency));
     }
@@ -77,8 +77,7 @@ public class MovieController {
     @PutMapping("{movieId}")
     public void editMovie(@PathVariable(required = false) Integer movieId, @RequestBody Movie movie) {
         log.info("Request for edit movie");
-        movie.setId(movieId);
-        movieService.editMovie(movie);
+        movieService.editMovie(movie, movieId);
     }
 
     @Secured({Role.ADMIN})

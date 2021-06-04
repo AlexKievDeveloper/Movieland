@@ -51,7 +51,7 @@ class JdbcGenreDaoITest {
     @DisplayName("Returns list of genres by movie id")
     void getByMovieId() {
         //when
-        List<Genre> actualGenreList = jdbcGenreDao.findByMovieId(1);
+        List<Genre> actualGenreList = jdbcGenreDao.findGenreByMovieId(1);
         //then
         assertEquals(2, actualGenreList.size());
         assertEquals(1, actualGenreList.get(0).getId());

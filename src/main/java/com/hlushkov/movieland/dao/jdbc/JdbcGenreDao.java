@@ -23,7 +23,7 @@ public class JdbcGenreDao implements GenreDao {
     }
 
     @Override
-    public List<Genre> findByMovieId(int movieId) {
+    public List<Genre> findGenreByMovieId(int movieId) {
         return jdbcTemplate.query(findGenresByMovieId, genreRowMapper, movieId);
     }
 

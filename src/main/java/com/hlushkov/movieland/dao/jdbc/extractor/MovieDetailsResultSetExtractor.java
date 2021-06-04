@@ -4,7 +4,6 @@ import com.hlushkov.movieland.common.dto.MovieDetails;
 import com.hlushkov.movieland.entity.Country;
 import com.hlushkov.movieland.entity.Genre;
 import com.hlushkov.movieland.entity.Review;
-import com.hlushkov.movieland.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -42,11 +41,6 @@ public class MovieDetailsResultSetExtractor implements ResultSetExtractor<MovieD
                 .id(resultSet.getInt("country_id"))
                 .name(resultSet.getString("country_name"))
                 .build();
-/*        User firstUser = User.builder()
-                .id(resultSet.getInt("user_id"))
-                .nickname(resultSet.getString("user_nickname"))
-                .build();*/
-
         Review firstReview = Review.builder()
                 .id(resultSet.getInt("review_id"))
                 .userId(resultSet.getInt("user_id"))
@@ -69,11 +63,6 @@ public class MovieDetailsResultSetExtractor implements ResultSetExtractor<MovieD
                     .id(resultSet.getInt("country_id"))
                     .name(resultSet.getString("country_name"))
                     .build();
-/*            User user = User.builder()
-                    .id(resultSet.getInt("user_id"))
-                    .nickname(resultSet.getString("user_nickname"))
-                    .build();*/
-
             Review review = Review.builder()
                     .id(resultSet.getInt("review_id"))
                     .userId(resultSet.getInt("user_id"))

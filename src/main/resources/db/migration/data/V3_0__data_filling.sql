@@ -73,9 +73,6 @@ INSERT INTO movies_genres (movie_id, genre_id) VALUES (25, 1);
 INSERT INTO movies_genres (movie_id, genre_id) VALUES (25, 11);
 INSERT INTO movies_genres (movie_id, genre_id) VALUES (25, 15);
 
-
-
-
 INSERT INTO movies_countries (movie_id, country_id) VALUES (1,1);
 INSERT INTO movies_countries (movie_id, country_id) VALUES (2,1);
 INSERT INTO movies_countries (movie_id, country_id) VALUES (3,1);
@@ -110,9 +107,6 @@ INSERT INTO movies_countries (movie_id, country_id) VALUES (23,4);
 INSERT INTO movies_countries (movie_id, country_id) VALUES (24,1);
 INSERT INTO movies_countries (movie_id, country_id) VALUES (25,1);
 INSERT INTO movies_countries (movie_id, country_id) VALUES (25,3);
-
-
-
 
 INSERT INTO reviews (movie_id, user_id, review_text)
 VALUES (1, 2,

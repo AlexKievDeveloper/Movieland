@@ -23,8 +23,11 @@ public class CachedMovieDao implements MovieDao {
     private final Map<Integer, SoftReference<Movie>> cachedMovieMap = new ConcurrentHashMap<>();
 
     @Override
-    public void saveMovie(SaveMovieRequest saveMovieRequest) {
-        movieDao.saveMovie(saveMovieRequest);
+    public int saveMovie(SaveMovieRequest saveMovieRequest) {
+        int movieId = movieDao.saveMovie(saveMovieRequest);
+        Movie movie = movieDao.findById(movieId);
+        cachedMovieMap.put(movieId, new SoftReference<>(movie));
+        return movieId;
     }
 
     @Override
@@ -56,12 +59,11 @@ public class CachedMovieDao implements MovieDao {
     }
 
     @Override
-    public void editMovie(Movie movie) {
-        movieDao.editMovie(movie);
+    public void editMovie(Movie movie, Integer movieId) {
+        movieDao.editMovie(movie, movieId);
         if (cachedMovieMap.containsKey(movie.getId())) {
             log.info("Updating movie with id: {} in movie cache", movie.getId());
-            Movie updatedMovie = (movieDao.findById(movie.getId()));
-            cachedMovieMap.put(movie.getId(), new SoftReference<>(updatedMovie));
+            cachedMovieMap.put(movie.getId(), new SoftReference<>(movie));
         }
     }
 

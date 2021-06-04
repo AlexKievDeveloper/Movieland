@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -22,7 +23,7 @@ public class DefaultReviewService implements ReviewService {
 
     @Override
     public List<Review> findReviewsByMovieId(int movieId) {
+        log.info("Method findReviewsByMovieId started: {}", LocalDateTime.now());
         return reviewDao.findReviewsByMovieId(movieId);
     }
-
 }

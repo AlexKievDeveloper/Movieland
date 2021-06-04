@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfig
 @DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
 @ExtendWith(MockitoExtension.class)
 @TestWebContextConfiguration
-/*@TestInstance(TestInstance.Lifecycle.PER_CLASS)*/
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MovieControllerITest {
     private MockMvc mockMvc;
     @Autowired

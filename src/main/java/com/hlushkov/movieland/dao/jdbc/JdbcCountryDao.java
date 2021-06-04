@@ -14,7 +14,13 @@ import java.util.List;
 public class JdbcCountryDao implements CountryDao {
     private final CountryRowMapper countryRowMapper = new CountryRowMapper();
     private final JdbcTemplate jdbcTemplate;
+    private final String findAllCountries;
     private final String findCountriesByMovieId;
+
+    @Override
+    public List<Country> findAll() {
+        return jdbcTemplate.query(findAllCountries, countryRowMapper);
+    }
 
     @Override
     public List<Country> findCountriesByMovieId(int movieId) {

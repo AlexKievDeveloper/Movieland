@@ -40,7 +40,6 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
-        }
-        return true;
+        } else return "login".equals(handlerMethod.getMethod().getName());
     }
 }

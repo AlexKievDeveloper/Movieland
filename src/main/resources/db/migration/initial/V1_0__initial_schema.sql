@@ -77,5 +77,15 @@ INSERT INTO genres (genre_name) VALUES ('мультфильм');
 INSERT INTO genres (genre_name) VALUES ('семейный');
 INSERT INTO genres (genre_name) VALUES ('вестерн');
 
+INSERT INTO countries (country_name) VALUES ('США');
+INSERT INTO countries (country_name) VALUES ('Франция');
+INSERT INTO countries (country_name) VALUES ('Великобритания');
+INSERT INTO countries (country_name) VALUES ('Италия');
+INSERT INTO countries (country_name) VALUES ('Германия');
+INSERT INTO countries (country_name) VALUES ('Япония');
+INSERT INTO countries (country_name) VALUES ('Испания');
+
+
+
 
 

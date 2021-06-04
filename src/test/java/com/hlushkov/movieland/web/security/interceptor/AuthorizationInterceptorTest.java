@@ -5,13 +5,12 @@ import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.hlushkov.movieland.common.Role;
-import com.hlushkov.movieland.security.util.UserHolder;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.entity.User;
+import com.hlushkov.movieland.security.util.UserHolder;
 import com.hlushkov.movieland.web.controller.AuthorizationController;
 import com.hlushkov.movieland.web.controller.MovieController;
-import com.hlushkov.movieland.web.security.interceptor.AuthorizationInterceptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -97,6 +96,17 @@ class AuthorizationInterceptorTest {
 
             assertEquals("application/json", response.getContentType());
         }
+    }
+
+    @Test
+    @DataSet(provider = TestData.UserProvider.class, cleanAfter = true)
+    @DisplayName("Return true without checking user role")
+    void preHandleMethodWithSecureAnnotationWithoutUser() throws Exception {
+        //when+then
+        mockMvcWithMovieController.perform(get("/movies"))
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+                .andReturn().getResponse();
     }
 }
 

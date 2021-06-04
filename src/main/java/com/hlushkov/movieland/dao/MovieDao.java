@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface MovieDao {
 
-    void saveMovie(SaveMovieRequest saveMovieRequest);
+    int saveMovie(SaveMovieRequest saveMovieRequest);
 
     List<Movie> findMovies(FindMoviesRequest findMoviesRequest);
 
@@ -18,7 +18,7 @@ public interface MovieDao {
 
     Movie findById(int movieId);
 
-    void editMovie(Movie movie);
+    void editMovie(Movie movie, Integer movieId);
 
     void editMovieGenres(Integer movieId, List<Integer> genreIds);
 

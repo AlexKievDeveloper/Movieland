@@ -119,6 +119,11 @@ public class QueriesContext {
      */
 
     @Bean
+    public String findAllCountries() {
+        return "SELECT countries.country_id, country_name FROM countries;";
+    }
+
+    @Bean
     public String findCountriesByMovieId() {
         return "SELECT countries.country_id, country_name FROM movies_countries LEFT JOIN countries ON(movies_countries.country_id = countries.country_id) WHERE movie_id = ?";
     }

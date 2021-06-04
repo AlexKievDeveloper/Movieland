@@ -2169,46 +2169,6 @@ public class TestData {
                             "8.9",
                             "134.67",
                             "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-
-
-/*                    .table("genres")
-                    .columns("genre_id", "genre_name")
-                    .values("1", "драма")
-                    .values("2", "криминал")
-                    .values("3", "фэнтези")
-                    .values("4", "детектив")
-                    .values("5", "мелодрама")
-                    .values("6", "биография")
-                    .values("7", "комедия")
-                    .values("8", "фантастика")
-                    .values("9", "боевик")
-                    .values("10", "триллер")
-                    .values("11", "приключения")
-                    .values("12", "аниме")
-                    .values("13", "мультфильм")
-                    .values("14", "семейный")
-                    .values("15", "вестерн")
-
-                    .table("movies_genres")
-                    .columns("movie_id", "genre_id")
-                    .values("1", "1").values("1", "2")
-                    .values("2", "1").values("2", "2").values("2", "3").values("2", "4")
-
-
-                    .table("countries")
-                    .columns("country_id", "country_name")
-                    .values("1", "США")
-                    .values("2", "Франция")
-                    .values("3", "Великобритания")
-                    .values("4", "Италия")
-                    .values("5", "Германия")
-                    .values("6", "Япония")
-                    .values("7", "Испания")
-
-                    .table("movies_countries")
-                    .columns("movie_id", "country_id")
-                    .values("1", "1")
-                    .values("2", "1")*/
                     .build();
         }
     }
@@ -2241,45 +2201,6 @@ public class TestData {
                             "8.0",
                             "123.45",
                             "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
-
-/*                    .table("genres")
-                    .columns("genre_id", "genre_name")
-                    .values("1", "драма")
-                    .values("2", "криминал")
-                    .values("3", "фэнтези")
-                    .values("4", "детектив")
-                    .values("5", "мелодрама")
-                    .values("6", "биография")
-                    .values("7", "комедия")
-                    .values("8", "фантастика")
-                    .values("9", "боевик")
-                    .values("10", "триллер")
-                    .values("11", "приключения")
-                    .values("12", "аниме")
-                    .values("13", "мультфильм")
-                    .values("14", "семейный")
-                    .values("15", "вестерн")
-
-                    .table("movies_genres")
-                    .columns("movie_id", "genre_id")
-                    .values("1", "1").values("1", "2")
-                    .values("2", "4").values("2", "5").values("2", "6")
-
-                    .table("countries")
-                    .columns("country_id", "country_name")
-                    .values("1", "США")
-                    .values("2", "Франция")
-                    .values("3", "Великобритания")
-                    .values("4", "Италия")
-                    .values("5", "Германия")
-                    .values("6", "Япония")
-                    .values("7", "Испания")
-
-                    .table("movies_countries")
-                    .columns("movie_id", "country_id")
-                    .values("1", "1")
-                    .values("2", "3")
-                    .values("2", "4")*/
                     .build();
         }
     }

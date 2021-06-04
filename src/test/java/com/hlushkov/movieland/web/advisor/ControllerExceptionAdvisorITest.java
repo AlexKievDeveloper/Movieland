@@ -5,10 +5,10 @@ import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.hlushkov.movieland.common.Role;
-import com.hlushkov.movieland.security.util.UserHolder;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.data.TestData;
 import com.hlushkov.movieland.entity.User;
+import com.hlushkov.movieland.security.util.UserHolder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,10 +29,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfigurer.sharedHttpSession;
 
@@ -67,24 +67,26 @@ class ControllerExceptionAdvisorITest {
                 .contentType("application/json")
                 .content(jsonNoValidUserCredentials))
                 .andDo(print())
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isUnauthorized())
                 .andReturn().getResponse();
 
         assertNull(response.getCookie("user_uuid"));
     }
 
     @Test
-    @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanAfter = true)
+    @DataSet(provider = TestData.MoviesCountriesGenresReviewsUsers.class, cleanBefore = true, cleanAfter = true)
     @DisplayName("Catch IllegalArgumentException and send message and bad request status as response")
     void badRequestIllegalArgumentException() throws Exception {
         //when
+        //assertThrows(EmptyResultDataAccessException.class, () -> {
         try (MockedStatic<UserHolder> theMock = Mockito.mockStatic(UserHolder.class)) {
             theMock.when(UserHolder::getUser).thenReturn(User.builder().role(Role.USER).build());
 
-            mockMvc.perform(get("/movies/26"))
+            mockMvc.perform(get("/movies/100"))
                     .andDo(print())
                     .andExpect(status().isBadRequest());
         }
+        //});
     }
 
     @Test

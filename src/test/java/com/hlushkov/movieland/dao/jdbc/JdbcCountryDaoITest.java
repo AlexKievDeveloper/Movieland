@@ -21,9 +21,18 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
 @TestWebContextConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class JdbcCountryDaoTest {
+class JdbcCountryDaoITest {
     @Autowired
     private CountryDao countryDao;
+
+    @Test
+    void findAll() {
+        //when
+        List<Country> actualCountries = countryDao.findAll();
+        //then
+        assertNotNull(actualCountries);
+        assertEquals(7, actualCountries.size());
+    }
 
     @Test
     @DataSet(provider = TestData.AddMovieResultProvider.class, cleanAfter = true)

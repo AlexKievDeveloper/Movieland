@@ -19,7 +19,9 @@ public class TestConfiguration {
     public DataSource dataSource(@Value("${jdbc.maximum.pool.size}") int maximumPoolSize) {
 
         PostgreSQLContainer postgresContainer = new PostgreSQLContainer("postgres:13.1");
-        log.info(postgresContainer.getLogs());
+        log.info("Postgres container database name: {}", postgresContainer.getDatabaseName());
+        log.info("Postgres container username: {}", postgresContainer.getUsername());
+        log.info("Postgres container password: {}", postgresContainer.getPassword());
         postgresContainer.start();
 
         HikariConfig hikariConfig = new HikariConfig();

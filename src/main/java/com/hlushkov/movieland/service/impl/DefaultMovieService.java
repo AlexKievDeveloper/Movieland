@@ -1,37 +1,28 @@
 package com.hlushkov.movieland.service.impl;
 
+import com.hlushkov.movieland.common.EnrichmentType;
 import com.hlushkov.movieland.common.dto.MovieDetails;
 import com.hlushkov.movieland.common.request.FindMoviesRequest;
 import com.hlushkov.movieland.common.request.SaveMovieRequest;
 import com.hlushkov.movieland.dao.MovieDao;
-import com.hlushkov.movieland.entity.Country;
-import com.hlushkov.movieland.entity.Genre;
 import com.hlushkov.movieland.entity.Movie;
-import com.hlushkov.movieland.entity.Review;
-import com.hlushkov.movieland.service.*;
-import lombok.AccessLevel;
+import com.hlushkov.movieland.service.CurrencyService;
+import com.hlushkov.movieland.service.MovieEnrichmentService;
+import com.hlushkov.movieland.service.MovieService;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class DefaultMovieService implements MovieService {
     private final MovieDao movieDao;
-    private final CountryService countryService;
-    private final GenreService genreService;
-    private final ReviewService reviewService;
+    private final MovieEnrichmentService movieEnrichmentService;
     private final CurrencyService currencyService;
-    @Setter(AccessLevel.PACKAGE)
-    @Value("${thread.interrupting.period}")
-    private Integer threadInterruptingPeriod;
 
     @Override
     public void saveMovie(SaveMovieRequest saveMovieRequest) {
@@ -56,46 +47,16 @@ public class DefaultMovieService implements MovieService {
     @Override
     public MovieDetails findById(int movieId, Optional<String> requestedCurrency) {
         Movie movie = movieDao.findById(movieId);
-        MovieDetails movieDetails = MovieDetails.builder().build();
-        movieDetails.setId(movie.getId());
-        movieDetails.setNameNative(movie.getNameNative());
-        movieDetails.setNameRussian(movie.getNameRussian());
-        movieDetails.setYearOfRelease(movie.getYearOfRelease());
-        movieDetails.setDescription(movie.getDescription());
-        movieDetails.setPrice(movie.getPrice());
-        movieDetails.setRating(movie.getRating());
-        movieDetails.setPicturePath(movie.getPicturePath());
+        MovieDetails movieDetails = movieEnrichmentService.enrich(movie, EnrichmentType.GENRES,
+                EnrichmentType.COUNTRIES, EnrichmentType.REVIEWS);
         requestedCurrency.ifPresent(currency -> movieDetails.setPrice(currencyService.convert(movie.getPrice(), currency)));
-
-        Callable<List<Genre>> getGenres = () -> genreService.findByMovieId(movieId);
-        Callable<List<Country>> getCountries = () -> countryService.findCountriesByMovieId(movieId);
-        Callable<List<Review>> getReviews = () -> reviewService.findReviewsByMovieId(movieId);
-
-        ExecutorService service = Executors.newCachedThreadPool();
-
-        try {
-            movieDetails.setGenres(service.submit(getGenres).get(threadInterruptingPeriod, TimeUnit.MILLISECONDS));
-            movieDetails.setCountries(service.submit(getCountries).get(threadInterruptingPeriod, TimeUnit.MILLISECONDS));
-            movieDetails.setReviews(service.submit(getReviews).get(threadInterruptingPeriod, TimeUnit.MILLISECONDS));
-        } catch (InterruptedException e) {
-            log.error("InterruptedException, thread name: {}: ", Thread.currentThread().getName(), e);
-            Thread.currentThread().interrupt();
-        } catch (ExecutionException e) {
-            log.error("Execution Exception, thread name: {}: ", Thread.currentThread().getName(), e);
-            Thread.currentThread().interrupt();
-        } catch (TimeoutException e) {
-            Thread.currentThread().interrupt();
-            log.error("Timeout Exception, thread name: {}: ", Thread.currentThread().getName(), e);
-        }
-
-        service.shutdown();
         log.debug("MovieDetails: {}", movieDetails);
         return movieDetails;
     }
 
     @Override
-    public void editMovie(Movie movie) {
-        movieDao.editMovie(movie);
+    public void editMovie(Movie movie, Integer movieId) {
+        movieDao.editMovie(movie, movieId);
     }
 
     @Override

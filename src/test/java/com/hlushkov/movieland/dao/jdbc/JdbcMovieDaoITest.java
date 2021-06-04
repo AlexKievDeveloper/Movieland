@@ -49,7 +49,8 @@ class JdbcMovieDaoITest {
                 .build();
 
         //when+then
-        jdbcMovieDao.saveMovie(saveMovieRequest);
+        int movieId = jdbcMovieDao.saveMovie(saveMovieRequest);
+        assertEquals(26, movieId);
     }
 
     @Test
@@ -262,7 +263,7 @@ class JdbcMovieDaoITest {
                 .picturePath("https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1._SY209_CR0,0,140,209_.jpg")
                 .build();
         //when+then
-        jdbcMovieDao.editMovie(movie);
+        jdbcMovieDao.editMovie(movie, movie.getId());
     }
 
     @Test

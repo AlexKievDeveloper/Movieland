@@ -1,11 +1,11 @@
 package com.hlushkov.movieland.entity;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 @Builder
 public class Country {
-    private int id;
-    private String name;
+    int id;
+    String name;
 }

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -21,8 +22,8 @@ public class DefaultGenreService implements GenreService {
     }
 
     @Override
-    public List<Genre> findByMovieId(int movieId) {
-        return genreDao.findByMovieId(movieId);
+    public List<Genre> findGenreByMovieId(int movieId) {
+        log.info("Method findGenreByMovieId started: {}", LocalDateTime.now());
+        return genreDao.findGenreByMovieId(movieId);
     }
-
 }

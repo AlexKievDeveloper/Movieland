@@ -8,6 +8,6 @@ public interface GenreService {
 
     List<Genre> findAll();
 
-    List<Genre> findByMovieId(int movieId);
+    List<Genre> findGenreByMovieId(int movieId);
 
 }

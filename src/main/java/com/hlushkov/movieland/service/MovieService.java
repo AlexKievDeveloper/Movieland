@@ -20,7 +20,7 @@ public interface MovieService {
 
     MovieDetails findById(int movieId, Optional<String> requestedCurrency);
 
-    void editMovie(Movie movie);
+    void editMovie(Movie movie, Integer movieId);
 
     void editMovieGenres(Integer movieId, List<Integer> genreIds);
 

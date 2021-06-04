@@ -46,7 +46,7 @@ public class JdbcMovieDao implements MovieDao {
 
     @Transactional
     @Override
-    public void saveMovie(SaveMovieRequest saveMovieRequest) {
+    public int saveMovie(SaveMovieRequest saveMovieRequest) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement statement = connection.prepareStatement(saveMovie, new String[]{constantMovieId});
@@ -63,6 +63,7 @@ public class JdbcMovieDao implements MovieDao {
         Integer movieId = (Integer) Objects.requireNonNull(keyHolder.getKey());
         addMoviesCountries(movieId, saveMovieRequest.getCountriesIds());
         addMoviesGenres(movieId, saveMovieRequest.getGenresIds());
+        return movieId;
     }
 
     @Override
@@ -89,9 +90,9 @@ public class JdbcMovieDao implements MovieDao {
     }
 
     @Override
-    public void editMovie(Movie movie) {
+    public void editMovie(Movie movie, Integer movieId) {
         MapSqlParameterSource parametersMap = getSqlParameterSource(movie);
-        parametersMap.addValue(constantMovieId, movie.getId());
+        parametersMap.addValue(constantMovieId, movieId);
         namedParameterJdbcTemplate.update(editMovie, parametersMap);
     }
 

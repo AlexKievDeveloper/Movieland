@@ -2,9 +2,9 @@ package com.hlushkov.movieland.web.controller;
 
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.hlushkov.movieland.common.Role;
-import com.hlushkov.movieland.security.util.UserHolder;
 import com.hlushkov.movieland.config.TestWebContextConfiguration;
 import com.hlushkov.movieland.entity.User;
+import com.hlushkov.movieland.security.util.UserHolder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

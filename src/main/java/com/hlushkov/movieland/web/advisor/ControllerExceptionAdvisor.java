@@ -23,7 +23,7 @@ public class ControllerExceptionAdvisor {
         log.error("IllegalArgumentException was thrown: ", e);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(NoUserFoundException.class)
     public void badRequest(NoUserFoundException e) {
         log.error("NoUserFoundException was thrown, unsuccessful user authentication: ", e);

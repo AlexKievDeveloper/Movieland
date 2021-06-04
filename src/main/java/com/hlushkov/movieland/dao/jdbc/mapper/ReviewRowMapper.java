@@ -1,7 +1,6 @@
 package com.hlushkov.movieland.dao.jdbc.mapper;
 
 import com.hlushkov.movieland.entity.Review;
-import com.hlushkov.movieland.entity.User;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
