@@ -53,24 +53,23 @@ public class ParallelMovieEnrichmentService implements MovieEnrichmentService {
         for (EnrichmentType enrichmentType : enrichmentTypes) {
             if ("GENRES".equals(enrichmentType.name())) {
                 CompletableFuture<Void> enrichWithGenres = CompletableFuture.supplyAsync(() ->
-                        genreService.findGenreByMovieId(movie.getId())).thenAccept(movieDetails::setGenres);
+                        genreService.findGenreByMovieId(movie.getId())).thenAccept(movieDetails::setGenres).orTimeout(timeout, TimeUnit.SECONDS);
                 completableFutureList.add(enrichWithGenres);
             }
             if ("COUNTRIES".equals(enrichmentType.name())) {
                 CompletableFuture<Void> enrichWithCountries = CompletableFuture.supplyAsync(() ->
-                        countryService.findCountriesByMovieId(movie.getId())).thenAccept(movieDetails::setCountries);
+                        countryService.findCountriesByMovieId(movie.getId())).thenAccept(movieDetails::setCountries).orTimeout(timeout, TimeUnit.SECONDS);
                 completableFutureList.add(enrichWithCountries);
             }
             if ("REVIEWS".equals(enrichmentType.name())) {
                 CompletableFuture<Void> enrichWithReviews = CompletableFuture.supplyAsync(() ->
-                        reviewService.findReviewsByMovieId(movie.getId())).thenAccept(movieDetails::setReviews);
+                        reviewService.findReviewsByMovieId(movie.getId())).thenAccept(movieDetails::setReviews).orTimeout(timeout, TimeUnit.SECONDS);
                 completableFutureList.add(enrichWithReviews);
             }
         }
 
         CompletableFuture.allOf(completableFutureList.toArray(new CompletableFuture[0]))
                 .exceptionally(this::exceptionHandler)
-                .completeOnTimeout(null, timeout, TimeUnit.SECONDS)
                 .join();
 
         return movieDetails;
